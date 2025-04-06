@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { 
@@ -225,7 +226,7 @@ const OrderBook = () => {
     let dateMatch = true;
     if (dateRange?.from) {
       const orderBookDate = new Date(orderBook.deadline);
-      if (dateRange.from && orderBookDate < orderBookDate) {
+      if (dateRange.from && orderBookDate < dateRange.from) {
         dateMatch = false;
       }
       if (dateRange.to && orderBookDate > dateRange.to) {
@@ -494,7 +495,7 @@ const OrderBook = () => {
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Komoditas:</span>
-                    <span className="font-medium">{selectedOrderBook.commodity}</span
+                    <span className="font-medium">{selectedOrderBook.commodity}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Grade:</span>
