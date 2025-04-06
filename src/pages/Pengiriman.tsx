@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { 
@@ -43,7 +44,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DateRange } from "react-day-picker";
 
 // Mock data for deliveries
-const deliveriesData = [
+let deliveriesData = [
   {
     id: "DLV-20231101-001",
     date: "2023-11-01",
@@ -227,10 +228,10 @@ const Pengiriman = () => {
     let dateMatch = true;
     if (dateRange?.from) {
       const deliveryDate = new Date(delivery.date);
-      if (dateRange.from && deliveryDate < deliveryDate.from) {
+      if (dateRange.from && deliveryDate < dateRange.from) {
         dateMatch = false;
       }
-      if (dateRange.to && deliveryDate > deliveryDate.to) {
+      if (dateRange.to && deliveryDate > dateRange.to) {
         dateMatch = false;
       }
     }
@@ -247,7 +248,7 @@ const Pengiriman = () => {
       "selesai": { label: "Selesai", color: "bg-gray-100 text-gray-800" },
     };
 
-    const { label, color } = statusMap[status] || { label: "Unknown", color: "bg-red-100 text-red-800" };
+    const { label, color } = statusMap[status as keyof typeof statusMap] || { label: "Unknown", color: "bg-red-100 text-red-800" };
 
     return (
       <Badge className={color + " font-normal"}>
@@ -329,13 +330,13 @@ const Pengiriman = () => {
           <TabsTrigger value="completed">Selesai</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4">
-          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} />
+          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} getStatusBadge={getStatusBadge} />
         </TabsContent>
         <TabsContent value="pending" className="space-y-4">
-          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} />
+          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} getStatusBadge={getStatusBadge} />
         </TabsContent>
         <TabsContent value="completed" className="space-y-4">
-          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} />
+          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} getStatusBadge={getStatusBadge} />
         </TabsContent>
       </Tabs>
 
@@ -432,9 +433,10 @@ interface DeliveryTableProps {
   deliveries: typeof deliveriesData;
   onView: (delivery: typeof deliveriesData[0]) => void;
   onUpdateStatus: (delivery: typeof deliveriesData[0], status: string) => void;
+  getStatusBadge: (status: string) => React.ReactNode;
 }
 
-const DeliveryTable = ({ deliveries, onView, onUpdateStatus }: DeliveryTableProps) => {
+const DeliveryTable = ({ deliveries, onView, onUpdateStatus, getStatusBadge }: DeliveryTableProps) => {
   return (
     <Table>
       <TableHeader>
