@@ -20,7 +20,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           {children}
         </main>
         <footer className="p-4 text-center text-sm text-gray-500 border-t bg-white">
-          <p>© 2025 AgriChain Connect. All rights reserved.</p>
+          <p>© 2025 TaniTrack. All rights reserved.</p>
         </footer>
       </div>
     </div>

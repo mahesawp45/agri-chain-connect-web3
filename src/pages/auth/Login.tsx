@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +24,7 @@ export default function Login() {
       if (email && password) {
         toast({
           title: "Login berhasil!",
-          description: "Selamat datang kembali di AgriChain Connect",
+          description: "Selamat datang kembali di TaniTrack",
         });
         navigate("/");
       } else {
@@ -43,10 +42,14 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-2 bg-agriGreen-500 rounded-full mb-4">
-            <Package className="h-8 w-8 text-white" />
+          <div className="inline-flex items-center justify-center mb-4">
+            <img 
+              src="/lovable-uploads/f7fb75ca-ee07-4d12-a8ab-4e5152e13679.png"
+              alt="TaniTrack Logo"
+              className="h-20 w-20"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">AgriChain Connect</h1>
+          <h1 className="text-2xl font-bold text-tani-green-dark">TaniTrack</h1>
           <p className="text-gray-500 mt-1">Platform Web3 untuk transaksi pertanian</p>
         </div>
 
@@ -75,7 +78,7 @@ export default function Login() {
                   <Label htmlFor="password">Kata Sandi</Label>
                   <a
                     href="#"
-                    className="text-sm font-medium text-agriGreen-600 hover:text-agriGreen-700"
+                    className="text-sm font-medium text-tani-green-dark hover:text-tani-green-dark/90"
                   >
                     Lupa kata sandi?
                   </a>
@@ -92,7 +95,7 @@ export default function Login() {
             <CardFooter className="flex flex-col gap-4">
               <Button 
                 type="submit" 
-                className="w-full bg-agriGreen-600 hover:bg-agriGreen-700"
+                className="w-full bg-tani-green-dark hover:bg-tani-green-dark/90"
                 disabled={loading}
               >
                 {loading ? "Memproses..." : "Masuk"}
@@ -101,7 +104,7 @@ export default function Login() {
                 Belum punya akun?{" "}
                 <a
                   href="#"
-                  className="font-medium text-agriGreen-600 hover:text-agriGreen-700"
+                  className="font-medium text-tani-green-dark hover:text-tani-green-dark/90"
                 >
                   Daftar sekarang
                 </a>

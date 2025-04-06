@@ -10,6 +10,7 @@ import {
   ClipboardList, 
   TrendingUp, 
   Truck,
+  User,
   ChevronRight,
   ChevronLeft,
   LogOut
@@ -38,7 +39,7 @@ const links = [
   { name: "Order Book", href: "/order-book", icon: ClipboardList },
   { name: "Harga Komoditas", href: "/harga", icon: TrendingUp },
   { name: "Pengiriman", href: "/pengiriman", icon: Truck },
-  { name: "Statistik", href: "/statistik", icon: BarChart3 },
+  { name: "Profil", href: "/profile", icon: User },
 ];
 
 export function Sidebar({ open, setOpen }: SidebarProps) {
@@ -82,15 +83,23 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
         <div className="flex items-center justify-between p-4 border-b">
           {open && (
             <Link to="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-agriGreen-500 flex items-center justify-center">
-                <Package className="h-4 w-4 text-white" />
+              <div className="h-10 w-10 rounded-md overflow-hidden flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/f7fb75ca-ee07-4d12-a8ab-4e5152e13679.png" 
+                  alt="TaniTrack Logo" 
+                  className="h-full w-full object-contain"
+                />
               </div>
-              <h1 className="text-lg font-bold text-gray-900">AgriChain</h1>
+              <h1 className="text-lg font-bold text-tani-green-dark">TaniTrack</h1>
             </Link>
           )}
           {!open && !isMobile && (
-            <div className="h-8 w-8 mx-auto rounded-full bg-agriGreen-500 flex items-center justify-center">
-              <Package className="h-4 w-4 text-white" />
+            <div className="h-10 w-10 mx-auto rounded-md overflow-hidden flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/f7fb75ca-ee07-4d12-a8ab-4e5152e13679.png" 
+                alt="TaniTrack Logo" 
+                className="h-full w-full object-contain"
+              />
             </div>
           )}
           {!isMobile && (
@@ -113,7 +122,10 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 to={link.href}
                 className={cn(
                   "sidebar-link",
-                  location.pathname === link.href && "active"
+                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  location.pathname === link.href 
+                    ? "bg-tani-green-light/20 text-tani-green-dark" 
+                    : "hover:bg-gray-100"
                 )}
               >
                 <link.icon className="h-5 w-5" />
@@ -139,12 +151,19 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>Profil</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/profile" className="flex items-center w-full">
+                    <User className="h-4 w-4 mr-2" />
+                    <span>Profil</span>
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>Pengaturan</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  <span>Keluar</span>
+                  <Link to="/login" className="flex items-center w-full">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    <span>Keluar</span>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -159,12 +178,19 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>Profil</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/profile" className="flex items-center w-full">
+                    <User className="h-4 w-4 mr-2" />
+                    <span>Profil</span>
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>Pengaturan</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  <span>Keluar</span>
+                  <Link to="/login" className="flex items-center w-full">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    <span>Keluar</span>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

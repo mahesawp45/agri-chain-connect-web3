@@ -63,43 +63,15 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors for our agricultural theme
-				agriGreen: {
-					50: '#f0f9f0',
-					100: '#dcf1dc',
-					200: '#bae3ba',
-					300: '#8ed08e',
-					400: '#5cb85c',
-					500: '#449d44',
-					600: '#398439',
-					700: '#306a30',
-					800: '#295429',
-					900: '#234623',
-				},
-				agriEarth: {
-					50: '#f9f5f2',
-					100: '#f0e7e0',
-					200: '#e2d0c3',
-					300: '#d0b19d',
-					400: '#ba8f73',
-					500: '#a47658',
-					600: '#8d6e63',
-					700: '#795548',
-					800: '#5d4037',
-					900: '#3e2723',
-				},
-				agriWarn: {
-					50: '#fff8e1',
-					100: '#ffecb3',
-					200: '#ffe082',
-					300: '#ffd54f',
-					400: '#ffca28',
-					500: '#ffc107',
-					600: '#ffb74d',
-					700: '#ff9800',
-					800: '#f57c00',
-					900: '#ff5722',
-				},
+				// TaniTrack colors based on the logo
+				tani: {
+					yellow: '#F4D03F', // Yellow from the drop/flower
+					green: {
+						light: '#7ED957', // Light green from the leaves
+						dark: '#005249'   // Dark green from the hexagon border
+					},
+					blue: '#003D40',    // Dark blue/teal from the background
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -8,82 +8,82 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 180 100% 13%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 180 100% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 180 100% 13%;
 
-    --primary: 122 39% 34%; /* Agriculture green */
+    --primary: 180 100% 13%; /* TaniTrack blue-green */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 25 79% 65%; /* Warm earthy accent */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 48 89% 60%; /* TaniTrack yellow */
+    --secondary-foreground: 180 100% 13%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 36 100% 50%; /* Golden accent */
-    --accent-foreground: 0 0% 0%;
+    --accent: 142 67% 59%; /* TaniTrack light green */
+    --accent-foreground: 180 100% 13%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 122 39% 34%;
+    --ring: 180 100% 16%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 120 30% 96%;
-    --sidebar-foreground: 120 5.3% 26.1%;
-    --sidebar-primary: 122 39% 34%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 180 100% 13%;
+    --sidebar-primary: 180 100% 16%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 120 20% 95%;
-    --sidebar-accent-foreground: 120 5.9% 10%;
-    --sidebar-border: 120 13% 91%;
-    --sidebar-ring: 122 39% 34%;
+    --sidebar-accent: 142 67% 95%;
+    --sidebar-accent-foreground: 180 100% 13%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 180 100% 16%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 180 100% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 180 100% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 180 100% 10%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 120 63% 31%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 142 67% 59%;
+    --primary-foreground: 180 100% 10%;
 
-    --secondary: 25 60% 40%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 48 89% 60%;
+    --secondary-foreground: 180 100% 10%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 36 100% 45%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 142 67% 59%;
+    --accent-foreground: 180 100% 10%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 120 63% 31%;
+    --ring: 142 67% 59%;
     
-    --sidebar-background: 120 20% 10%;
-    --sidebar-foreground: 120 15% 95%;
-    --sidebar-primary: 120 63% 31%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 120 15% 15%;
-    --sidebar-accent-foreground: 120 15% 95%;
-    --sidebar-border: 120 15% 15%;
-    --sidebar-ring: 120 63% 31%;
+    --sidebar-background: 180 100% 12%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 142 67% 59%;
+    --sidebar-primary-foreground: 180 100% 10%;
+    --sidebar-accent: 180 100% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 180 100% 15%;
+    --sidebar-ring: 142 67% 59%;
   }
 }
 
@@ -102,8 +102,8 @@
 }
 
 @layer components {
-  .agri-gradient {
-    @apply bg-gradient-to-br from-agriGreen-500 to-agriGreen-700;
+  .tani-gradient {
+    @apply bg-gradient-to-br from-tani-green-light to-tani-green-dark;
   }
   
   .card-hover {
@@ -135,7 +135,7 @@
   }
   
   .sidebar-link.active {
-    @apply bg-agriGreen-100 text-agriGreen-700;
+    @apply bg-tani-green-light/20 text-tani-green-dark;
   }
   
   .sidebar-link:hover {

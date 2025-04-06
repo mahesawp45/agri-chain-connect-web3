@@ -1,367 +1,459 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Plus, Search, QrCode, Filter } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from "@/components/ui/table";
+import { 
+  Plus, 
+  Search, 
+  Filter, 
+  Package, 
+  MoreVertical, 
+  FileText, 
+  Edit, 
+  Trash2,
+  QrCode
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { commodities, commodityTypes, commodityUnits, commodityGrades, farmerLocations } from "@/lib/data/mockData";
-import { formatDate } from "@/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
+import { formatCurrency } from "@/lib/utils";
 
-export default function Komoditas() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [openAddDialog, setOpenAddDialog] = useState(false);
-  const [newCommodity, setNewCommodity] = useState({
+// Mock data for demo purposes
+const komoditasData = [
+  { 
+    id: "KM001", 
+    name: "Beras Putih", 
+    unit: "kg", 
+    type: "Padi", 
+    quantity: 5000, 
+    location: "Cianjur, Jawa Barat", 
+    grade: "Premium", 
+    createdAt: "2025-04-01",
+    imageUrl: "/placeholder.svg"
+  },
+  { 
+    id: "KM002", 
+    name: "Jagung Manis", 
+    unit: "kg", 
+    type: "Jagung", 
+    quantity: 2500, 
+    location: "Malang, Jawa Timur", 
+    grade: "A", 
+    createdAt: "2025-03-28",
+    imageUrl: "/placeholder.svg"
+  },
+  { 
+    id: "KM003", 
+    name: "Kedelai", 
+    unit: "kg", 
+    type: "Kedelai", 
+    quantity: 1800, 
+    location: "Jember, Jawa Timur", 
+    grade: "B", 
+    createdAt: "2025-03-25",
+    imageUrl: "/placeholder.svg"
+  },
+  { 
+    id: "KM004", 
+    name: "Gula Aren", 
+    unit: "kg", 
+    type: "Gula", 
+    quantity: 750, 
+    location: "Bandung, Jawa Barat", 
+    grade: "Premium", 
+    createdAt: "2025-03-20",
+    imageUrl: "/placeholder.svg"
+  },
+  { 
+    id: "KM005", 
+    name: "Kopi Arabika", 
+    unit: "kg", 
+    type: "Kopi", 
+    quantity: 500, 
+    location: "Bali", 
+    grade: "Premium", 
+    createdAt: "2025-03-15",
+    imageUrl: "/placeholder.svg"
+  }
+];
+
+// Mock data for units and types
+const units = ["kg", "ton", "gram", "liter"];
+const types = ["Padi", "Jagung", "Kedelai", "Gula", "Kopi", "Cabai", "Bawang"];
+const locations = ["Cianjur, Jawa Barat", "Malang, Jawa Timur", "Jember, Jawa Timur", "Bandung, Jawa Barat", "Bali"];
+const grades = ["Premium", "A", "B", "C"];
+
+const Komoditas = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [addKomoditasOpen, setAddKomoditasOpen] = useState(false);
+  const [qrCodeDialogOpen, setQrCodeDialogOpen] = useState(false);
+  const [selectedKomoditas, setSelectedKomoditas] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  // Form state
+  const [formData, setFormData] = useState({
     name: "",
-    type: "",
     unit: "",
+    type: "",
+    image: null as File | null,
     quantity: "",
     location: "",
-    grade: "",
-    imageUrl: null as File | null,
-    gradingFileUrl: null as File | null,
-  });
-  const navigate = useNavigate();
-
-  const filteredCommodities = commodities.filter((commodity) => {
-    const matchesSearch = commodity.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = !selectedType || commodity.type === selectedType;
-    return matchesSearch && matchesType;
+    gradeFile: null as File | null,
+    grade: ""
   });
 
-  const handleAddCommodity = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, this would make an API call
-    console.log("Adding new commodity:", newCommodity);
-    setOpenAddDialog(false);
-    // Reset form
-    setNewCommodity({
-      name: "",
-      type: "",
-      unit: "",
-      quantity: "",
-      location: "",
-      grade: "",
-      imageUrl: null,
-      gradingFileUrl: null,
-    });
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'imageUrl' | 'gradingFileUrl') => {
-    if (e.target.files && e.target.files[0]) {
-      setNewCommodity({
-        ...newCommodity,
-        [field]: e.target.files[0]
-      });
+  const handleFileChange = (field: string, files: FileList | null) => {
+    if (files && files.length > 0) {
+      setFormData(prev => ({ ...prev, [field]: files[0] }));
     }
   };
 
+  const handleAddKomoditas = () => {
+    toast({
+      title: "Komoditas berhasil ditambahkan",
+      description: `${formData.name} telah ditambahkan ke daftar komoditas Anda`,
+    });
+    
+    setAddKomoditasOpen(false);
+    
+    // Show QR Code dialog after success
+    setSelectedKomoditas(formData.name);
+    setQrCodeDialogOpen(true);
+    
+    // Reset form
+    setFormData({
+      name: "",
+      unit: "",
+      type: "",
+      image: null,
+      quantity: "",
+      location: "",
+      gradeFile: null,
+      grade: ""
+    });
+  };
+
+  const filteredData = komoditasData.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
   return (
     <MainLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold tracking-tight">Komoditas</h1>
-          <div className="flex gap-2">
-            <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-              <Input
-                type="search"
-                placeholder="Cari komoditas..."
-                className="pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" /> Tambah Komoditas
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Tambah Komoditas Baru</DialogTitle>
-                  <DialogDescription>
-                    Lengkapi informasi komoditas yang ingin Anda tambahkan.
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleAddCommodity} className="space-y-5 py-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Nama Komoditas</Label>
-                      <Input
-                        id="name"
-                        value={newCommodity.name}
-                        onChange={(e) => setNewCommodity({ ...newCommodity, name: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="type">Jenis Komoditas</Label>
-                      <Select
-                        value={newCommodity.type}
-                        onValueChange={(value) => setNewCommodity({ ...newCommodity, type: value })}
-                        required
-                      >
-                        <SelectTrigger id="type">
-                          <SelectValue placeholder="Pilih jenis komoditas" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Jenis Komoditas</SelectLabel>
-                            {commodityTypes.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="unit">Satuan</Label>
-                      <Select
-                        value={newCommodity.unit}
-                        onValueChange={(value) => setNewCommodity({ ...newCommodity, unit: value })}
-                        required
-                      >
-                        <SelectTrigger id="unit">
-                          <SelectValue placeholder="Pilih satuan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Satuan</SelectLabel>
-                            {commodityUnits.map((unit) => (
-                              <SelectItem key={unit} value={unit}>
-                                {unit}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="quantity">Jumlah</Label>
-                      <Input
-                        id="quantity"
-                        type="number"
-                        min="1"
-                        value={newCommodity.quantity}
-                        onChange={(e) => setNewCommodity({ ...newCommodity, quantity: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="location">Lokasi</Label>
-                      <Select
-                        value={newCommodity.location}
-                        onValueChange={(value) => setNewCommodity({ ...newCommodity, location: value })}
-                        required
-                      >
-                        <SelectTrigger id="location">
-                          <SelectValue placeholder="Pilih lokasi" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Lokasi</SelectLabel>
-                            {farmerLocations.map((location) => (
-                              <SelectItem key={location} value={location}>
-                                {location}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="grade">Status Grade</Label>
-                      <Select
-                        value={newCommodity.grade}
-                        onValueChange={(value) => setNewCommodity({ ...newCommodity, grade: value })}
-                        required
-                      >
-                        <SelectTrigger id="grade">
-                          <SelectValue placeholder="Pilih grade" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Grade</SelectLabel>
-                            {commodityGrades.map((grade) => (
-                              <SelectItem key={grade} value={grade}>
-                                {grade}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="image">Foto Komoditas</Label>
-                      <Input
-                        id="image"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageChange(e, 'imageUrl')}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="gradingFile">File Grading</Label>
-                      <Input
-                        id="gradingFile"
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleImageChange(e, 'gradingFileUrl')}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">Simpan Komoditas</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-          </div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Komoditas</h1>
+          <p className="text-gray-600">Kelola komoditas pertanian Anda</p>
         </div>
-
-        <Tabs defaultValue="table" className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="table">Tabel</TabsTrigger>
-            <TabsTrigger value="card">Kartu</TabsTrigger>
-          </TabsList>
-          <TabsContent value="table" className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Select
-                value={selectedType || ""}
-                onValueChange={(value) => setSelectedType(value === "" ? null : value)}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter jenis" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Semua Jenis</SelectItem>
-                  {commodityTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="bg-white rounded-lg shadow overflow-hidden border">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-gray-50 text-gray-700">
-                    <tr>
-                      <th className="py-3 px-4 text-left font-medium">Nama</th>
-                      <th className="py-3 px-4 text-left font-medium">Jenis</th>
-                      <th className="py-3 px-4 text-left font-medium">Jumlah</th>
-                      <th className="py-3 px-4 text-left font-medium">Grade</th>
-                      <th className="py-3 px-4 text-left font-medium">Lokasi</th>
-                      <th className="py-3 px-4 text-left font-medium">Tanggal Dibuat</th>
-                      <th className="py-3 px-4 text-center font-medium">QR Code</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {filteredCommodities.map((commodity) => (
-                      <tr key={commodity.id} className="hover:bg-gray-50 cursor-pointer transition-colors" onClick={() => navigate(`/komoditas/${commodity.id}`)}>
-                        <td className="py-3 px-4">{commodity.name}</td>
-                        <td className="py-3 px-4">{commodity.type}</td>
-                        <td className="py-3 px-4">
-                          {commodity.quantity} {commodity.unit}
-                        </td>
-                        <td className="py-3 px-4">{commodity.grade}</td>
-                        <td className="py-3 px-4">{commodity.location}</td>
-                        <td className="py-3 px-4">{formatDate(commodity.createdAt)}</td>
-                        <td className="py-3 px-4 text-center">
-                          <Button variant="ghost" size="icon">
-                            <QrCode className="h-4 w-4" />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        <Dialog open={addKomoditasOpen} onOpenChange={setAddKomoditasOpen}>
+          <DialogTrigger asChild>
+            <Button className="gap-2 bg-tani-green-dark hover:bg-tani-green-dark/90">
+              <Plus className="h-4 w-4" />
+              Tambah Komoditas
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[625px]">
+            <DialogHeader>
+              <DialogTitle>Tambah Komoditas Baru</DialogTitle>
+              <DialogDescription>
+                Isi formulir di bawah ini untuk menambahkan komoditas baru ke daftar Anda.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Nama Komoditas</Label>
+                  <Input 
+                    id="name" 
+                    placeholder="Masukkan nama komoditas" 
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="unit">Satuan</Label>
+                  <Select 
+                    value={formData.unit}
+                    onValueChange={(value) => handleInputChange("unit", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih satuan" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {units.map((unit) => (
+                        <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type">Jenis Komoditas</Label>
+                  <Select 
+                    value={formData.type}
+                    onValueChange={(value) => handleInputChange("type", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih jenis komoditas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {types.map((type) => (
+                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="image">Foto Komoditas</Label>
+                  <Input 
+                    id="image" 
+                    type="file" 
+                    accept="image/*"
+                    onChange={(e) => handleFileChange("image", e.target.files)}
+                  />
+                  <p className="text-xs text-gray-500">Upload foto komoditas (maks 2MB)</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="quantity">Jumlah</Label>
+                  <Input 
+                    id="quantity" 
+                    type="number" 
+                    placeholder="Masukkan jumlah" 
+                    value={formData.quantity}
+                    onChange={(e) => handleInputChange("quantity", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="location">Lokasi</Label>
+                  <Select 
+                    value={formData.location}
+                    onValueChange={(value) => handleInputChange("location", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih lokasi" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {locations.map((location) => (
+                        <SelectItem key={location} value={location}>{location}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="gradeFile">File Grading</Label>
+                  <Input 
+                    id="gradeFile" 
+                    type="file" 
+                    accept="image/*,.pdf" 
+                    onChange={(e) => handleFileChange("gradeFile", e.target.files)}
+                  />
+                  <p className="text-xs text-gray-500">Upload file grading (PDF/Gambar)</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="grade">Status Grade</Label>
+                  <Select 
+                    value={formData.grade}
+                    onValueChange={(value) => handleInputChange("grade", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih grade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {grades.map((grade) => (
+                        <SelectItem key={grade} value={grade}>{grade}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </TabsContent>
-          <TabsContent value="card" className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Select
-                value={selectedType || ""}
-                onValueChange={(value) => setSelectedType(value === "" ? null : value)}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter jenis" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Semua Jenis</SelectItem>
-                  {commodityTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setAddKomoditasOpen(false)}>Batal</Button>
+              <Button onClick={handleAddKomoditas}>Simpan</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* QR Code Dialog */}
+        <Dialog open={qrCodeDialogOpen} onOpenChange={setQrCodeDialogOpen}>
+          <DialogContent className="sm:max-w-[400px]">
+            <DialogHeader>
+              <DialogTitle>QR Code Komoditas</DialogTitle>
+              <DialogDescription>
+                Gunakan QR Code ini untuk melacak komoditas Anda.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col items-center py-4">
+              <div className="bg-gray-100 p-4 rounded-lg mb-4">
+                <QrCode className="h-32 w-32 text-tani-green-dark mx-auto" />
+              </div>
+              <p className="text-center text-sm text-gray-700">
+                Komoditas: <span className="font-medium">{selectedKomoditas}</span><br />
+                ID: <span className="font-medium">KM00{Math.floor(Math.random() * 1000)}</span><br />
+                Tanggal: <span className="font-medium">{new Date().toLocaleDateString('id-ID')}</span>
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {filteredCommodities.map((commodity) => (
-                <div
-                  key={commodity.id}
-                  className="bg-white border rounded-lg shadow-sm overflow-hidden transition-transform hover:shadow-md hover:-translate-y-1 cursor-pointer"
-                  onClick={() => navigate(`/komoditas/${commodity.id}`)}
-                >
-                  <div className="h-48 bg-gray-200">
-                    <img
-                      src={commodity.imageUrl}
-                      alt={commodity.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold">{commodity.name}</h3>
-                        <p className="text-sm text-gray-500">{commodity.type}</p>
-                      </div>
-                      <div className="px-2 py-1 bg-gray-100 rounded-full text-xs">
-                        Grade {commodity.grade}
-                      </div>
-                    </div>
-                    <div className="mt-3 space-y-1">
-                      <p className="text-sm">
-                        <span className="font-medium">Jumlah:</span>{" "}
-                        {commodity.quantity} {commodity.unit}
-                      </p>
-                      <p className="text-sm">
-                        <span className="font-medium">Lokasi:</span>{" "}
-                        {commodity.location}
-                      </p>
-                      <p className="text-sm">
-                        <span className="font-medium">Tanggal:</span>{" "}
-                        {formatDate(commodity.createdAt)}
-                      </p>
-                    </div>
-                    <div className="mt-4 flex justify-end">
-                      <Button variant="ghost" size="sm" className="text-agriGreen-600">
-                        <QrCode className="h-4 w-4 mr-1" /> QR Code
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+            <DialogFooter>
+              <Button onClick={() => setQrCodeDialogOpen(false)}>Tutup</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
+
+      <Card className="mb-6">
+        <CardContent className="p-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input 
+                className="pl-10" 
+                placeholder="Cari komoditas..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <Button variant="outline" className="gap-2">
+              <Filter className="h-4 w-4" />
+              Filter
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center">
+            <Package className="h-5 w-5 mr-2 text-tani-green-dark" />
+            Daftar Komoditas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nama</TableHead>
+                  <TableHead>Jenis</TableHead>
+                  <TableHead className="hidden md:table-cell">Jumlah</TableHead>
+                  <TableHead className="hidden lg:table-cell">Lokasi</TableHead>
+                  <TableHead>Grade</TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded overflow-hidden bg-gray-100 flex items-center justify-center">
+                            <img 
+                              src={item.imageUrl} 
+                              alt={item.name} 
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <div className="font-medium">{item.name}</div>
+                            <div className="text-xs text-gray-500">{item.id}</div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{item.type}</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {item.quantity.toLocaleString()} {item.unit}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">{item.location}</TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant="outline" 
+                          className={
+                            item.grade === "Premium" 
+                              ? "bg-green-50 text-green-700 border-green-200" 
+                              : item.grade === "A" 
+                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                : "bg-orange-50 text-orange-700 border-orange-200"
+                          }
+                        >
+                          {item.grade}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <FileText className="h-4 w-4 mr-2" />
+                              Lihat Detail
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <QrCode className="h-4 w-4 mr-2" />
+                              Lihat QR Code
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-red-600">
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Hapus
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                      {searchQuery 
+                        ? `Tidak ada komoditas yang cocok dengan "${searchQuery}"`
+                        : "Belum ada data komoditas. Klik 'Tambah Komoditas' untuk menambahkan."}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
     </MainLayout>
   );
-}
+};
+
+export default Komoditas;
