@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { 
@@ -39,6 +38,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { id } from 'date-fns/locale';
 import { useToast } from "@/hooks/use-toast";
+import { DateRange } from "react-day-picker";
 
 // Mock data for transactions
 const transactionsData = [
@@ -121,13 +121,7 @@ const Transaksi = () => {
   const [tab, setTab] = useState("all");
   const [type, setType] = useState<string>("");
   const [status, setStatus] = useState<string>("");
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<typeof transactionsData[0] | null>(null);
   const { toast } = useToast();
@@ -171,7 +165,7 @@ const Transaksi = () => {
     
     // Date range filter
     let dateMatch = true;
-    if (dateRange.from) {
+    if (dateRange?.from) {
       const transactionDate = new Date(transaction.date);
       if (dateRange.from && transactionDate < dateRange.from) {
         dateMatch = false;
@@ -258,7 +252,7 @@ const Transaksi = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dateRange.from ? (
+                    {dateRange?.from ? (
                       dateRange.to ? (
                         <>
                           {format(dateRange.from, "dd MMM yyyy", { locale: id })} -{" "}
@@ -286,7 +280,7 @@ const Transaksi = () => {
                 setSearchQuery("");
                 setType("");
                 setStatus("");
-                setDateRange({ from: undefined, to: undefined });
+                setDateRange(undefined);
               }}>
                 <X className="h-4 w-4" />
                 Reset

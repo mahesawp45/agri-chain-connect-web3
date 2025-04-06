@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { 
@@ -43,6 +42,7 @@ import { format } from "date-fns";
 import { id } from 'date-fns/locale';
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DateRange } from "react-day-picker";
 
 // Mock data for order books
 const orderBooksData = [
@@ -162,13 +162,7 @@ const OrderBook = () => {
   const [tab, setTab] = useState("available");
   const [status, setStatus] = useState<string>("");
   const [commodity, setCommodity] = useState<string>("");
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [acceptDialogOpen, setAcceptDialogOpen] = useState(false);
   const [selectedOrderBook, setSelectedOrderBook] = useState<typeof orderBooksData[0] | null>(null);
@@ -229,9 +223,9 @@ const OrderBook = () => {
     
     // Date range filter
     let dateMatch = true;
-    if (dateRange.from) {
+    if (dateRange?.from) {
       const orderBookDate = new Date(orderBook.deadline);
-      if (dateRange.from && orderBookDate < dateRange.from) {
+      if (dateRange.from && orderBookDate < orderBookDate) {
         dateMatch = false;
       }
       if (dateRange.to && orderBookDate > dateRange.to) {
@@ -330,7 +324,7 @@ const OrderBook = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dateRange.from ? (
+                    {dateRange?.from ? (
                       dateRange.to ? (
                         <>
                           {format(dateRange.from, "dd MMM yyyy", { locale: id })} -{" "}
@@ -500,7 +494,7 @@ const OrderBook = () => {
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Komoditas:</span>
-                    <span className="font-medium">{selectedOrderBook.commodity}</span>
+                    <span className="font-medium">{selectedOrderBook.commodity}</span
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Grade:</span>

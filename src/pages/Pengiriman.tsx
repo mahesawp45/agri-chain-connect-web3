@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { 
@@ -41,78 +40,129 @@ import { format } from "date-fns";
 import { id } from 'date-fns/locale';
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DateRange } from "react-day-picker";
 
 // Mock data for deliveries
 const deliveriesData = [
   {
-    id: "DEL7825",
-    transactionId: "TX7825",
-    buyerName: "PT Agrimax",
+    id: "DLV-20231101-001",
+    date: "2023-11-01",
+    buyerName: "PT. Agro Makmur",
     commodity: "Beras Putih",
-    quantity: 500,
-    unit: "kg",
-    date: "2025-04-05",
-    status: "persiapan_pengiriman",
-    destination: "Jakarta Pusat",
-    estimatedArrival: "2025-04-08",
-    origin: "Cianjur, Jawa Barat",
-    contact: "0812-3456-7890"
-  },
-  {
-    id: "DEL7824",
-    transactionId: "TX7824",
-    buyerName: "CV Pangan Sejahtera",
-    commodity: "Jagung Manis",
-    quantity: 250,
-    unit: "kg",
-    date: "2025-04-04",
-    status: "sedang_dikirim",
-    destination: "Bandung",
-    estimatedArrival: "2025-04-07",
-    origin: "Malang, Jawa Timur",
-    contact: "0813-2345-6789"
-  },
-  {
-    id: "DEL7823",
-    transactionId: "TX7823",
-    buyerName: "PT Indofood",
-    commodity: "Kedelai",
     quantity: 1000,
     unit: "kg",
-    date: "2025-04-03",
-    status: "sudah_dikirim",
-    destination: "Tangerang",
-    estimatedArrival: "2025-04-06",
-    origin: "Jember, Jawa Timur",
-    contact: "0814-3456-7890"
+    destination: "Jakarta",
+    status: "persiapan_pengiriman",
+    pricePerUnit: 12000,
+    shippingCost: 500000,
   },
   {
-    id: "DEL7822",
-    transactionId: "TX7822",
-    buyerName: "PT Gula Nusantara",
-    commodity: "Gula Aren",
-    quantity: 100,
+    id: "DLV-20231105-002",
+    date: "2023-11-05",
+    buyerName: "CV. Mitra Tani",
+    commodity: "Jagung Manis",
+    quantity: 500,
     unit: "kg",
-    date: "2025-04-01",
-    status: "diterima",
-    destination: "Jakarta Selatan",
-    estimatedArrival: "2025-04-04",
-    origin: "Bandung, Jawa Barat",
-    contact: "0815-4567-8901"
-  },
-  {
-    id: "DEL7821",
-    transactionId: "TX7821",
-    buyerName: "PT Kopi Indonesia",
-    commodity: "Kopi Arabika",
-    quantity: 75,
-    unit: "kg",
-    date: "2025-03-30",
-    status: "selesai",
     destination: "Surabaya",
-    estimatedArrival: "2025-04-02",
-    origin: "Bali",
-    contact: "0816-5678-9012"
+    status: "sedang_dikirim",
+    pricePerUnit: 8000,
+    shippingCost: 300000,
+  },
+  {
+    id: "DLV-20231110-003",
+    date: "2023-11-10",
+    buyerName: "Koperasi Sinar Harapan",
+    commodity: "Kedelai",
+    quantity: 750,
+    unit: "kg",
+    destination: "Medan",
+    status: "sudah_dikirim",
+    pricePerUnit: 10000,
+    shippingCost: 400000,
+  },
+  {
+    id: "DLV-20231115-004",
+    date: "2023-11-15",
+    buyerName: "PT. Bumi Subur",
+    commodity: "Gula Aren",
+    quantity: 1200,
+    unit: "kg",
+    destination: "Makassar",
+    status: "diterima",
+    pricePerUnit: 15000,
+    shippingCost: 600000,
+  },
+  {
+    id: "DLV-20231120-005",
+    date: "2023-11-20",
+    buyerName: "CV. Tani Jaya",
+    commodity: "Kopi Arabika",
+    quantity: 300,
+    unit: "kg",
+    destination: "Denpasar",
+    status: "selesai",
+    pricePerUnit: 40000,
+    shippingCost: 250000,
+  },
+  {
+    id: "DLV-20231125-006",
+    date: "2023-11-25",
+    buyerName: "Koperasi Agro Mandiri",
+    commodity: "Cabai Merah",
+    quantity: 600,
+    unit: "kg",
+    destination: "Palembang",
+    status: "persiapan_pengiriman",
+    pricePerUnit: 25000,
+    shippingCost: 350000,
+  },
+  {
+    id: "DLV-20231130-007",
+    date: "2023-11-30",
+    buyerName: "PT. Subur Abadi",
+    commodity: "Beras Putih",
+    quantity: 900,
+    unit: "kg",
+    destination: "Bandung",
+    status: "sedang_dikirim",
+    pricePerUnit: 12000,
+    shippingCost: 450000,
+  },
+  {
+    id: "DLV-20231205-008",
+    date: "2023-12-05",
+    buyerName: "CV. Harapan Tani",
+    commodity: "Jagung Manis",
+    quantity: 400,
+    unit: "kg",
+    destination: "Semarang",
+    status: "sudah_dikirim",
+    pricePerUnit: 8000,
+    shippingCost: 280000,
+  },
+  {
+    id: "DLV-20231210-009",
+    date: "2023-12-10",
+    buyerName: "Koperasi Makmur Jaya",
+    commodity: "Kedelai",
+    quantity: 800,
+    unit: "kg",
+    destination: "Yogyakarta",
+    status: "diterima",
+    pricePerUnit: 10000,
+    shippingCost: 420000,
+  },
+  {
+    id: "DLV-20231215-010",
+    date: "2023-12-15",
+    buyerName: "PT. Agro Sejahtera",
+    commodity: "Gula Aren",
+    quantity: 1100,
+    unit: "kg",
+    destination: "Surakarta",
+    status: "selesai",
+    pricePerUnit: 15000,
+    shippingCost: 550000,
   },
 ];
 
@@ -120,39 +170,39 @@ const Pengiriman = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [tab, setTab] = useState("all");
   const [status, setStatus] = useState<string>("");
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState<typeof deliveriesData[0] | null>(null);
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  // Handle viewing delivery details
   const handleViewDelivery = (delivery: typeof deliveriesData[0]) => {
     setSelectedDelivery(delivery);
     setDetailDialogOpen(true);
   };
 
-  // Handle updating delivery status to "sudah_dikirim"
-  const handleUpdateStatus = () => {
-    setDetailDialogOpen(false);
+  const handleUpdateStatus = (delivery: typeof deliveriesData[0], newStatus: string) => {
+    setSelectedDelivery(delivery);
+    setStatus(newStatus);
     setConfirmationDialogOpen(true);
   };
 
-  // Handle confirming status update
   const handleConfirmStatusUpdate = () => {
     if (selectedDelivery) {
+      const updatedDeliveriesData = deliveriesData.map(delivery => {
+        if (delivery.id === selectedDelivery.id) {
+          return { ...delivery, status: status };
+        }
+        return delivery;
+      });
+      deliveriesData = updatedDeliveriesData;
       toast({
         title: "Status Pengiriman Diperbarui",
-        description: `Pengiriman ${selectedDelivery.id} telah diperbarui statusnya menjadi 'Sudah Dikirim'`,
+        description: `Status pengiriman ${selectedDelivery.id} berhasil diperbarui menjadi ${status}.`,
       });
-      setConfirmationDialogOpen(false);
     }
+    setConfirmationDialogOpen(false);
+    setDetailDialogOpen(false);
   };
 
   // Apply filters to deliveries
@@ -175,12 +225,12 @@ const Pengiriman = () => {
     
     // Date range filter
     let dateMatch = true;
-    if (dateRange.from) {
+    if (dateRange?.from) {
       const deliveryDate = new Date(delivery.date);
-      if (dateRange.from && deliveryDate < dateRange.from) {
+      if (dateRange.from && deliveryDate < deliveryDate.from) {
         dateMatch = false;
       }
-      if (dateRange.to && deliveryDate > dateRange.to) {
+      if (dateRange.to && deliveryDate > deliveryDate.to) {
         dateMatch = false;
       }
     }
@@ -188,22 +238,20 @@ const Pengiriman = () => {
     return textMatch && tabMatch && statusMatch && dateMatch;
   });
 
-  // Get status badge based on status
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { color: string, label: string }> = {
-      persiapan_pengiriman: { color: "bg-blue-50 text-blue-700 border-blue-200", label: "Persiapan Pengiriman" },
-      sedang_dikirim: { color: "bg-yellow-50 text-yellow-700 border-yellow-200", label: "Sedang Dikirim" },
-      sudah_dikirim: { color: "bg-green-50 text-green-700 border-green-200", label: "Sudah Dikirim" },
-      diterima: { color: "bg-teal-50 text-teal-700 border-teal-200", label: "Diterima" },
-      selesai: { color: "bg-green-50 text-green-700 border-green-200", label: "Selesai" }
+    const statusMap = {
+      "persiapan_pengiriman": { label: "Persiapan Pengiriman", color: "bg-yellow-100 text-yellow-800" },
+      "sedang_dikirim": { label: "Sedang Dikirim", color: "bg-blue-100 text-blue-800" },
+      "sudah_dikirim": { label: "Sudah Dikirim", color: "bg-purple-100 text-purple-800" },
+      "diterima": { label: "Diterima", color: "bg-green-100 text-green-800" },
+      "selesai": { label: "Selesai", color: "bg-gray-100 text-gray-800" },
     };
-    
+
+    const { label, color } = statusMap[status] || { label: "Unknown", color: "bg-red-100 text-red-800" };
+
     return (
-      <Badge 
-        variant="outline" 
-        className={statusConfig[status]?.color || "bg-gray-50 text-gray-700 border-gray-200"}
-      >
-        {statusConfig[status]?.label || status.replace(/_/g, ' ')}
+      <Badge className={color + " font-normal"}>
+        {label}
       </Badge>
     );
   };
@@ -246,7 +294,7 @@ const Pengiriman = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dateRange.from ? (
+                    {dateRange?.from ? (
                       dateRange.to ? (
                         <>
                           {format(dateRange.from, "dd MMM yyyy", { locale: id })} -{" "}
@@ -274,205 +322,178 @@ const Pengiriman = () => {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center">
-            <Truck className="h-5 w-5 mr-2 text-tani-green-dark" />
-            Daftar Pengiriman
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="all" value={tab} onValueChange={setTab}>
-            <TabsList className="mb-4">
-              <TabsTrigger value="all">Semua</TabsTrigger>
-              <TabsTrigger value="pending">Dalam Proses</TabsTrigger>
-              <TabsTrigger value="completed">Selesai</TabsTrigger>
-            </TabsList>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Pembeli</TableHead>
-                    <TableHead className="hidden md:table-cell">Komoditas</TableHead>
-                    <TableHead className="hidden lg:table-cell">Tujuan</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredDeliveries.length > 0 ? (
-                    filteredDeliveries.map((delivery) => (
-                      <TableRow key={delivery.id}>
-                        <TableCell className="font-medium">{delivery.id}</TableCell>
-                        <TableCell>{delivery.buyerName}</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {delivery.commodity} ({delivery.quantity} {delivery.unit})
-                        </TableCell>
-                        <TableCell className="hidden lg:table-cell">
-                          {delivery.destination}
-                        </TableCell>
-                        <TableCell>{getStatusBadge(delivery.status)}</TableCell>
-                        <TableCell className="text-right">
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => handleViewDelivery(delivery)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                        Tidak ada pengiriman yang ditemukan
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </Tabs>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="all" className="mb-4" value={tab} onValueChange={setTab}>
+        <TabsList>
+          <TabsTrigger value="all">Semua</TabsTrigger>
+          <TabsTrigger value="pending">Pending</TabsTrigger>
+          <TabsTrigger value="completed">Selesai</TabsTrigger>
+        </TabsList>
+        <TabsContent value="all" className="space-y-4">
+          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} />
+        </TabsContent>
+        <TabsContent value="pending" className="space-y-4">
+          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} />
+        </TabsContent>
+        <TabsContent value="completed" className="space-y-4">
+          <DeliveryTable deliveries={filteredDeliveries} onView={handleViewDelivery} onUpdateStatus={handleUpdateStatus} />
+        </TabsContent>
+      </Tabs>
 
-      {/* Delivery Detail Dialog */}
-      {selectedDelivery && (
-        <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Detail Pengiriman</DialogTitle>
-              <DialogDescription>
-                {selectedDelivery.id} - {selectedDelivery.transactionId}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center pb-2 border-b">
-                <span className="font-medium">Status</span>
-                {getStatusBadge(selectedDelivery.status)}
+      <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Detail Pengiriman</DialogTitle>
+            <DialogDescription>
+              Informasi lengkap mengenai pengiriman.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDelivery && (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="id" className="text-right">ID:</label>
+                <Input id="id" value={selectedDelivery.id} className="col-span-3" readOnly />
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Pembeli</h4>
-                  <p className="font-medium">{selectedDelivery.buyerName}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Kontak</h4>
-                  <p className="font-medium">{selectedDelivery.contact}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Komoditas</h4>
-                  <p className="font-medium">{selectedDelivery.commodity}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Kuantitas</h4>
-                  <p className="font-medium">{selectedDelivery.quantity} {selectedDelivery.unit}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Asal</h4>
-                  <p className="font-medium">{selectedDelivery.origin}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Tujuan</h4>
-                  <p className="font-medium">{selectedDelivery.destination}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Tanggal Pengiriman</h4>
-                  <p className="font-medium">{formatDate(new Date(selectedDelivery.date))}</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-500">Estimasi Tiba</h4>
-                  <p className="font-medium">{formatDate(new Date(selectedDelivery.estimatedArrival))}</p>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="date" className="text-right">Tanggal:</label>
+                <Input id="date" value={formatDate(new Date(selectedDelivery.date))} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="buyerName" className="text-right">Nama Pembeli:</label>
+                <Input id="buyerName" value={selectedDelivery.buyerName} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="commodity" className="text-right">Komoditas:</label>
+                <Input id="commodity" value={selectedDelivery.commodity} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="quantity" className="text-right">Kuantitas:</label>
+                <Input id="quantity" value={`${selectedDelivery.quantity} ${selectedDelivery.unit}`} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="destination" className="text-right">Tujuan:</label>
+                <Input id="destination" value={selectedDelivery.destination} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="pricePerUnit" className="text-right">Harga per Unit:</label>
+                <Input id="pricePerUnit" value={formatCurrency(selectedDelivery.pricePerUnit)} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="shippingCost" className="text-right">Biaya Pengiriman:</label>
+                <Input id="shippingCost" value={formatCurrency(selectedDelivery.shippingCost)} className="col-span-3" readOnly />
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <label htmlFor="status" className="text-right">Status:</label>
+                <div className="col-span-3">
+                  {getStatusBadge(selectedDelivery.status)}
                 </div>
               </div>
-              
-              {selectedDelivery.status === "persiapan_pengiriman" && (
-                <Alert className="bg-blue-50 border-blue-200">
-                  <Clock className="h-4 w-4 text-blue-700" />
-                  <AlertTitle className="text-blue-700">Persiapan Pengiriman</AlertTitle>
-                  <AlertDescription className="text-blue-700">
-                    Komoditas sedang dipersiapkan untuk pengiriman. Pastikan semua dokumen dan kemasan sudah siap.
-                  </AlertDescription>
-                </Alert>
-              )}
-              
-              {selectedDelivery.status === "sedang_dikirim" && (
-                <Alert className="bg-yellow-50 border-yellow-200">
-                  <MapPin className="h-4 w-4 text-yellow-700" />
-                  <AlertTitle className="text-yellow-700">Sedang Dikirim</AlertTitle>
-                  <AlertDescription className="text-yellow-700">
-                    Komoditas sedang dalam perjalanan menuju lokasi tujuan. Perbarui status menjadi 'Sudah Dikirim' setelah pengiriman selesai.
-                  </AlertDescription>
-                </Alert>
-              )}
             </div>
-            <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={() => setDetailDialogOpen(false)}>
-                Tutup
-              </Button>
-              
-              {selectedDelivery.status === "sedang_dikirim" && (
-                <Button onClick={handleUpdateStatus} className="gap-2">
-                  <Check className="h-4 w-4" />
-                  Sudah Dikirim
-                </Button>
-              )}
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+          )}
+          <DialogFooter>
+            <Button type="submit" onClick={() => setDetailDialogOpen(false)}>
+              Tutup
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      {/* Confirmation Dialog */}
-      {selectedDelivery && (
-        <Dialog open={confirmationDialogOpen} onOpenChange={setConfirmationDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Konfirmasi Pengiriman</DialogTitle>
-              <DialogDescription>
-                Apakah Anda yakin komoditas telah terkirim ke alamat tujuan?
-              </DialogDescription>
-            </DialogHeader>
-            <div className="py-4">
-              <Alert className="bg-blue-50 border-blue-200">
-                <CircleAlert className="h-4 w-4 text-blue-700" />
-                <AlertDescription className="text-blue-700">
-                  Dengan mengkonfirmasi, Anda menyatakan bahwa pengiriman telah sampai ke alamat tujuan dan siap untuk diterima oleh pembeli.
-                </AlertDescription>
-              </Alert>
-              
-              <div className="mt-4 p-4 bg-gray-50 rounded-md">
-                <h3 className="text-sm font-medium mb-2">Detail Pengiriman</h3>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="text-gray-500">ID:</div>
-                  <div className="font-medium">{selectedDelivery.id}</div>
-                  <div className="text-gray-500">Pembeli:</div>
-                  <div className="font-medium">{selectedDelivery.buyerName}</div>
-                  <div className="text-gray-500">Komoditas:</div>
-                  <div className="font-medium">{selectedDelivery.commodity}</div>
-                  <div className="text-gray-500">Tujuan:</div>
-                  <div className="font-medium">{selectedDelivery.destination}</div>
-                </div>
-              </div>
-            </div>
-            <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={() => setConfirmationDialogOpen(false)}>
-                Batal
-              </Button>
-              <Button 
-                onClick={handleConfirmStatusUpdate} 
-                className="gap-2 bg-tani-green-dark hover:bg-tani-green-dark/90"
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Konfirmasi Pengiriman
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+      <Dialog open={confirmationDialogOpen} onOpenChange={setConfirmationDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Konfirmasi</DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin mengubah status pengiriman ini?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Alert>
+              <CircleAlert className="h-4 w-4" />
+              <AlertTitle>Peringatan!</AlertTitle>
+              <AlertDescription>
+                Anda akan mengubah status pengiriman ini menjadi {status}.
+              </AlertDescription>
+            </Alert>
+          </div>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setConfirmationDialogOpen(false)}>
+              Batal
+            </Button>
+            <Button type="submit" onClick={handleConfirmStatusUpdate}>
+              Konfirmasi
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
+  );
+};
+
+interface DeliveryTableProps {
+  deliveries: typeof deliveriesData;
+  onView: (delivery: typeof deliveriesData[0]) => void;
+  onUpdateStatus: (delivery: typeof deliveriesData[0], status: string) => void;
+}
+
+const DeliveryTable = ({ deliveries, onView, onUpdateStatus }: DeliveryTableProps) => {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">ID</TableHead>
+          <TableHead>Pembeli</TableHead>
+          <TableHead className="hidden md:table-cell">Komoditas</TableHead>
+          <TableHead className="hidden lg:table-cell">Tujuan</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Aksi</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {deliveries.length > 0 ? (
+          deliveries.map((delivery) => (
+            <TableRow key={delivery.id}>
+              <TableCell className="font-medium">{delivery.id}</TableCell>
+              <TableCell>{delivery.buyerName}</TableCell>
+              <TableCell className="hidden md:table-cell">
+                {delivery.commodity} ({delivery.quantity} {delivery.unit})
+              </TableCell>
+              <TableCell className="hidden lg:table-cell">{delivery.destination}</TableCell>
+              <TableCell>{getStatusBadge(delivery.status)}</TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" size="icon" onClick={() => onView(delivery)}>
+                  <Eye className="h-4 w-4" />
+                </Button>
+                {delivery.status === "persiapan_pengiriman" && (
+                  <Button variant="ghost" size="icon" onClick={() => onUpdateStatus(delivery, "sedang_dikirim")}>
+                    <Truck className="h-4 w-4" />
+                  </Button>
+                )}
+                {delivery.status === "sedang_dikirim" && (
+                  <Button variant="ghost" size="icon" onClick={() => onUpdateStatus(delivery, "sudah_dikirim")}>
+                    <Package className="h-4 w-4" />
+                  </Button>
+                )}
+                {delivery.status === "sudah_dikirim" && (
+                  <Button variant="ghost" size="icon" onClick={() => onUpdateStatus(delivery, "diterima")}>
+                    <CheckCircle2 className="h-4 w-4" />
+                  </Button>
+                )}
+                {delivery.status === "diterima" && (
+                  <Button variant="ghost" size="icon" onClick={() => onUpdateStatus(delivery, "selesai")}>
+                    <Check className="h-4 w-4" />
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+              Tidak ada pengiriman yang ditemukan
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 };
 
