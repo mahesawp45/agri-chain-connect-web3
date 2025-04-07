@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 import Komoditas from "./pages/Komoditas";
 import KomoditasDetail from "./pages/KomoditasDetail";
 import Saldo from "./pages/Saldo";
@@ -37,6 +38,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/komoditas" element={<Komoditas />} />
             <Route path="/komoditas/:id" element={<KomoditasDetail />} />
