@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ClipboardList, Search, Calendar, Filter, Eye, Check, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,8 @@ import {
 } from "@/components/ui/select";
 import { formatDate } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
 
 // Sample order book data
 const orderBooks = [
@@ -93,6 +96,9 @@ const orderBooks = [
 ];
 
 const OrderBook = () => {
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
@@ -118,27 +124,49 @@ const OrderBook = () => {
     return matchesSearch && matchesStatus && matchesTab;
   });
 
+  // Function to handle viewing details
+  const handleViewDetails = (id: string) => {
+    navigate(`/order-book/${id}`);
+  };
+
+  // Function to handle accepting an order
+  const handleAccept = (id: string) => {
+    toast({
+      title: "Order Accepted",
+      description: `You have accepted the order ${id}`,
+    });
+  };
+
+  // Function to handle rejecting an order
+  const handleReject = (id: string) => {
+    toast({
+      title: "Order Rejected",
+      description: `You have rejected the order ${id}`,
+      variant: "destructive"
+    });
+  };
+
   // Function to render status badge with appropriate color
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { label: string; className: string }> = {
       open: {
-        label: "Terbuka",
+        label: t("status.open"),
         className: "bg-blue-100 text-blue-800",
       },
       accepted: {
-        label: "Diterima",
+        label: t("status.accepted"),
         className: "bg-green-100 text-green-800",
       },
       completed: {
-        label: "Selesai",
+        label: t("status.completed"),
         className: "bg-teal-100 text-teal-800",
       },
       expired: {
-        label: "Kedaluwarsa",
+        label: t("status.expired"),
         className: "bg-gray-100 text-gray-800",
       },
       cancelled: {
-        label: "Dibatalkan",
+        label: t("status.canceled"),
         className: "bg-red-100 text-red-800",
       },
     };
@@ -158,15 +186,15 @@ const OrderBook = () => {
   return (
     <MainLayout>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Order Book</h1>
-        <p className="text-gray-600">Lihat dan terima permintaan komoditas dari pembeli</p>
+        <h1 className="text-2xl font-bold mb-2">{t("orderbook.title")}</h1>
+        <p className="text-gray-600">{t("orderbook.subtitle")}</p>
       </div>
 
       <Card className="mb-6">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center">
             <ClipboardList className="h-5 w-5 mr-2 text-tani-green-dark" />
-            Daftar Order Book
+            {t("orderbook.list")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -176,7 +204,7 @@ const OrderBook = () => {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
                   type="search"
-                  placeholder="Cari order book..."
+                  placeholder={t("orderbook.search")}
                   className="pl-8"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -191,43 +219,43 @@ const OrderBook = () => {
                     <SelectValue placeholder="Filter Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Semua Status</SelectItem>
-                    <SelectItem value="open">Terbuka</SelectItem>
-                    <SelectItem value="accepted">Diterima</SelectItem>
-                    <SelectItem value="completed">Selesai</SelectItem>
-                    <SelectItem value="expired">Kedaluwarsa</SelectItem>
-                    <SelectItem value="cancelled">Dibatalkan</SelectItem>
+                    <SelectItem value="all">{t("orderbook.all")}</SelectItem>
+                    <SelectItem value="open">{t("status.open")}</SelectItem>
+                    <SelectItem value="accepted">{t("status.accepted")}</SelectItem>
+                    <SelectItem value="completed">{t("status.completed")}</SelectItem>
+                    <SelectItem value="expired">{t("status.expired")}</SelectItem>
+                    <SelectItem value="cancelled">{t("status.canceled")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button variant="outline" className="flex gap-2">
                   <Filter className="h-4 w-4" />
-                  Filter Lanjutan
+                  {t("action.filter")}
                 </Button>
               </div>
             </div>
 
             <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
               <TabsList className="mb-4">
-                <TabsTrigger value="all">Semua</TabsTrigger>
-                <TabsTrigger value="open">Terbuka</TabsTrigger>
-                <TabsTrigger value="accepted">Diterima</TabsTrigger>
-                <TabsTrigger value="completed">Selesai</TabsTrigger>
-                <TabsTrigger value="expired">Kedaluwarsa</TabsTrigger>
+                <TabsTrigger value="all">{t("orderbook.all")}</TabsTrigger>
+                <TabsTrigger value="open">{t("status.open")}</TabsTrigger>
+                <TabsTrigger value="accepted">{t("status.accepted")}</TabsTrigger>
+                <TabsTrigger value="completed">{t("status.completed")}</TabsTrigger>
+                <TabsTrigger value="expired">{t("status.expired")}</TabsTrigger>
               </TabsList>
               <TabsContent value="all" className="mt-0">
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID Order</TableHead>
-                        <TableHead>Pembeli</TableHead>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Kuantitas</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Tanggal Pengiriman</TableHead>
-                        <TableHead>Tanggal Kedaluwarsa</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Aksi</TableHead>
+                        <TableHead>{t("orderbook.id")}</TableHead>
+                        <TableHead>{t("orderbook.buyer")}</TableHead>
+                        <TableHead>{t("orderbook.commodity")}</TableHead>
+                        <TableHead>{t("orderbook.quantity")}</TableHead>
+                        <TableHead>{t("orderbook.grade")}</TableHead>
+                        <TableHead>{t("orderbook.delivery")}</TableHead>
+                        <TableHead>{t("orderbook.expiry")}</TableHead>
+                        <TableHead>{t("orderbook.status")}</TableHead>
+                        <TableHead className="text-right">{t("orderbook.action")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -246,15 +274,29 @@ const OrderBook = () => {
                             <TableCell>{getStatusBadge(orderBook.status)}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
-                                <Button variant="ghost" size="icon">
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon"
+                                  onClick={() => handleViewDetails(orderBook.id)}
+                                >
                                   <Eye className="h-4 w-4" />
                                 </Button>
                                 {orderBook.status === "open" && (
                                   <>
-                                    <Button variant="ghost" size="icon" className="text-green-600">
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="text-green-600"
+                                      onClick={() => handleAccept(orderBook.id)}
+                                    >
                                       <Check className="h-4 w-4" />
                                     </Button>
-                                    <Button variant="ghost" size="icon" className="text-red-600">
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="text-red-600"
+                                      onClick={() => handleReject(orderBook.id)}
+                                    >
                                       <X className="h-4 w-4" />
                                     </Button>
                                   </>
@@ -266,7 +308,7 @@ const OrderBook = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={9} className="text-center py-8 text-gray-500">
-                            Tidak ada order book yang ditemukan
+                            {t("orderbook.notfound")}
                           </TableCell>
                         </TableRow>
                       )}
@@ -275,21 +317,21 @@ const OrderBook = () => {
                 </div>
               </TabsContent>
               
-              {/* Other tabs have similar structure but filtered by status */}
+              {/* Other tabs have similar structure but just for display since actual filtering happens in JS */}
               <TabsContent value="open" className="mt-0">
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID Order</TableHead>
-                        <TableHead>Pembeli</TableHead>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Kuantitas</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Tanggal Pengiriman</TableHead>
-                        <TableHead>Tanggal Kedaluwarsa</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Aksi</TableHead>
+                        <TableHead>{t("orderbook.id")}</TableHead>
+                        <TableHead>{t("orderbook.buyer")}</TableHead>
+                        <TableHead>{t("orderbook.commodity")}</TableHead>
+                        <TableHead>{t("orderbook.quantity")}</TableHead>
+                        <TableHead>{t("orderbook.grade")}</TableHead>
+                        <TableHead>{t("orderbook.delivery")}</TableHead>
+                        <TableHead>{t("orderbook.expiry")}</TableHead>
+                        <TableHead>{t("orderbook.status")}</TableHead>
+                        <TableHead className="text-right">{t("orderbook.action")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -308,13 +350,27 @@ const OrderBook = () => {
                             <TableCell>{getStatusBadge(orderBook.status)}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
-                                <Button variant="ghost" size="icon">
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon"
+                                  onClick={() => handleViewDetails(orderBook.id)}
+                                >
                                   <Eye className="h-4 w-4" />
                                 </Button>
-                                <Button variant="ghost" size="icon" className="text-green-600">
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="text-green-600"
+                                  onClick={() => handleAccept(orderBook.id)}
+                                >
                                   <Check className="h-4 w-4" />
                                 </Button>
-                                <Button variant="ghost" size="icon" className="text-red-600">
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="text-red-600"
+                                  onClick={() => handleReject(orderBook.id)}
+                                >
                                   <X className="h-4 w-4" />
                                 </Button>
                               </div>
@@ -324,7 +380,7 @@ const OrderBook = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={9} className="text-center py-8 text-gray-500">
-                            Tidak ada order book terbuka yang ditemukan
+                            {t("orderbook.notfound")}
                           </TableCell>
                         </TableRow>
                       )}
@@ -333,21 +389,22 @@ const OrderBook = () => {
                 </div>
               </TabsContent>
               
-              {/* Similar structures for accepted, completed, and expired tabs */}
+              {/* Other tabs content is similar */}
               <TabsContent value="accepted" className="mt-0">
                 <div className="rounded-md border">
                   <Table>
+                    {/* ... same table structure as above ... */}
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID Order</TableHead>
-                        <TableHead>Pembeli</TableHead>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Kuantitas</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Tanggal Pengiriman</TableHead>
-                        <TableHead>Tanggal Kedaluwarsa</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Aksi</TableHead>
+                        <TableHead>{t("orderbook.id")}</TableHead>
+                        <TableHead>{t("orderbook.buyer")}</TableHead>
+                        <TableHead>{t("orderbook.commodity")}</TableHead>
+                        <TableHead>{t("orderbook.quantity")}</TableHead>
+                        <TableHead>{t("orderbook.grade")}</TableHead>
+                        <TableHead>{t("orderbook.delivery")}</TableHead>
+                        <TableHead>{t("orderbook.expiry")}</TableHead>
+                        <TableHead>{t("orderbook.status")}</TableHead>
+                        <TableHead className="text-right">{t("orderbook.action")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -365,7 +422,11 @@ const OrderBook = () => {
                             <TableCell>{formatDate(orderBook.offerExpiryDate)}</TableCell>
                             <TableCell>{getStatusBadge(orderBook.status)}</TableCell>
                             <TableCell className="text-right">
-                              <Button variant="ghost" size="icon">
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                onClick={() => handleViewDetails(orderBook.id)}
+                              >
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
@@ -374,7 +435,7 @@ const OrderBook = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={9} className="text-center py-8 text-gray-500">
-                            Tidak ada order book diterima yang ditemukan
+                            {t("orderbook.notfound")}
                           </TableCell>
                         </TableRow>
                       )}
@@ -384,19 +445,20 @@ const OrderBook = () => {
               </TabsContent>
               
               <TabsContent value="completed" className="mt-0">
+                {/* ... similar structure ... */}
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID Order</TableHead>
-                        <TableHead>Pembeli</TableHead>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Kuantitas</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Tanggal Pengiriman</TableHead>
-                        <TableHead>Tanggal Kedaluwarsa</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Aksi</TableHead>
+                        <TableHead>{t("orderbook.id")}</TableHead>
+                        <TableHead>{t("orderbook.buyer")}</TableHead>
+                        <TableHead>{t("orderbook.commodity")}</TableHead>
+                        <TableHead>{t("orderbook.quantity")}</TableHead>
+                        <TableHead>{t("orderbook.grade")}</TableHead>
+                        <TableHead>{t("orderbook.delivery")}</TableHead>
+                        <TableHead>{t("orderbook.expiry")}</TableHead>
+                        <TableHead>{t("orderbook.status")}</TableHead>
+                        <TableHead className="text-right">{t("orderbook.action")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -414,7 +476,11 @@ const OrderBook = () => {
                             <TableCell>{formatDate(orderBook.offerExpiryDate)}</TableCell>
                             <TableCell>{getStatusBadge(orderBook.status)}</TableCell>
                             <TableCell className="text-right">
-                              <Button variant="ghost" size="icon">
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                onClick={() => handleViewDetails(orderBook.id)}
+                              >
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
@@ -423,7 +489,7 @@ const OrderBook = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={9} className="text-center py-8 text-gray-500">
-                            Tidak ada order book selesai yang ditemukan
+                            {t("orderbook.notfound")}
                           </TableCell>
                         </TableRow>
                       )}
@@ -433,19 +499,20 @@ const OrderBook = () => {
               </TabsContent>
               
               <TabsContent value="expired" className="mt-0">
+                {/* ... similar structure ... */}
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID Order</TableHead>
-                        <TableHead>Pembeli</TableHead>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Kuantitas</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Tanggal Pengiriman</TableHead>
-                        <TableHead>Tanggal Kedaluwarsa</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Aksi</TableHead>
+                        <TableHead>{t("orderbook.id")}</TableHead>
+                        <TableHead>{t("orderbook.buyer")}</TableHead>
+                        <TableHead>{t("orderbook.commodity")}</TableHead>
+                        <TableHead>{t("orderbook.quantity")}</TableHead>
+                        <TableHead>{t("orderbook.grade")}</TableHead>
+                        <TableHead>{t("orderbook.delivery")}</TableHead>
+                        <TableHead>{t("orderbook.expiry")}</TableHead>
+                        <TableHead>{t("orderbook.status")}</TableHead>
+                        <TableHead className="text-right">{t("orderbook.action")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -463,7 +530,11 @@ const OrderBook = () => {
                             <TableCell>{formatDate(orderBook.offerExpiryDate)}</TableCell>
                             <TableCell>{getStatusBadge(orderBook.status)}</TableCell>
                             <TableCell className="text-right">
-                              <Button variant="ghost" size="icon">
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                onClick={() => handleViewDetails(orderBook.id)}
+                              >
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
@@ -472,7 +543,7 @@ const OrderBook = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={9} className="text-center py-8 text-gray-500">
-                            Tidak ada order book kedaluwarsa yang ditemukan
+                            {t("orderbook.notfound")}
                           </TableCell>
                         </TableRow>
                       )}

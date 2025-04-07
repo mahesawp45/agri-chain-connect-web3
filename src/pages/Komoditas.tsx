@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { 
   Table, 
@@ -37,6 +38,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Mock data for demo purposes
 const komoditasData = [
@@ -104,11 +106,13 @@ const locations = ["Cianjur, Jawa Barat", "Malang, Jawa Timur", "Jember, Jawa Ti
 const grades = ["Premium", "A", "B", "C"];
 
 const Komoditas = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [addKomoditasOpen, setAddKomoditasOpen] = useState(false);
   const [qrCodeDialogOpen, setQrCodeDialogOpen] = useState(false);
   const [selectedKomoditas, setSelectedKomoditas] = useState<string | null>(null);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -162,24 +166,28 @@ const Komoditas = () => {
     item.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleViewDetail = (id: string) => {
+    navigate(`/komoditas/${id}`);
+  };
   
   return (
     <MainLayout>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Komoditas</h1>
-          <p className="text-gray-600">Kelola komoditas pertanian Anda</p>
+          <h1 className="text-2xl font-bold">{t("commodities.title")}</h1>
+          <p className="text-gray-600">{t("commodities.subtitle")}</p>
         </div>
         <Dialog open={addKomoditasOpen} onOpenChange={setAddKomoditasOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2 bg-tani-green-dark hover:bg-tani-green-dark/90">
               <Plus className="h-4 w-4" />
-              Tambah Komoditas
+              {t("commodities.add")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[625px]">
             <DialogHeader>
-              <DialogTitle>Tambah Komoditas Baru</DialogTitle>
+              <DialogTitle>{t("commodities.add")}</DialogTitle>
               <DialogDescription>
                 Isi formulir di bawah ini untuk menambahkan komoditas baru ke daftar Anda.
               </DialogDescription>
@@ -187,7 +195,7 @@ const Komoditas = () => {
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nama Komoditas</Label>
+                  <Label htmlFor="name">{t("commodities.name")}</Label>
                   <Input 
                     id="name" 
                     placeholder="Masukkan nama komoditas" 
@@ -196,7 +204,7 @@ const Komoditas = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="unit">Satuan</Label>
+                  <Label htmlFor="unit">{t("commodities.unit")}</Label>
                   <Select 
                     value={formData.unit}
                     onValueChange={(value) => handleInputChange("unit", value)}
@@ -214,7 +222,7 @@ const Komoditas = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="type">Jenis Komoditas</Label>
+                  <Label htmlFor="type">{t("commodities.type")}</Label>
                   <Select 
                     value={formData.type}
                     onValueChange={(value) => handleInputChange("type", value)}
@@ -230,7 +238,7 @@ const Komoditas = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="image">Foto Komoditas</Label>
+                  <Label htmlFor="image">{t("commodities.upload.image")}</Label>
                   <Input 
                     id="image" 
                     type="file" 
@@ -242,7 +250,7 @@ const Komoditas = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="quantity">Jumlah</Label>
+                  <Label htmlFor="quantity">{t("commodities.quantity")}</Label>
                   <Input 
                     id="quantity" 
                     type="number" 
@@ -252,7 +260,7 @@ const Komoditas = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location">Lokasi</Label>
+                  <Label htmlFor="location">{t("commodities.location")}</Label>
                   <Select 
                     value={formData.location}
                     onValueChange={(value) => handleInputChange("location", value)}
@@ -270,7 +278,7 @@ const Komoditas = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="gradeFile">File Grading</Label>
+                  <Label htmlFor="gradeFile">{t("commodities.upload.grade")}</Label>
                   <Input 
                     id="gradeFile" 
                     type="file" 
@@ -280,7 +288,7 @@ const Komoditas = () => {
                   <p className="text-xs text-gray-500">Upload file grading (PDF/Gambar)</p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="grade">Status Grade</Label>
+                  <Label htmlFor="grade">{t("commodities.grade")}</Label>
                   <Select 
                     value={formData.grade}
                     onValueChange={(value) => handleInputChange("grade", value)}
@@ -298,8 +306,8 @@ const Komoditas = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setAddKomoditasOpen(false)}>Batal</Button>
-              <Button onClick={handleAddKomoditas}>Simpan</Button>
+              <Button variant="outline" onClick={() => setAddKomoditasOpen(false)}>{t("action.cancel")}</Button>
+              <Button onClick={handleAddKomoditas}>{t("action.save")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -308,7 +316,7 @@ const Komoditas = () => {
         <Dialog open={qrCodeDialogOpen} onOpenChange={setQrCodeDialogOpen}>
           <DialogContent className="sm:max-w-[400px]">
             <DialogHeader>
-              <DialogTitle>QR Code Komoditas</DialogTitle>
+              <DialogTitle>{t("commodities.qrcode")}</DialogTitle>
               <DialogDescription>
                 Gunakan QR Code ini untuk melacak komoditas Anda.
               </DialogDescription>
@@ -318,13 +326,13 @@ const Komoditas = () => {
                 <QrCode className="h-32 w-32 text-tani-green-dark mx-auto" />
               </div>
               <p className="text-center text-sm text-gray-700">
-                Komoditas: <span className="font-medium">{selectedKomoditas}</span><br />
+                {t("commodities.name")}: <span className="font-medium">{selectedKomoditas}</span><br />
                 ID: <span className="font-medium">KM00{Math.floor(Math.random() * 1000)}</span><br />
-                Tanggal: <span className="font-medium">{new Date().toLocaleDateString('id-ID')}</span>
+                {t("commodities.created")}: <span className="font-medium">{new Date().toLocaleDateString('id-ID')}</span>
               </p>
             </div>
             <DialogFooter>
-              <Button onClick={() => setQrCodeDialogOpen(false)}>Tutup</Button>
+              <Button onClick={() => setQrCodeDialogOpen(false)}>{t("action.close")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -337,14 +345,14 @@ const Komoditas = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <Input 
                 className="pl-10" 
-                placeholder="Cari komoditas..." 
+                placeholder={t("commodities.search")} 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             <Button variant="outline" className="gap-2">
               <Filter className="h-4 w-4" />
-              Filter
+              {t("action.filter")}
             </Button>
           </div>
         </CardContent>
@@ -354,7 +362,7 @@ const Komoditas = () => {
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center">
             <Package className="h-5 w-5 mr-2 text-tani-green-dark" />
-            Daftar Komoditas
+            {t("commodities.list")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -362,12 +370,12 @@ const Komoditas = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Nama</TableHead>
-                  <TableHead>Jenis</TableHead>
-                  <TableHead className="hidden md:table-cell">Jumlah</TableHead>
-                  <TableHead className="hidden lg:table-cell">Lokasi</TableHead>
-                  <TableHead>Grade</TableHead>
-                  <TableHead className="text-right">Aksi</TableHead>
+                  <TableHead>{t("commodities.name")}</TableHead>
+                  <TableHead>{t("commodities.type")}</TableHead>
+                  <TableHead className="hidden md:table-cell">{t("commodities.quantity")}</TableHead>
+                  <TableHead className="hidden lg:table-cell">{t("commodities.location")}</TableHead>
+                  <TableHead>{t("commodities.grade")}</TableHead>
+                  <TableHead className="text-right">{t("commodities.action")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -416,22 +424,22 @@ const Komoditas = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewDetail(item.id)}>
                               <FileText className="h-4 w-4 mr-2" />
-                              Lihat Detail
+                              {t("action.view")}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Edit className="h-4 w-4 mr-2" />
-                              Edit
+                              {t("action.edit")}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <QrCode className="h-4 w-4 mr-2" />
-                              Lihat QR Code
+                              {t("commodities.qrcode")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600">
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Hapus
+                              {t("action.delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -442,8 +450,8 @@ const Komoditas = () => {
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8 text-gray-500">
                       {searchQuery 
-                        ? `Tidak ada komoditas yang cocok dengan "${searchQuery}"`
-                        : "Belum ada data komoditas. Klik 'Tambah Komoditas' untuk menambahkan."}
+                        ? `${t("commodities.notfound")} "${searchQuery}"`
+                        : `${t("commodities.notfound")}. ${t("commodities.add")} to get started.`}
                     </TableCell>
                   </TableRow>
                 )}
