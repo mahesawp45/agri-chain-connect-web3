@@ -202,7 +202,14 @@ export default function Dashboard() {
                                 transaction.status === "selesai" ? "completed" :
                                 transaction.status === "dibatalkan" ? "cancelled" :
                                 transaction.status === "negosiasi" ? "negotiation" :
-                                transaction.status === "proses" ? "processing" : transaction.status
+                                transaction.status === "menunggu_konfirmasi" ? "awaiting confirmation" :
+                                transaction.status === "dikonfirmasi" ? "confirmed" :
+                                transaction.status === "dibayar" ? "paid" :
+                                transaction.status === "persiapan_pengiriman" ? "preparing shipment" :
+                                transaction.status === "sedang_dikirim" ? "shipping" :
+                                transaction.status === "sudah_dikirim" ? "shipped" :
+                                transaction.status === "diterima" ? "received" : 
+                                transaction.status
                               }
                             </span>
                           </div>
@@ -366,9 +373,21 @@ export default function Dashboard() {
                         ? transaction.status.replace('_', ' ') 
                         : transaction.status === 'negosiasi' 
                           ? 'negotiation' 
-                          : transaction.status === 'proses' 
-                            ? 'processing' 
-                            : transaction.status
+                          : transaction.status === 'menunggu_konfirmasi' 
+                            ? 'awaiting confirmation' 
+                            : transaction.status === 'dikonfirmasi' 
+                              ? 'confirmed' 
+                              : transaction.status === 'dibayar' 
+                                ? 'paid' 
+                                : transaction.status === 'persiapan_pengiriman' 
+                                  ? 'preparing shipment' 
+                                  : transaction.status === 'sedang_dikirim' 
+                                    ? 'shipping' 
+                                    : transaction.status === 'sudah_dikirim' 
+                                      ? 'shipped' 
+                                      : transaction.status === 'diterima' 
+                                        ? 'received' 
+                                        : transaction.status
                       }
                     </div>
                   </div>
