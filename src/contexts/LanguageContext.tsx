@@ -5,13 +5,10 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 export type Language = 'id' | 'en';
 
 // Define translation object structure
-interface NestedTranslations {
-  [key: string]: string | NestedTranslations;
-}
-
-// Define translations object structure
 type TranslationsType = {
-  [key in Language]: Record<string, string | NestedTranslations>;
+  [key in Language]: {
+    [key: string]: string;
+  };
 };
 
 // Translations dictionary
@@ -41,38 +38,6 @@ export const translations: TranslationsType = {
     "action.details": "Details",
     "action.showAll": "Show All",
     "action.showMore": "Show More",
-
-    // Authentication
-    "auth.login": "Login",
-    "auth.register": "Register",
-    "auth.forgotPassword": "Forgot Password?",
-    "auth.loginDesc": "Login to access your TaniTrack account",
-    "auth.farmerLogin": "Farmer Login",
-    "auth.buyerLogin": "Buyer Login",
-    "auth.enterCredentials": "Enter your credentials to continue",
-    "auth.loggingIn": "Logging in...",
-    "auth.noAccount": "Don't have an account?",
-    "auth.registerNow": "Register now",
-    "auth.needHelp": "Need help?",
-    "auth.contactSupport": "Contact support",
-    "auth.email": "Email",
-    "auth.password": "Password",
-    "auth.confirmPassword": "Confirm Password",
-    "auth.name": "Name",
-    "auth.phone": "Phone Number",
-    "auth.address": "Address",
-    "auth.farmer": "Farmer",
-    "auth.buyer": "Buyer",
-    "auth.scanTaniTrackCard": "Scan your TaniTrack card to login",
-    "auth.scanCard": "Scan Card",
-    "auth.loginInstructions": "Login with TaniTrack Card",
-    "auth.scanInstruction": "Scan your TaniTrack card using the TaniTrack Mobile Auth App",
-    "auth.otpInstruction": "Enter the OTP sent to your mobile device",
-    "auth.enterOTP": "Enter OTP",
-    "auth.otpPlaceholder": "Enter OTP code",
-    "auth.otpRequired": "OTP is required",
-    "auth.welcomeBack": "Welcome back to TaniTrack!",
-    "success.login": "Login Successful",
 
     // Navigation
     "nav.dashboard": "Dashboard",
@@ -345,61 +310,6 @@ export const translations: TranslationsType = {
     "info.processing": "Processing your request",
     "info.noData": "No data available",
     "warning.unsaved": "You have unsaved changes",
-    
-    // Buyer section
-    "buyer": {
-      "marketplace": {
-        "title": "Marketplace",
-        "browse": "Browse Products",
-        "description": "Find and purchase agricultural commodities",
-        "filters": "Marketplace Filters",
-        "search": "Search",
-        "searchPlaceholder": "Search for commodities...",
-        "commodityType": "Commodity Type",
-        "allTypes": "All Types",
-        "available": "Available Now",
-        "buy": "Buy Now"
-      },
-      "orderbook": {
-        "title": "Order Book",
-        "browse": "Browse Orders",
-        "create": "Create Order",
-        "review": "Review Orders",
-        "myOrders": "My Orders",
-        "pendingOrders": "Pending Orders"
-      },
-      "finance": {
-        "title": "Finance",
-        "balance": "My Balance",
-        "history": "Transaction History",
-        "payments": "Payment Methods",
-        "invoices": "Invoices"
-      },
-      "market": {
-        "title": "Market",
-        "prices": "Market Prices",
-        "trends": "Market Trends",
-        "forecasts": "Price Forecasts"
-      },
-      "shipping": {
-        "title": "Logistics",
-        "manage": "Manage Shipments",
-        "track": "Track Shipments",
-        "schedule": "Schedule Pickup"
-      },
-      "account": {
-        "title": "My Account",
-        "profile": "Profile Settings",
-        "company": "Company Profile",
-        "notifications": "Notifications"
-      },
-      "transactions": {
-        "title": "Purchases",
-        "pending": "Pending",
-        "completed": "Completed",
-        "history": "History"
-      }
-    }
   },
   id: {
     // General
@@ -426,38 +336,6 @@ export const translations: TranslationsType = {
     "action.details": "Detail",
     "action.showAll": "Tampilkan Semua",
     "action.showMore": "Tampilkan Lebih",
-
-    // Authentication
-    "auth.login": "Masuk",
-    "auth.register": "Daftar",
-    "auth.forgotPassword": "Lupa Kata Sandi?",
-    "auth.loginDesc": "Masuk ke akun TaniTrack Anda",
-    "auth.farmerLogin": "Login Petani",
-    "auth.buyerLogin": "Login Pembeli",
-    "auth.enterCredentials": "Masukkan kredensial Anda untuk melanjutkan",
-    "auth.loggingIn": "Masuk...",
-    "auth.noAccount": "Belum memiliki akun?",
-    "auth.registerNow": "Daftar sekarang",
-    "auth.needHelp": "Butuh bantuan?",
-    "auth.contactSupport": "Hubungi dukungan",
-    "auth.email": "Email",
-    "auth.password": "Kata Sandi",
-    "auth.confirmPassword": "Konfirmasi Kata Sandi",
-    "auth.name": "Nama",
-    "auth.phone": "Nomor Telepon",
-    "auth.address": "Alamat",
-    "auth.farmer": "Petani",
-    "auth.buyer": "Pembeli",
-    "auth.scanTaniTrackCard": "Pindai kartu TaniTrack Anda untuk masuk",
-    "auth.scanCard": "Pindai Kartu",
-    "auth.loginInstructions": "Penjelasan Penggunaan Login dengan TaniTrack Card",
-    "auth.scanInstruction": "Pindai kartu TaniTrack Anda menggunakan Aplikasi TaniTrack Mobile Auth",
-    "auth.otpInstruction": "Masukkan OTP yang dikirim ke perangkat seluler Anda",
-    "auth.enterOTP": "Masukkan OTP",
-    "auth.otpPlaceholder": "Masukkan kode OTP",
-    "auth.otpRequired": "OTP diperlukan",
-    "auth.welcomeBack": "Selamat datang kembali di TaniTrack!",
-    "success.login": "Login Berhasil",
 
     // Navigation
     "nav.dashboard": "Dasbor",
@@ -730,117 +608,35 @@ export const translations: TranslationsType = {
     "info.processing": "Memproses permintaan Anda",
     "info.noData": "Tidak ada data tersedia",
     "warning.unsaved": "Anda memiliki perubahan yang belum disimpan",
-    
-    // Buyer section
-    "buyer": {
-      "marketplace": {
-        "title": "Pasar",
-        "browse": "Jelajahi Produk",
-        "description": "Temukan dan beli komoditas pertanian",
-        "filters": "Filter Pasar",
-        "search": "Cari",
-        "searchPlaceholder": "Cari komoditas...",
-        "commodityType": "Jenis Komoditas",
-        "allTypes": "Semua Jenis",
-        "available": "Tersedia Sekarang",
-        "buy": "Beli Sekarang"
-      },
-      "orderbook": {
-        "title": "Buku Pesanan",
-        "browse": "Jelajahi Pesanan",
-        "create": "Buat Pesanan",
-        "review": "Tinjau Pesanan",
-        "myOrders": "Pesanan Saya",
-        "pendingOrders": "Pesanan Tertunda"
-      },
-      "finance": {
-        "title": "Keuangan",
-        "balance": "Saldo Saya",
-        "history": "Riwayat Transaksi",
-        "payments": "Metode Pembayaran",
-        "invoices": "Faktur"
-      },
-      "market": {
-        "title": "Pasar",
-        "prices": "Harga Pasar",
-        "trends": "Tren Pasar",
-        "forecasts": "Perkiraan Harga"
-      },
-      "shipping": {
-        "title": "Logistik",
-        "manage": "Kelola Pengiriman",
-        "track": "Lacak Pengiriman",
-        "schedule": "Jadwalkan Pengambilan"
-      },
-      "account": {
-        "title": "Akun Saya",
-        "profile": "Pengaturan Profil",
-        "company": "Profil Perusahaan",
-        "notifications": "Notifikasi"
-      },
-      "transactions": {
-        "title": "Pembelian",
-        "pending": "Tertunda",
-        "completed": "Selesai",
-        "history": "Riwayat"
-      }
-    }
   }
 };
 
-// Function to get nested translations
-const getNestedTranslation = (
-  obj: Record<string, string | NestedTranslations>,
-  key: string
-): string => {
-  const keys = key.split('.');
-  let result: any = obj;
-
-  for (let i = 0; i < keys.length; i++) {
-    if (result[keys[i]] === undefined) {
-      return key; // Key not found, return the key itself
-    }
-    result = result[keys[i]];
-  }
-
-  if (typeof result === 'string') {
-    return result;
-  }
-
-  return key; // If the result is not a string, return the key
-};
-
-// Language Context interface
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
 
-// Create the context
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Language Provider Props
-interface LanguageProviderProps {
-  children: ReactNode;
-}
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const [language, setLanguage] = useState<Language>('id');
 
-// Language Provider Component
-export const LanguageProvider = ({ children }: LanguageProviderProps) => {
-  // Get user's preferred language from localStorage or use default
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage as Language) || 'en';
-  });
-
-  // Update localStorage when language changes
+  // Load saved language preference from localStorage
   useEffect(() => {
-    localStorage.setItem('language', language);
+    const savedLanguage = localStorage.getItem('app-language');
+    if (savedLanguage && (savedLanguage === 'id' || savedLanguage === 'en')) {
+      setLanguage(savedLanguage as Language);
+    }
+  }, []);
+
+  // Save language preference to localStorage when changed
+  useEffect(() => {
+    localStorage.setItem('app-language', language);
   }, [language]);
 
-  // Translation function
   const t = (key: string): string => {
-    return getNestedTranslation(translations[language], key);
+    return translations[language][key] || key;
   };
 
   return (
@@ -850,7 +646,6 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   );
 };
 
-// Custom hook to use the language context
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (context === undefined) {

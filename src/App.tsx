@@ -20,13 +20,6 @@ import Pengiriman from "./pages/Pengiriman";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
-// Buyer Pages
-import { BuyerLayout } from "./components/layout/BuyerLayout";
-import BuyerMarketplace from "./pages/buyer/Marketplace";
-import BuyerOrderBook from "./pages/buyer/OrderBook";
-import BuyerOrderBookCreate from "./pages/buyer/OrderBookCreate";
-import BuyerBalance from "./pages/buyer/Balance";
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -48,8 +41,6 @@ const App = () => (
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            
-            {/* Farmer Routes */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/komoditas" element={<Komoditas />} />
             <Route path="/komoditas/:id" element={<KomoditasDetail />} />
@@ -61,17 +52,6 @@ const App = () => (
             <Route path="/harga" element={<Harga />} />
             <Route path="/pengiriman" element={<Pengiriman />} />
             <Route path="/profile" element={<Profile />} />
-            
-            {/* Buyer Routes */}
-            <Route path="/buyer" element={<BuyerLayout />}>
-              <Route index element={<Navigate to="/buyer/marketplace" replace />} />
-              <Route path="marketplace" element={<BuyerMarketplace />} />
-              <Route path="order-book" element={<BuyerOrderBook />} />
-              <Route path="order-book/create" element={<BuyerOrderBookCreate />} />
-              <Route path="balance" element={<BuyerBalance />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
