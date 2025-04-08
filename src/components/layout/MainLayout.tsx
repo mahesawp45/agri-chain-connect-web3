@@ -26,7 +26,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         </main>
         <footer className="py-4 px-6 text-center text-sm text-earth-dark-green border-t bg-white shadow-sm w-full">
           <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-center gap-2">
-            <p>© 2025 TaniTrack. {t("app.name") === "TaniTrack" ? "All rights reserved." : "Hak cipta dilindungi."}</p>
+            <p>© 2025 TaniTrack - Agriculture Management System. {t("app.name") === "TaniTrack" ? "All rights reserved." : "Hak cipta dilindungi."}</p>
             <LanguageSwitcher />
           </div>
         </footer>
