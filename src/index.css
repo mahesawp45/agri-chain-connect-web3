@@ -46,15 +46,15 @@
     --sidebar-border: 214.3 31.8% 91.4%;
     --sidebar-ring: 180 100% 16%;
     
-    /* Earth/Agriculture Theme Colors */
-    --earth-dark-green: 106 32% 30%; /* #3a5a40 */
-    --earth-medium-green: 101 22% 51%; /* #588157 */
-    --earth-light-green: 83 27% 62%; /* #a3b18a */
+    /* Earth/Agriculture Theme Colors - Enhanced for better contrast */
+    --earth-dark-green: 106 40% 25%; /* Darker version of #3a5a40 */
+    --earth-medium-green: 101 25% 45%; /* Slightly darker #588157 */
+    --earth-light-green: 83 30% 55%; /* Slightly darker #a3b18a */
     --earth-pale-green: 83 25% 90%; /* #e9f0e1 */
-    --earth-brown: 33 33% 40%; /* #866a45 */
+    --earth-brown: 33 40% 35%; /* Darker #866a45 */
     --earth-light-brown: 33 43% 85%; /* #ead7bb */
-    --earth-clay: 27 56% 80%; /* #f2cca0 */
-    --earth-wheat: 39 74% 85%; /* #f8e4a8 */
+    --earth-clay: 27 60% 75%; /* Richer #f2cca0 */
+    --earth-wheat: 39 80% 80%; /* Richer #f8e4a8 */
   }
 
   .dark {
@@ -107,7 +107,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold;
+    @apply font-display font-semibold text-earth-dark-green;
   }
 }
 
@@ -125,15 +125,15 @@
   }
   
   .stats-card {
-    @apply bg-white rounded-lg shadow-sm p-5 card-hover border border-earth-light-brown/30;
+    @apply bg-white rounded-lg shadow-sm p-5 card-hover border border-earth-light-brown/50;
   }
   
   .table-container {
-    @apply bg-white rounded-lg shadow-sm overflow-hidden border border-earth-light-brown/30 mb-6;
+    @apply bg-white rounded-lg shadow-sm overflow-hidden border border-earth-light-brown/50 mb-6;
   }
   
   .form-container {
-    @apply bg-white rounded-lg shadow-sm p-6 border border-earth-light-brown/30;
+    @apply bg-white rounded-lg shadow-sm p-6 border border-earth-light-brown/50;
   }
   
   .input-label {
@@ -145,72 +145,103 @@
   }
   
   .sidebar-link.active {
-    @apply bg-[#588157]/20 text-[#3a5a40];
+    @apply bg-[#588157]/25 text-[#3a5a40] font-bold;
   }
   
   .sidebar-link:hover {
     @apply bg-[#e9f0e1];
   }
   
-  /* Earth/agriculture themed cards */
+  /* Earth/agriculture themed cards with improved contrast */
   .earth-card-green {
-    @apply bg-white border border-earth-light-green/50 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-light-green/70 shadow-sm rounded-lg overflow-hidden;
   }
   
   .earth-card-brown {
-    @apply bg-white border border-earth-light-brown/50 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-light-brown/70 shadow-sm rounded-lg overflow-hidden;
   }
   
   .earth-card-clay {
-    @apply bg-white border border-earth-clay/50 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-clay/70 shadow-sm rounded-lg overflow-hidden;
   }
   
   .earth-card-wheat {
-    @apply bg-white border border-earth-wheat/50 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-wheat/70 shadow-sm rounded-lg overflow-hidden;
   }
   
   .earth-card-moss {
-    @apply bg-white border border-earth-light-green/50 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-light-green/70 shadow-sm rounded-lg overflow-hidden;
   }
   
   .earth-card-forest {
-    @apply bg-white border border-earth-medium-green/50 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-medium-green/70 shadow-sm rounded-lg overflow-hidden;
   }
   
+  /* Enhanced headers with better contrast */
   .earth-header-green {
-    @apply bg-earth-pale-green rounded-t-lg border-b border-earth-light-green/30 py-4 px-5;
+    @apply bg-earth-medium-green text-white rounded-t-lg border-b border-earth-light-green/50 py-4 px-5;
   }
   
   .earth-header-brown {
-    @apply bg-earth-light-brown/30 rounded-t-lg border-b border-earth-light-brown/30 py-4 px-5;
+    @apply bg-earth-brown text-white rounded-t-lg border-b border-earth-light-brown/50 py-4 px-5;
   }
   
   .earth-header-clay {
-    @apply bg-earth-clay/30 rounded-t-lg border-b border-earth-clay/30 py-4 px-5;
+    @apply bg-[#e69b55] text-white rounded-t-lg border-b border-earth-clay/50 py-4 px-5;
   }
   
   .earth-header-wheat {
-    @apply bg-earth-wheat/30 rounded-t-lg border-b border-earth-wheat/30 py-4 px-5;
+    @apply bg-[#d4b145] text-white rounded-t-lg border-b border-earth-wheat/50 py-4 px-5;
   }
   
   .earth-header-moss {
-    @apply bg-earth-light-green/30 rounded-t-lg border-b border-earth-light-green/30 py-4 px-5;
+    @apply bg-earth-medium-green text-white rounded-t-lg border-b border-earth-light-green/50 py-4 px-5;
   }
   
   .earth-header-forest {
-    @apply bg-earth-medium-green/30 rounded-t-lg border-b border-earth-medium-green/30 py-4 px-5;
+    @apply bg-earth-dark-green text-white rounded-t-lg border-b border-earth-medium-green/50 py-4 px-5;
   }
   
-  /* UI Improvement Classes */
+  /* Standard table styling for consistency */
+  .table-header {
+    @apply bg-earth-medium-green/20 text-earth-dark-green font-bold;
+  }
+  
+  .table-body {
+    @apply bg-white text-earth-dark-green;
+  }
+  
+  .table-row-hover {
+    @apply hover:bg-earth-pale-green transition-colors duration-150;
+  }
+  
+  /* UI Improvement Classes with better contrast */
   .data-card {
-    @apply p-5 bg-white border border-earth-light-brown/30 rounded-lg shadow-sm;
+    @apply p-5 bg-white border-2 border-earth-light-brown/50 rounded-lg shadow-sm;
   }
   
   .section-title {
-    @apply text-2xl font-semibold text-earth-dark-green mb-4;
+    @apply text-2xl font-bold text-earth-dark-green mb-4;
   }
   
   .section-container {
-    @apply bg-white p-6 rounded-lg shadow-sm border border-earth-light-brown/30 mb-6;
+    @apply bg-white p-6 rounded-lg shadow-sm border-2 border-earth-light-brown/50 mb-6;
+  }
+  
+  /* Status indicators with better contrast */
+  .status-completed {
+    @apply bg-green-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+  }
+  
+  .status-pending {
+    @apply bg-yellow-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+  }
+  
+  .status-canceled {
+    @apply bg-red-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+  }
+  
+  .status-processing {
+    @apply bg-blue-600 text-white px-2 py-1 text-xs font-medium rounded-full;
   }
 }

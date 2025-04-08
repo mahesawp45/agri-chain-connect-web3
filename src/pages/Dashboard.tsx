@@ -60,84 +60,84 @@ export default function Dashboard() {
             onValueChange={(value) => setTimeframe(value as any)}
             className="w-auto"
           >
-            <TabsList className="grid grid-cols-4 w-[300px] bg-earth-pale-green/70">
-              <TabsTrigger value="day" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.today")}</TabsTrigger>
-              <TabsTrigger value="week" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.thisWeek")}</TabsTrigger>
-              <TabsTrigger value="month" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.thisMonth")}</TabsTrigger>
-              <TabsTrigger value="year" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.thisYear")}</TabsTrigger>
+            <TabsList className="grid grid-cols-4 w-[300px] bg-earth-pale-green">
+              <TabsTrigger value="day" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">{t("time.today")}</TabsTrigger>
+              <TabsTrigger value="week" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">{t("time.thisWeek")}</TabsTrigger>
+              <TabsTrigger value="month" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">{t("time.thisMonth")}</TabsTrigger>
+              <TabsTrigger value="year" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">{t("time.thisYear")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="earth-card-green">
+          <Card className="earth-card-green shadow-md">
             <div className="absolute top-0 right-0 p-3">
-              <ShoppingCart className="h-6 w-6 text-earth-medium-green opacity-30" />
+              <ShoppingCart className="h-6 w-6 text-earth-dark-green opacity-60" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-earth-dark-green">{t("dashboard.summary")}</CardTitle>
+              <CardTitle className="text-sm font-bold text-earth-dark-green">{t("dashboard.summary")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-earth-dark-green">{formatCurrency(totalSales)}</div>
-              <p className="text-xs text-earth-medium-green mt-1">
+              <p className="text-sm text-earth-dark-green mt-1 font-medium">
                 {completedTransactions.length} {t("transactions.completed").toLowerCase()}
               </p>
-              <div className="h-1 w-full bg-earth-pale-green mt-3 rounded-full">
-                <div className="h-1 bg-earth-medium-green rounded-full" style={{ width: '70%' }}></div>
+              <div className="h-2 w-full bg-earth-pale-green mt-3 rounded-full">
+                <div className="h-2 bg-earth-dark-green rounded-full" style={{ width: '70%' }}></div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="earth-card-brown">
+          <Card className="earth-card-brown shadow-md">
             <div className="absolute top-0 right-0 p-3">
-              <Leaf className="h-6 w-6 text-earth-brown opacity-30" />
+              <Leaf className="h-6 w-6 text-earth-brown opacity-60" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-earth-brown">{t("commodities.title")}</CardTitle>
+              <CardTitle className="text-sm font-bold text-earth-brown">{t("commodities.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-earth-brown">{totalCommodities} kg</div>
-              <p className="text-xs text-earth-brown/80 mt-1">
+              <p className="text-sm text-earth-brown mt-1 font-medium">
                 {commodities.length} {t("commodities.type").toLowerCase()}
               </p>
-              <div className="h-1 w-full bg-earth-light-brown mt-3 rounded-full">
-                <div className="h-1 bg-earth-brown rounded-full" style={{ width: '60%' }}></div>
+              <div className="h-2 w-full bg-earth-light-brown mt-3 rounded-full">
+                <div className="h-2 bg-earth-brown rounded-full" style={{ width: '60%' }}></div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="earth-card-wheat">
+          <Card className="earth-card-wheat shadow-md">
             <div className="absolute top-0 right-0 p-3">
-              <Sun className="h-6 w-6 text-yellow-600 opacity-30" />
+              <Sun className="h-6 w-6 text-yellow-700 opacity-60" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-yellow-800">{t("transactions.pending")}</CardTitle>
+              <CardTitle className="text-sm font-bold text-yellow-800">{t("transactions.pending")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-700">{pendingTransactions.length}</div>
-              <p className="text-xs text-yellow-600 mt-1">
+              <div className="text-2xl font-bold text-yellow-800">{pendingTransactions.length}</div>
+              <p className="text-sm text-yellow-700 mt-1 font-medium">
                 {pendingTransactions.filter(t => t.status === 'negosiasi').length} {language === 'id' ? 'dalam negosiasi' : 'in negotiation'}
               </p>
-              <div className="h-1 w-full bg-yellow-100 mt-3 rounded-full">
-                <div className="h-1 bg-yellow-500 rounded-full" style={{ width: '40%' }}></div>
+              <div className="h-2 w-full bg-yellow-100 mt-3 rounded-full">
+                <div className="h-2 bg-yellow-600 rounded-full" style={{ width: '40%' }}></div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="earth-card-clay">
+          <Card className="earth-card-clay shadow-md">
             <div className="absolute top-0 right-0 p-3">
-              <Wallet className="h-6 w-6 text-orange-600 opacity-30" />
+              <Wallet className="h-6 w-6 text-orange-700 opacity-60" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-orange-800">{t("balance.title")}</CardTitle>
+              <CardTitle className="text-sm font-bold text-orange-800">{t("balance.title")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-700">{formatCurrency(currentUser.balance)}</div>
-              <p className="text-xs text-orange-600 mt-1">
+              <div className="text-2xl font-bold text-orange-800">{formatCurrency(currentUser.balance)}</div>
+              <p className="text-sm text-orange-700 mt-1 font-medium">
                 5 SOL (≈ {formatCurrency(currentUser.balance)})
               </p>
-              <div className="h-1 w-full bg-orange-100 mt-3 rounded-full">
-                <div className="h-1 bg-orange-500 rounded-full" style={{ width: '85%' }}></div>
+              <div className="h-2 w-full bg-orange-100 mt-3 rounded-full">
+                <div className="h-2 bg-orange-600 rounded-full" style={{ width: '85%' }}></div>
               </div>
             </CardContent>
           </Card>
@@ -145,30 +145,30 @@ export default function Dashboard() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
           <Card className="lg:col-span-4 border-none shadow-md bg-white">
-            <CardHeader className="earth-header-green">
-              <CardTitle className="text-earth-dark-green flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-earth-medium-green" />
+            <CardHeader className="earth-header-forest">
+              <CardTitle className="text-white flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
                 {t("dashboard.recentTransactions")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="relative w-full overflow-auto">
                 <table className="w-full caption-bottom text-sm">
-                  <thead className="[&_tr]:border-b bg-earth-pale-green/30">
+                  <thead className="bg-earth-medium-green/20">
                     <tr className="border-b transition-colors">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-500">
+                      <th className="h-12 px-4 text-left align-middle font-bold text-earth-dark-green">
                         {t("transactions.commodity")}
                       </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-500">
+                      <th className="h-12 px-4 text-left align-middle font-bold text-earth-dark-green">
                         {t("transactions.buyer")}
                       </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-500">
+                      <th className="h-12 px-4 text-left align-middle font-bold text-earth-dark-green">
                         {t("transactions.date")}
                       </th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-gray-500">
+                      <th className="h-12 px-4 text-left align-middle font-bold text-earth-dark-green">
                         {t("transactions.status")}
                       </th>
-                      <th className="h-12 px-4 text-right align-middle font-medium text-gray-500">
+                      <th className="h-12 px-4 text-right align-middle font-bold text-earth-dark-green">
                         {t("transactions.total")}
                       </th>
                     </tr>
@@ -177,27 +177,33 @@ export default function Dashboard() {
                     {transactions.slice(0, 5).map((transaction) => (
                       <tr
                         key={transaction.id}
-                        className="border-b transition-colors hover:bg-earth-pale-green/10"
+                        className="border-b transition-colors hover:bg-earth-pale-green/40"
                       >
-                        <td className="p-4 align-middle">
+                        <td className="p-4 align-middle font-medium text-earth-dark-green">
                           {transaction.commodityName}
                         </td>
-                        <td className="p-4 align-middle">{transaction.buyerName}</td>
-                        <td className="p-4 align-middle">
+                        <td className="p-4 align-middle text-earth-dark-green">{transaction.buyerName}</td>
+                        <td className="p-4 align-middle text-earth-dark-green">
                           {formatDate(transaction.createdAt)}
                         </td>
                         <td className="p-4 align-middle">
                           <div className="flex items-center">
                             <div
-                              className={`h-2 w-2 rounded-full mr-2 ${
+                              className={`h-2.5 w-2.5 rounded-full mr-2 ${
                                 transaction.status === "selesai"
-                                  ? "bg-earth-medium-green"
+                                  ? "bg-green-600"
                                   : transaction.status === "dibatalkan"
-                                  ? "bg-red-500"
-                                  : "bg-yellow-500"
+                                  ? "bg-red-600"
+                                  : "bg-yellow-600"
                               }`}
                             />
-                            <span className="capitalize">
+                            <span className={`capitalize font-medium ${
+                              transaction.status === "selesai"
+                                ? "text-green-700"
+                                : transaction.status === "dibatalkan"
+                                ? "text-red-700"
+                                : "text-yellow-700"
+                            }`}>
                               {language === 'id' ? transaction.status.replace("_", " ") : 
                                 transaction.status === "selesai" ? "completed" :
                                 transaction.status === "dibatalkan" ? "cancelled" :
@@ -214,7 +220,7 @@ export default function Dashboard() {
                             </span>
                           </div>
                         </td>
-                        <td className="p-4 align-middle text-right">
+                        <td className="p-4 align-middle text-right font-bold text-earth-dark-green">
                           {formatCurrency(transaction.totalPrice || 0)}
                         </td>
                       </tr>
@@ -226,31 +232,31 @@ export default function Dashboard() {
           </Card>
           <Card className="lg:col-span-3 border-none shadow-md">
             <CardHeader className="earth-header-brown">
-              <CardTitle className="text-earth-brown flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-earth-brown" />
+              <CardTitle className="text-white flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
                 {t("prices.trends")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-4">
                 {trendingCommodities.map((commodity) => (
-                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-earth-light-brown/10 transition-colors">
+                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-earth-light-brown/20 transition-colors">
                     <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">
+                      <p className="text-sm font-bold leading-none text-earth-dark-green">
                         {commodity.name} ({commodity.grade})
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-earth-brown font-medium">
                         {commodity.region}
                       </p>
                     </div>
-                    <div className="text-sm font-medium">
+                    <div className="text-sm font-bold text-earth-dark-green">
                       {formatCurrency(commodity.price)}/{commodity.unit}
                     </div>
                     <div
-                      className={`ml-4 flex items-center ${
+                      className={`ml-4 flex items-center font-bold ${
                         commodity.predictedChange >= 0
-                          ? "text-earth-medium-green"
-                          : "text-red-500"
+                          ? "text-green-600"
+                          : "text-red-600"
                       }`}
                     >
                       {commodity.predictedChange >= 0 ? (
@@ -266,7 +272,7 @@ export default function Dashboard() {
               <div className="mt-6 pt-3 border-t">
                 <a 
                   href="/harga"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-earth-brown hover:text-earth-brown/80"
+                  className="inline-flex items-center gap-1 text-sm font-bold text-earth-brown hover:text-earth-dark-green"
                 >
                   <span>{language === 'id' ? 'Lihat semua harga' : 'View all prices'}</span>
                   <svg
@@ -300,19 +306,19 @@ export default function Dashboard() {
             <CardContent className="pt-4">
               <div className="space-y-4">
                 {commodities.map((commodity) => (
-                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-earth-pale-green/20 transition-colors">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-earth-light-green/20 text-earth-medium-green mr-3">
+                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-earth-pale-green/30 transition-colors">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-earth-medium-green/20 text-earth-dark-green mr-3">
                       <Leaf className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">
+                      <p className="text-sm font-bold leading-none text-earth-dark-green">
                         {commodity.name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-earth-medium-green font-medium">
                         {commodity.type} - Grade {commodity.grade}
                       </p>
                     </div>
-                    <div className="text-sm font-medium">
+                    <div className="text-sm font-bold text-earth-dark-green">
                       {commodity.quantity} {commodity.unit}
                     </div>
                   </div>
@@ -321,7 +327,7 @@ export default function Dashboard() {
               <div className="mt-6 pt-3 border-t">
                 <a 
                   href="/komoditas"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-earth-medium-green hover:text-earth-dark-green"
+                  className="inline-flex items-center gap-1 text-sm font-bold text-earth-medium-green hover:text-earth-dark-green"
                 >
                   <span>{language === 'id' ? 'Kelola komoditas' : 'Manage commodities'}</span>
                   <svg
@@ -353,22 +359,22 @@ export default function Dashboard() {
             <CardContent className="pt-4">
               <div className="space-y-4">
                 {pendingTransactions.slice(0, 4).map((transaction) => (
-                  <div key={transaction.id} className="flex items-center p-3 rounded-lg hover:bg-earth-pale-green/20 transition-colors">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-earth-medium-green/20 text-earth-medium-green mr-3">
+                  <div key={transaction.id} className="flex items-center p-3 rounded-lg hover:bg-earth-pale-green/30 transition-colors">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-earth-medium-green/30 text-earth-dark-green mr-3">
                       <Truck className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">
+                      <p className="text-sm font-bold leading-none text-earth-dark-green">
                         {transaction.commodityName}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-earth-medium-green font-medium">
                         {transaction.buyerName}
                       </p>
                     </div>
-                    <div className="text-sm font-medium">
+                    <div className="text-sm font-bold text-earth-dark-green">
                       {transaction.quantity} {transaction.unit}
                     </div>
-                    <div className="ml-4 text-xs px-2 py-1 rounded-full bg-earth-pale-green text-earth-dark-green">
+                    <div className="ml-4 text-xs px-2.5 py-1 rounded-full bg-earth-dark-green text-white font-medium">
                       {language === 'id' 
                         ? transaction.status.replace('_', ' ') 
                         : transaction.status === 'negosiasi' 
@@ -396,7 +402,7 @@ export default function Dashboard() {
               <div className="mt-6 pt-3 border-t">
                 <a 
                   href="/transaksi"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-earth-medium-green hover:text-earth-dark-green"
+                  className="inline-flex items-center gap-1 text-sm font-bold text-earth-medium-green hover:text-earth-dark-green"
                 >
                   <span>{language === 'id' ? 'Lihat semua transaksi' : 'View all transactions'}</span>
                   <svg
