@@ -42,6 +42,34 @@ export const translations: TranslationsType = {
     "action.showAll": "Show All",
     "action.showMore": "Show More",
 
+    // Authentication
+    "auth.login": "Login",
+    "auth.register": "Register",
+    "auth.forgotPassword": "Forgot Password?",
+    "auth.loginDesc": "Login to access your TaniTrack account",
+    "auth.farmerLogin": "Farmer Login",
+    "auth.buyerLogin": "Buyer Login",
+    "auth.enterCredentials": "Enter your credentials to continue",
+    "auth.loggingIn": "Logging in...",
+    "auth.noAccount": "Don't have an account?",
+    "auth.registerNow": "Register now",
+    "auth.needHelp": "Need help?",
+    "auth.contactSupport": "Contact support",
+    "auth.email": "Email",
+    "auth.password": "Password",
+    "auth.confirmPassword": "Confirm Password",
+    "auth.name": "Name",
+    "auth.phone": "Phone Number",
+    "auth.address": "Address",
+    "auth.farmer": "Farmer",
+    "auth.buyer": "Buyer",
+    "auth.scanTaniTrackCard": "Scan your TaniTrack card to login",
+    "auth.scanCard": "Scan Card",
+    "auth.loginInstructions": "Login Instructions",
+    "auth.scanInstruction": "Scan your TaniTrack card using the TaniTrack Mobile Auth App",
+    "auth.otpInstruction": "Enter the OTP sent to your mobile device",
+    "auth.enterOTP": "Enter OTP",
+
     // Navigation
     "nav.dashboard": "Dashboard",
     "nav.commodities": "Commodities",
@@ -313,6 +341,61 @@ export const translations: TranslationsType = {
     "info.processing": "Processing your request",
     "info.noData": "No data available",
     "warning.unsaved": "You have unsaved changes",
+    
+    // Buyer section
+    "buyer": {
+      "marketplace": {
+        "title": "Marketplace",
+        "browse": "Browse Products",
+        "description": "Find and purchase agricultural commodities",
+        "filters": "Marketplace Filters",
+        "search": "Search",
+        "searchPlaceholder": "Search for commodities...",
+        "commodityType": "Commodity Type",
+        "allTypes": "All Types",
+        "available": "Available Now",
+        "buy": "Buy Now"
+      },
+      "orderbook": {
+        "title": "Order Book",
+        "browse": "Browse Orders",
+        "create": "Create Order",
+        "review": "Review Orders",
+        "myOrders": "My Orders",
+        "pendingOrders": "Pending Orders"
+      },
+      "finance": {
+        "title": "Finance",
+        "balance": "My Balance",
+        "history": "Transaction History",
+        "payments": "Payment Methods",
+        "invoices": "Invoices"
+      },
+      "market": {
+        "title": "Market",
+        "prices": "Market Prices",
+        "trends": "Market Trends",
+        "forecasts": "Price Forecasts"
+      },
+      "shipping": {
+        "title": "Logistics",
+        "manage": "Manage Shipments",
+        "track": "Track Shipments",
+        "schedule": "Schedule Pickup"
+      },
+      "account": {
+        "title": "My Account",
+        "profile": "Profile Settings",
+        "company": "Company Profile",
+        "notifications": "Notifications"
+      },
+      "transactions": {
+        "title": "Purchases",
+        "pending": "Pending",
+        "completed": "Completed",
+        "history": "History"
+      }
+    }
   },
   id: {
     // General
@@ -339,6 +422,34 @@ export const translations: TranslationsType = {
     "action.details": "Detail",
     "action.showAll": "Tampilkan Semua",
     "action.showMore": "Tampilkan Lebih",
+
+    // Authentication
+    "auth.login": "Masuk",
+    "auth.register": "Daftar",
+    "auth.forgotPassword": "Lupa Kata Sandi?",
+    "auth.loginDesc": "Masuk ke akun TaniTrack Anda",
+    "auth.farmerLogin": "Login Petani",
+    "auth.buyerLogin": "Login Pembeli",
+    "auth.enterCredentials": "Masukkan kredensial Anda untuk melanjutkan",
+    "auth.loggingIn": "Masuk...",
+    "auth.noAccount": "Belum memiliki akun?",
+    "auth.registerNow": "Daftar sekarang",
+    "auth.needHelp": "Butuh bantuan?",
+    "auth.contactSupport": "Hubungi dukungan",
+    "auth.email": "Email",
+    "auth.password": "Kata Sandi",
+    "auth.confirmPassword": "Konfirmasi Kata Sandi",
+    "auth.name": "Nama",
+    "auth.phone": "Nomor Telepon",
+    "auth.address": "Alamat",
+    "auth.farmer": "Petani",
+    "auth.buyer": "Pembeli",
+    "auth.scanTaniTrackCard": "Pindai kartu TaniTrack Anda untuk masuk",
+    "auth.scanCard": "Pindai Kartu",
+    "auth.loginInstructions": "Petunjuk Login",
+    "auth.scanInstruction": "Pindai kartu TaniTrack Anda menggunakan Aplikasi TaniTrack Mobile Auth",
+    "auth.otpInstruction": "Masukkan OTP yang dikirim ke perangkat seluler Anda",
+    "auth.enterOTP": "Masukkan OTP",
 
     // Navigation
     "nav.dashboard": "Dasbor",
@@ -611,12 +722,66 @@ export const translations: TranslationsType = {
     "info.processing": "Memproses permintaan Anda",
     "info.noData": "Tidak ada data tersedia",
     "warning.unsaved": "Anda memiliki perubahan yang belum disimpan",
+    
+    // Buyer section
+    "buyer": {
+      "marketplace": {
+        "title": "Pasar",
+        "browse": "Jelajahi Produk",
+        "description": "Temukan dan beli komoditas pertanian",
+        "filters": "Filter Pasar",
+        "search": "Cari",
+        "searchPlaceholder": "Cari komoditas...",
+        "commodityType": "Jenis Komoditas",
+        "allTypes": "Semua Jenis",
+        "available": "Tersedia Sekarang",
+        "buy": "Beli Sekarang"
+      },
+      "orderbook": {
+        "title": "Buku Pesanan",
+        "browse": "Jelajahi Pesanan",
+        "create": "Buat Pesanan",
+        "review": "Tinjau Pesanan",
+        "myOrders": "Pesanan Saya",
+        "pendingOrders": "Pesanan Tertunda"
+      },
+      "finance": {
+        "title": "Keuangan",
+        "balance": "Saldo Saya",
+        "history": "Riwayat Transaksi",
+        "payments": "Metode Pembayaran",
+        "invoices": "Faktur"
+      },
+      "market": {
+        "title": "Pasar",
+        "prices": "Harga Pasar",
+        "trends": "Tren Pasar",
+        "forecasts": "Perkiraan Harga"
+      },
+      "shipping": {
+        "title": "Logistik",
+        "manage": "Kelola Pengiriman",
+        "track": "Lacak Pengiriman",
+        "schedule": "Jadwalkan Pengambilan"
+      },
+      "account": {
+        "title": "Akun Saya",
+        "profile": "Pengaturan Profil",
+        "company": "Profil Perusahaan",
+        "notifications": "Notifikasi"
+      },
+      "transactions": {
+        "title": "Pembelian",
+        "pending": "Tertunda",
+        "completed": "Selesai",
+        "history": "Riwayat"
+      }
+    }
   }
 };
 
 interface LanguageContextType {
   language: Language;
-  currentLanguage: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
   addTranslations: (lang: Language, newTranslations: Record<string, any>) => void;
@@ -641,7 +806,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('app-language', language);
   }, [language]);
 
-  // Function to add new translations - updated to handle nested objects
+  // Function to add new translations
   const addTranslations = (lang: Language, newTranslations: Record<string, any>) => {
     setTranslationsData(prev => ({
       ...prev,
@@ -668,7 +833,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   return (
     <LanguageContext.Provider value={{ 
       language, 
-      currentLanguage: language, 
       setLanguage, 
       t,
       addTranslations 

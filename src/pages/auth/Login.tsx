@@ -13,7 +13,6 @@ import { useToast } from "@/hooks/use-toast";
 import { TaniTrackCard } from "@/components/custom/TaniTrackCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Leaf, User, ArrowRight, QrCode, LockKeyhole, SmartphoneNfc } from "lucide-react";
-import { buyerEnTranslations, buyerIdTranslations } from "@/contexts/BuyerLanguageExtension";
 
 // Update the schema to include validation rules
 const formSchema = z.object({
@@ -31,14 +30,10 @@ type FormData = z.infer<typeof formSchema>;
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t, currentLanguage, setLanguage, addTranslations } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("farmer");
   const [showOTP, setShowOTP] = useState(false);
-
-  // Add buyer translations
-  addTranslations('en', buyerEnTranslations);
-  addTranslations('id', buyerIdTranslations);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -294,9 +289,9 @@ const Login = () => {
           variant="outline"
           size="sm"
           className="gap-2 bg-white/80 border-earth-light-brown/30"
-          onClick={() => setLanguage(currentLanguage === 'en' ? 'id' : 'en')}
+          onClick={() => setLanguage(language === 'en' ? 'id' : 'en')}
         >
-          {currentLanguage === 'en' ? '🇮🇩 Bahasa Indonesia' : '🇺🇸 English'}
+          {language === 'en' ? '🇮🇩 Bahasa Indonesia' : '🇺🇸 English'}
         </Button>
       </div>
     </div>
