@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeftIcon, ArrowRightIcon, BuildingStore, FileCheck, Leaf, MapPin, Phone, ShoppingBag, User, UserCircle2 } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, Store, FileCheck, Leaf, MapPin, Phone, ShoppingBag, User, UserCircle2 } from "lucide-react";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ export default function Register() {
                 </li>
                 <li className="flex items-center text-earth-medium-green">
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
-                    <BuildingStore className="h-4 w-4 text-earth-dark-green" />
+                    <Store className="h-4 w-4 text-earth-dark-green" />
                   </div>
                   <span>Dapatkan harga pasar yang lebih baik</span>
                 </li>
@@ -96,7 +96,7 @@ export default function Register() {
                 </li>
                 <li className="flex items-center text-earth-medium-green">
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
-                    <BuildingStore className="h-4 w-4 text-earth-dark-green" />
+                    <Store className="h-4 w-4 text-earth-dark-green" />
                   </div>
                   <span>Dukung petani lokal dan pertanian berkelanjutan</span>
                 </li>
@@ -264,7 +264,7 @@ export default function Register() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="merchant" className="text-earth-dark-green flex items-center">
-                      <BuildingStore className="h-4 w-4 mr-2" />
+                      <Store className="h-4 w-4 mr-2" />
                       Nama Perusahaan/Merchant
                     </Label>
                     <Input 
