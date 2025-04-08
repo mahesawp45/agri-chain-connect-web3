@@ -4,12 +4,14 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 // Define available languages
 export type Language = 'id' | 'en';
 
-// Define translation object structure - updated to support nested objects
-type TranslationValue = string | Record<string, TranslationValue>;
+// Define translation object structure - updated to avoid circular reference
+interface NestedTranslations {
+  [key: string]: string | NestedTranslations;
+}
 
 // Define translations object structure
 type TranslationsType = {
-  [key in Language]: Record<string, TranslationValue>;
+  [key in Language]: Record<string, string | NestedTranslations>;
 };
 
 // Translations dictionary
@@ -617,7 +619,7 @@ interface LanguageContextType {
   currentLanguage: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
-  addTranslations: (lang: Language, newTranslations: Record<string, any>) => void; // Updated to accept nested objects
+  addTranslations: (lang: Language, newTranslations: Record<string, any>) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
