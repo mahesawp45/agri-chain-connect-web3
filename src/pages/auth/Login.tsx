@@ -1,268 +1,306 @@
 
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { ArrowRightIcon, HelpCircle, QrCode, Smartphone } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { TaniTrackCard } from "@/components/custom/TaniTrackCard";
-import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Leaf, User, ArrowRight, QrCode, LockKeyhole, SmartphoneNfc } from "lucide-react";
+import { buyerEnTranslations, buyerIdTranslations } from "@/contexts/BuyerLanguageExtension";
 
-export default function Login() {
-  const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showOtpInput, setShowOtpInput] = useState(false);
+// Update the schema to include validation rules
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address."
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters."
+  }),
+  otp: z.string().optional(),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t, language } = useLanguage();
+  const { t, currentLanguage, setLanguage, addTranslations } = useLanguage();
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("farmer");
+  const [showOTP, setShowOTP] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  // Add buyer translations
+  addTranslations('en', buyerEnTranslations);
+  addTranslations('id', buyerIdTranslations);
 
-    // Simulate sending OTP
-    setTimeout(() => {
-      toast({
-        title: language === 'id' ? "Kode OTP telah dikirim!" : "OTP code has been sent!",
-        description: language === 'id' 
-          ? "Silakan masukkan kode OTP yang telah dikirim ke perangkat TaniTrack Mobile Auth App Anda" 
-          : "Please enter the OTP code sent to your TaniTrack Mobile Auth App",
-      });
-      setShowOtpInput(true);
-      setLoading(false);
-    }, 1000);
-  };
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      otp: "",
+    },
+  });
 
-  const verifyOtp = () => {
+  const onSubmit = (data: FormData) => {
     setLoading(true);
     
-    // Simulate OTP verification
+    // Simulate API call with setTimeout
     setTimeout(() => {
-      if (otp.length === 6) {
-        toast({
-          title: language === 'id' ? "Login berhasil!" : "Login successful!",
-          description: language === 'id' ? "Selamat datang kembali di TaniTrack" : "Welcome back to TaniTrack",
-        });
-        navigate("/dashboard");
-      } else {
-        toast({
-          variant: "destructive",
-          title: language === 'id' ? "Gagal masuk" : "Login failed",
-          description: language === 'id' ? "Kode OTP tidak valid" : "Invalid OTP code",
-        });
-      }
       setLoading(false);
-    }, 1000);
+      
+      if (activeTab === "farmer") {
+        navigate("/dashboard");
+      } else if (activeTab === "buyer") {
+        navigate("/buyer/marketplace");
+      }
+      
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to TaniTrack!",
+      });
+    }, 1500);
+  };
+
+  const handleScanCard = () => {
+    // Show OTP input after "scanning"
+    toast({
+      title: "Card Scanned",
+      description: "Please enter the OTP sent to your TaniTrack Mobile Auth App",
+    });
+    setShowOTP(true);
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-earth-pale-green to-white overflow-hidden">
-      {/* Left Section - Visual & Explanation */}
-      <div className="w-full md:w-1/2 p-8 flex items-center justify-center relative">
-        <div className="absolute -bottom-64 -left-64 w-96 h-96 bg-earth-light-green/20 rounded-full blur-3xl" />
-        <div className="absolute -top-64 -right-64 w-96 h-96 bg-earth-wheat/30 rounded-full blur-3xl" />
-        
-        <div className="max-w-md mx-auto z-10">
-          <div className="flex items-center mb-6">
-            <div className="h-12 w-12 rounded-md overflow-hidden flex items-center justify-center bg-white/90 mr-4">
-              <img 
-                src="/lovable-uploads/f7fb75ca-ee07-4d12-a8ab-4e5152e13679.png" 
-                alt="TaniTrack Logo" 
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <h1 className="text-4xl font-bold text-earth-dark-green">TaniTrack</h1>
+    <div className="min-h-screen bg-earth-pale-green/20 flex flex-col justify-center items-center p-4 md:p-8 relative">
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none" 
+        style={{ backgroundImage: "url('/lovable-uploads/dea4ed3d-edc5-4e93-be76-2a87b3ea5476.png')" }}
+      />
+      
+      <div className="w-full max-w-md space-y-8 relative z-10">
+        <div className="text-center mb-8">
+          <div className="h-16 w-16 rounded-xl overflow-hidden bg-white/90 mx-auto mb-4 flex items-center justify-center shadow-md">
+            <img 
+              src="/lovable-uploads/f7fb75ca-ee07-4d12-a8ab-4e5152e13679.png" 
+              alt="TaniTrack Logo" 
+              className="h-full w-full object-contain" 
+            />
           </div>
-          
-          <h2 className="text-2xl font-bold text-earth-dark-green mb-6">
-            {language === 'id' 
-              ? "Aplikasi Pengelolaan Pertanian untuk Kesejahteraan Petani" 
-              : "Agricultural Management App for Farmers' Prosperity"}
-          </h2>
-          
-          <div className="space-y-6">
-            <div className="bg-white p-4 rounded-lg shadow-md border border-earth-light-green/50 flex items-start">
-              <QrCode className="h-6 w-6 text-earth-medium-green mr-3 mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="font-semibold mb-1 text-earth-dark-green">
-                  {language === 'id' ? "Cara Login" : "How to Login"}
-                </h3>
-                <p className="text-earth-medium-green text-sm">
-                  1. {language === 'id' 
-                    ? "Scan TaniTrack Card dengan TaniTrack Mobile Auth App" 
-                    : "Scan your TaniTrack Card with TaniTrack Mobile Auth App"}
-                </p>
-                <p className="text-earth-medium-green text-sm mt-1">
-                  2. {language === 'id' 
-                    ? "Masukkan kode OTP dari TaniTrack Mobile Auth App ke Form Login" 
-                    : "Enter the OTP code from TaniTrack Mobile Auth App to the Login Form"}
-                </p>
-              </div>
-            </div>
-            
-            <div className="bg-white p-4 rounded-lg shadow-md border border-earth-light-green/50 flex items-start">
-              <Smartphone className="h-6 w-6 text-earth-medium-green mr-3 mt-1 flex-shrink-0" />
-              <div>
-                <h3 className="font-semibold mb-1 text-earth-dark-green">
-                  {language === 'id' ? "Keamanan Tinggi" : "High Security"}
-                </h3>
-                <p className="text-earth-medium-green text-sm">
-                  {language === 'id'
-                    ? "TaniTrack Card menjamin keamanan akun Anda dengan sistem OTP yang terproteksi."
-                    : "TaniTrack Card ensures your account security with protected OTP system."}
-                </p>
-              </div>
-            </div>
-            
-            {/* Stacked cards in perspective view */}
-            <div className="mt-8 flex justify-center">
-              <div className="relative w-72 h-60 mx-auto">
-                {/* Back card (Buyer card) */}
-                <TaniTrackCard
-                  type="buyer"
-                  name="PT PANGAN SEJAHTERA"
-                  id="B-451022-JK"
-                  location="JAKARTA"
-                  expiryDate="09/2025"
-                  isStacked={true}
-                  stackPosition="back"
-                />
-                
-                {/* Front card (Farmer card) */}
-                <TaniTrackCard 
-                  type="farmer"
-                  name="AGUS SURYANA"
-                  id="F-230599-JB"
-                  isStacked={true}
-                  stackPosition="front"
-                  className="z-10 relative transform translate-y-2 -translate-x-2 -rotate-3"
-                />
-              </div>
-            </div>
-          </div>
+          <h1 className="text-3xl font-bold text-earth-dark-green">TaniTrack</h1>
+          <p className="text-earth-dark-green/70">
+            {t("auth.loginDesc")}
+          </p>
         </div>
 
-        {/* Language Switcher positioned at bottom right */}
-        <div className="absolute bottom-4 right-4">
-          <LanguageSwitcher />
-        </div>
-      </div>
-
-      {/* Right Section - Login Form */}
-      <div className="w-full md:w-1/2 p-8 flex items-center justify-center bg-white md:bg-transparent">
-        <Card className="w-full max-w-md shadow-lg border-earth-light-brown/40 overflow-hidden bg-white md:bg-white/95 backdrop-blur-sm">
-          <CardHeader className="bg-gradient-to-r from-earth-dark-green to-earth-medium-green text-white py-6">
-            <CardTitle className="text-center text-2xl">
-              {language === 'id' ? "Masuk ke TaniTrack" : "Login to TaniTrack"}
-            </CardTitle>
-            <CardDescription className="text-center text-white/90 mt-2">
-              {showOtpInput
-                ? (language === 'id' 
-                  ? "Masukkan kode OTP yang dikirim ke perangkat Anda" 
-                  : "Enter the OTP code sent to your device")
-                : (language === 'id' 
-                  ? "Masukkan ID TaniTrack untuk memulai" 
-                  : "Enter your TaniTrack ID to get started")}
-            </CardDescription>
-          </CardHeader>
-
-          {!showOtpInput ? (
-            <form onSubmit={handleLogin}>
-              <CardContent className="space-y-5 pt-6 px-8">
-                <div className="space-y-3">
-                  <label htmlFor="tanitrack-id" className="text-earth-dark-green font-medium block">
-                    {language === 'id' ? "ID TaniTrack" : "TaniTrack ID"}
-                  </label>
-                  <Input
-                    id="tanitrack-id"
-                    type="text"
-                    placeholder={language === 'id' ? "Masukkan ID TaniTrack" : "Enter TaniTrack ID"}
-                    required
-                    className="border-earth-light-brown focus-visible:ring-earth-medium-green text-base h-12"
-                  />
-                  <div className="flex items-start text-xs text-earth-dark-green">
-                    <HelpCircle className="h-4 w-4 mr-1 mt-0.5 flex-shrink-0 text-earth-medium-green" />
-                    <span>
-                      {language === 'id'
-                        ? "Format: F-XXXXXX-XX (Petani) atau B-XXXXXX-XX (Konsumen). ID ini terdapat pada kartu TaniTrack Anda."
-                        : "Format: F-XXXXXX-XX (Farmer) or B-XXXXXX-XX (Buyer). This ID is on your TaniTrack card."}
-                    </span>
+        <Tabs defaultValue="farmer" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="farmer" className="flex items-center gap-2">
+              <Leaf className="h-4 w-4" />
+              {t("auth.farmer")}
+            </TabsTrigger>
+            <TabsTrigger value="buyer" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              {t("auth.buyer")}
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="farmer" className="mt-0">
+            <Card className="bg-white/95 border-earth-light-brown/30 shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-earth-dark-green">
+                  {t("auth.farmerLogin")}
+                </CardTitle>
+                <CardDescription>
+                  {t("auth.enterCredentials")}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">{t("auth.email")}</Label>
+                    <Input 
+                      id="email"
+                      type="email" 
+                      placeholder="you@example.com" 
+                      {...form.register("email")}
+                    />
+                    {form.formState.errors.email && (
+                      <p className="text-red-500 text-sm">{form.formState.errors.email.message}</p>
+                    )}
                   </div>
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-col gap-4 pb-8 px-8">
-                <Button 
-                  type="submit" 
-                  className="w-full bg-earth-dark-green hover:bg-earth-medium-green rounded-full h-12 text-base"
-                  disabled={loading}
-                >
-                  {loading 
-                    ? (language === 'id' ? "Memproses..." : "Processing...") 
-                    : (language === 'id' ? "Lanjutkan" : "Continue")}
-                  {!loading && <ArrowRightIcon className="ml-2 h-5 w-5" />}
-                </Button>
-                <div className="text-sm text-center text-earth-dark-green">
-                  {language === 'id' ? "Belum punya akun? " : "Don't have an account? "}
-                  <Link
-                    to="/register"
-                    className="font-semibold text-earth-medium-green hover:underline"
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <Label htmlFor="password">{t("auth.password")}</Label>
+                      <Link to="/forgot-password" className="text-xs text-earth-dark-green hover:underline">
+                        {t("auth.forgotPassword")}
+                      </Link>
+                    </div>
+                    <Input 
+                      id="password"
+                      type="password" 
+                      placeholder="••••••••" 
+                      {...form.register("password")}
+                    />
+                    {form.formState.errors.password && (
+                      <p className="text-red-500 text-sm">{form.formState.errors.password.message}</p>
+                    )}
+                  </div>
+                  
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-earth-dark-green hover:bg-earth-dark-green/90"
+                    disabled={loading}
                   >
-                    {language === 'id' ? "Daftar sekarang" : "Register now"}
+                    {loading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        {t("auth.loggingIn")}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        {t("auth.login")}
+                        <ArrowRight className="h-4 w-4" />
+                      </div>
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+              <CardFooter className="flex flex-col space-y-4 pt-0">
+                <div className="text-sm text-center w-full">
+                  {t("auth.noAccount")}{" "}
+                  <Link to="/register" className="text-earth-dark-green font-medium hover:underline">
+                    {t("auth.registerNow")}
                   </Link>
                 </div>
               </CardFooter>
-            </form>
-          ) : (
-            <div>
-              <CardContent className="space-y-6 pt-6 px-8">
-                <div className="space-y-3">
-                  <p className="text-earth-dark-green font-medium text-center">
-                    {language === 'id' ? "Masukkan 6 Digit Kode OTP" : "Enter 6 Digit OTP Code"}
-                  </p>
-                  <p className="text-sm text-earth-dark-green text-center mb-4">
-                    {language === 'id'
-                      ? "Kode dikirim ke perangkat yang terhubung dengan TaniTrack Card Anda"
-                      : "Code sent to the device connected to your TaniTrack Card"}
-                  </p>
-                  <div className="flex justify-center">
-                    <InputOTP maxLength={6} value={otp} onChange={setOtp}>
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} className="border-earth-medium-green focus-visible:ring-earth-dark-green h-14 w-14 text-xl" />
-                        <InputOTPSlot index={1} className="border-earth-medium-green focus-visible:ring-earth-dark-green h-14 w-14 text-xl" />
-                        <InputOTPSlot index={2} className="border-earth-medium-green focus-visible:ring-earth-dark-green h-14 w-14 text-xl" />
-                        <InputOTPSlot index={3} className="border-earth-medium-green focus-visible:ring-earth-dark-green h-14 w-14 text-xl" />
-                        <InputOTPSlot index={4} className="border-earth-medium-green focus-visible:ring-earth-dark-green h-14 w-14 text-xl" />
-                        <InputOTPSlot index={5} className="border-earth-medium-green focus-visible:ring-earth-dark-green h-14 w-14 text-xl" />
-                      </InputOTPGroup>
-                    </InputOTP>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="buyer" className="mt-0">
+            <Card className="bg-white/95 border-earth-light-brown/30 shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-earth-dark-green">
+                  {t("auth.buyerLogin")}
+                </CardTitle>
+                <CardDescription>
+                  {t("auth.scanTaniTrackCard")}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex flex-col items-center justify-center">
+                  <div className="relative w-full max-w-[18rem] mx-auto">
+                    <TaniTrackCard
+                      type="buyer"
+                      name="PT Agrimax Food"
+                      id="BYR-2023-001"
+                      location="Jakarta, Indonesia"
+                      expiryDate="12/25"
+                      isStacked={true}
+                      stackPosition="back"
+                    />
+                    <TaniTrackCard
+                      type="farmer"
+                      name="Koperasi Tani Makmur"
+                      id="FMR-2023-001"
+                      location="Karawang, Indonesia"
+                      expiryDate="12/25"
+                      isStacked={true}
+                    />
                   </div>
                 </div>
+                
+                <div className="space-y-4">
+                  <div className="border-t border-dashed border-earth-light-brown/30 pt-4">
+                    <h3 className="text-sm font-medium text-earth-dark-green mb-3">
+                      {t("auth.loginInstructions")}:
+                    </h3>
+                    <ol className="space-y-3 text-sm text-earth-dark-green/80">
+                      <li className="flex items-start gap-3">
+                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-earth-pale-green flex items-center justify-center text-earth-dark-green font-medium">1</div>
+                        <div>
+                          <p>{t("auth.scanInstruction")}</p>
+                          <div className="flex items-center gap-1 text-xs text-earth-dark-green/60 mt-1">
+                            <SmartphoneNfc className="h-3 w-3" />
+                            <span>TaniTrack Mobile Auth App</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-earth-pale-green flex items-center justify-center text-earth-dark-green font-medium">2</div>
+                        <div>
+                          <p>{t("auth.otpInstruction")}</p>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                  
+                  {!showOTP ? (
+                    <Button 
+                      onClick={handleScanCard} 
+                      className="w-full gap-2 bg-earth-dark-green hover:bg-earth-dark-green/90"
+                    >
+                      <QrCode className="h-4 w-4" />
+                      {t("auth.scanCard")}
+                    </Button>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="otp">{t("auth.enterOTP")}</Label>
+                        <div className="flex gap-2">
+                          <Input 
+                            id="otp"
+                            type="text" 
+                            placeholder="000000" 
+                            {...form.register("otp")}
+                            className="font-mono text-center tracking-widest"
+                          />
+                          <Button 
+                            type="button"
+                            onClick={() => form.handleSubmit(onSubmit)()}
+                            className="bg-earth-dark-green hover:bg-earth-dark-green/90"
+                            disabled={loading}
+                          >
+                            <LockKeyhole className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </CardContent>
-              <CardFooter className="flex flex-col gap-4 pb-8 px-8">
-                <Button 
-                  onClick={verifyOtp} 
-                  className="w-full bg-earth-dark-green hover:bg-earth-medium-green rounded-full h-12 text-base"
-                  disabled={loading || otp.length !== 6}
-                >
-                  {loading 
-                    ? (language === 'id' ? "Memverifikasi..." : "Verifying...") 
-                    : (language === 'id' ? "Verifikasi & Masuk" : "Verify & Login")}
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-earth-light-brown text-earth-dark-green hover:bg-earth-pale-green rounded-full"
-                  onClick={() => setShowOtpInput(false)}
-                >
-                  {language === 'id' ? "Kembali" : "Back"}
-                </Button>
+              <CardFooter className="flex flex-col space-y-4 pt-0">
+                <div className="text-sm text-center w-full">
+                  {t("auth.needHelp")}{" "}
+                  <a href="#" className="text-earth-dark-green font-medium hover:underline">
+                    {t("auth.contactSupport")}
+                  </a>
+                </div>
               </CardFooter>
-            </div>
-          )}
-        </Card>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+      
+      <div className="absolute bottom-4 right-4">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2 bg-white/80 border-earth-light-brown/30"
+          onClick={() => setLanguage(currentLanguage === 'en' ? 'id' : 'en')}
+        >
+          {currentLanguage === 'en' ? '🇮🇩 Bahasa Indonesia' : '🇺🇸 English'}
+        </Button>
       </div>
     </div>
   );
-}
+};
+
+export default Login;
