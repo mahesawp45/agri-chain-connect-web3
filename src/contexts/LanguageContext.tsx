@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define available languages
@@ -757,4 +758,103 @@ export const translations: TranslationsType = {
         "balance": "Saldo Saya",
         "history": "Riwayat Transaksi",
         "payments": "Metode Pembayaran",
-        "invoices": "
+        "invoices": "Faktur"
+      },
+      "market": {
+        "title": "Pasar",
+        "prices": "Harga Pasar",
+        "trends": "Tren Pasar",
+        "forecasts": "Perkiraan Harga"
+      },
+      "shipping": {
+        "title": "Logistik",
+        "manage": "Kelola Pengiriman",
+        "track": "Lacak Pengiriman",
+        "schedule": "Jadwalkan Pengambilan"
+      },
+      "account": {
+        "title": "Akun Saya",
+        "profile": "Pengaturan Profil",
+        "company": "Profil Perusahaan",
+        "notifications": "Notifikasi"
+      },
+      "transactions": {
+        "title": "Pembelian",
+        "pending": "Tertunda",
+        "completed": "Selesai",
+        "history": "Riwayat"
+      }
+    }
+  }
+};
+
+// Function to get nested translations
+const getNestedTranslation = (
+  obj: Record<string, string | NestedTranslations>,
+  key: string
+): string => {
+  const keys = key.split('.');
+  let result: any = obj;
+
+  for (let i = 0; i < keys.length; i++) {
+    if (result[keys[i]] === undefined) {
+      return key; // Key not found, return the key itself
+    }
+    result = result[keys[i]];
+  }
+
+  if (typeof result === 'string') {
+    return result;
+  }
+
+  return key; // If the result is not a string, return the key
+};
+
+// Language Context interface
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
+}
+
+// Create the context
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Language Provider Props
+interface LanguageProviderProps {
+  children: ReactNode;
+}
+
+// Language Provider Component
+export const LanguageProvider = ({ children }: LanguageProviderProps) => {
+  // Get user's preferred language from localStorage or use default
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem('language');
+    return (savedLanguage as Language) || 'en';
+  });
+
+  // Update localStorage when language changes
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  // Translation function
+  const t = (key: string): string => {
+    return getNestedTranslation(translations[language], key);
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+// Custom hook to use the language context
+export const useLanguage = (): LanguageContextType => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
