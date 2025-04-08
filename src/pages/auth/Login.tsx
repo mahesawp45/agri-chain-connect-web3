@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -42,7 +41,7 @@ export default function Login() {
           title: "Login berhasil!",
           description: "Selamat datang kembali di TaniTrack",
         });
-        navigate("/");
+        navigate("/dashboard");
       } else {
         toast({
           variant: "destructive",
