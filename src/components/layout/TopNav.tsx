@@ -11,12 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TopNavProps {
   onMenuButtonClick: () => void;
 }
 
 export function TopNav({ onMenuButtonClick }: TopNavProps) {
+  const { t } = useLanguage();
+  
   return (
     <header className="fixed top-0 w-full bg-white border-b border-gray-200 z-30">
       <div className="flex h-16 items-center justify-between px-4">
@@ -49,7 +52,7 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
               type="search"
-              placeholder="Cari..."
+              placeholder={t("action.search") + "..."}
               className="w-full bg-gray-50 pl-8 focus-visible:ring-agriGreen-500"
             />
           </div>
@@ -66,39 +69,39 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Notifikasi</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("nav.notifications")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
                 <div className="flex flex-col gap-1">
-                  <p className="font-medium text-sm">Pesanan Baru Diterima</p>
+                  <p className="font-medium text-sm">{t("language") === "id" ? "Pesanan Baru Diterima" : "New Order Received"}</p>
                   <p className="text-sm text-gray-500">
-                    PT Agrimax memesan 500kg beras.
+                    {t("language") === "id" ? "PT Agrimax memesan 500kg beras." : "PT Agrimax ordered 500kg of rice."}
                   </p>
-                  <p className="text-xs text-gray-400">2 menit yang lalu</p>
+                  <p className="text-xs text-gray-400">{t("language") === "id" ? "2 menit yang lalu" : "2 minutes ago"}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <div className="flex flex-col gap-1">
-                  <p className="font-medium text-sm">Pembayaran Diterima</p>
+                  <p className="font-medium text-sm">{t("language") === "id" ? "Pembayaran Diterima" : "Payment Received"}</p>
                   <p className="text-sm text-gray-500">
-                    Pembayaran sebesar Rp. 5.000.000 telah masuk.
+                    {t("language") === "id" ? "Pembayaran sebesar Rp. 5.000.000 telah masuk." : "Payment of Rp. 5,000,000 has been received."}
                   </p>
-                  <p className="text-xs text-gray-400">1 jam yang lalu</p>
+                  <p className="text-xs text-gray-400">{t("language") === "id" ? "1 jam yang lalu" : "1 hour ago"}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <div className="flex flex-col gap-1">
-                  <p className="font-medium text-sm">Harga Beras Naik</p>
+                  <p className="font-medium text-sm">{t("language") === "id" ? "Harga Beras Naik" : "Rice Price Increased"}</p>
                   <p className="text-sm text-gray-500">
-                    Harga beras naik 5% dari minggu lalu.
+                    {t("language") === "id" ? "Harga beras naik 5% dari minggu lalu." : "Rice price increased by 5% from last week."}
                   </p>
-                  <p className="text-xs text-gray-400">1 hari yang lalu</p>
+                  <p className="text-xs text-gray-400">{t("language") === "id" ? "1 hari yang lalu" : "1 day ago"}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="justify-center">
                 <span className="text-agriGreen-600 font-medium text-sm">
-                  Lihat Semua Notifikasi
+                  {t("language") === "id" ? "Lihat Semua Notifikasi" : "View All Notifications"}
                 </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
