@@ -1,10 +1,9 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define available languages
 export type Language = 'id' | 'en';
 
-// Define translation object structure - updated to avoid circular reference
+// Define translation object structure
 interface NestedTranslations {
   [key: string]: string | NestedTranslations;
 }
@@ -65,10 +64,14 @@ export const translations: TranslationsType = {
     "auth.buyer": "Buyer",
     "auth.scanTaniTrackCard": "Scan your TaniTrack card to login",
     "auth.scanCard": "Scan Card",
-    "auth.loginInstructions": "Login Instructions",
+    "auth.loginInstructions": "Login with TaniTrack Card",
     "auth.scanInstruction": "Scan your TaniTrack card using the TaniTrack Mobile Auth App",
     "auth.otpInstruction": "Enter the OTP sent to your mobile device",
     "auth.enterOTP": "Enter OTP",
+    "auth.otpPlaceholder": "Enter OTP code",
+    "auth.otpRequired": "OTP is required",
+    "auth.welcomeBack": "Welcome back to TaniTrack!",
+    "success.login": "Login Successful",
 
     // Navigation
     "nav.dashboard": "Dashboard",
@@ -446,10 +449,14 @@ export const translations: TranslationsType = {
     "auth.buyer": "Pembeli",
     "auth.scanTaniTrackCard": "Pindai kartu TaniTrack Anda untuk masuk",
     "auth.scanCard": "Pindai Kartu",
-    "auth.loginInstructions": "Petunjuk Login",
+    "auth.loginInstructions": "Penjelasan Penggunaan Login dengan TaniTrack Card",
     "auth.scanInstruction": "Pindai kartu TaniTrack Anda menggunakan Aplikasi TaniTrack Mobile Auth",
     "auth.otpInstruction": "Masukkan OTP yang dikirim ke perangkat seluler Anda",
     "auth.enterOTP": "Masukkan OTP",
+    "auth.otpPlaceholder": "Masukkan kode OTP",
+    "auth.otpRequired": "OTP diperlukan",
+    "auth.welcomeBack": "Selamat datang kembali di TaniTrack!",
+    "success.login": "Login Berhasil",
 
     // Navigation
     "nav.dashboard": "Dasbor",
@@ -750,102 +757,4 @@ export const translations: TranslationsType = {
         "balance": "Saldo Saya",
         "history": "Riwayat Transaksi",
         "payments": "Metode Pembayaran",
-        "invoices": "Faktur"
-      },
-      "market": {
-        "title": "Pasar",
-        "prices": "Harga Pasar",
-        "trends": "Tren Pasar",
-        "forecasts": "Perkiraan Harga"
-      },
-      "shipping": {
-        "title": "Logistik",
-        "manage": "Kelola Pengiriman",
-        "track": "Lacak Pengiriman",
-        "schedule": "Jadwalkan Pengambilan"
-      },
-      "account": {
-        "title": "Akun Saya",
-        "profile": "Pengaturan Profil",
-        "company": "Profil Perusahaan",
-        "notifications": "Notifikasi"
-      },
-      "transactions": {
-        "title": "Pembelian",
-        "pending": "Tertunda",
-        "completed": "Selesai",
-        "history": "Riwayat"
-      }
-    }
-  }
-};
-
-interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
-  addTranslations: (lang: Language, newTranslations: Record<string, any>) => void;
-}
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('id');
-  const [translationsData, setTranslationsData] = useState<TranslationsType>(translations);
-
-  // Load saved language preference from localStorage
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('app-language');
-    if (savedLanguage && (savedLanguage === 'id' || savedLanguage === 'en')) {
-      setLanguage(savedLanguage as Language);
-    }
-  }, []);
-
-  // Save language preference to localStorage when changed
-  useEffect(() => {
-    localStorage.setItem('app-language', language);
-  }, [language]);
-
-  // Function to add new translations
-  const addTranslations = (lang: Language, newTranslations: Record<string, any>) => {
-    setTranslationsData(prev => ({
-      ...prev,
-      [lang]: {
-        ...prev[lang],
-        ...newTranslations
-      }
-    }));
-  };
-
-  // Modified to handle nested keys
-  const t = (key: string): string => {
-    const keys = key.split('.');
-    let result: any = translationsData[language];
-    
-    for (const k of keys) {
-      if (result === undefined) return key;
-      result = result[k];
-    }
-    
-    return typeof result === 'string' ? result : key;
-  };
-
-  return (
-    <LanguageContext.Provider value={{ 
-      language, 
-      setLanguage, 
-      t,
-      addTranslations 
-    }}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};
-
-export const useLanguage = (): LanguageContextType => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-};
+        "invoices": "
