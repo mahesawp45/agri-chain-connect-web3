@@ -1,7 +1,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { CreditCard } from "lucide-react";
+import { CreditCard, Leaf } from "lucide-react";
 
 interface TaniTrackCardProps {
   type: "farmer" | "buyer";
@@ -27,7 +27,7 @@ export function TaniTrackCard({
           "w-72 h-44 rounded-xl shadow-lg p-5 relative overflow-hidden transform transition-transform hover:scale-105",
           type === "farmer" 
             ? "bg-earth-dark-green text-white" 
-            : "bg-yellow-500 text-white"
+            : "bg-yellow-600 text-white"
         )}
         style={{
           perspective: "1000px",
@@ -42,11 +42,16 @@ export function TaniTrackCard({
             </p>
             <h2 className="text-lg font-bold mt-1">TANITRACK</h2>
           </div>
-          {type === "buyer" && (
-            <div className="bg-yellow-400/50 w-10 h-10 rounded-full flex items-center justify-center">
+          <div className={cn(
+            "w-10 h-10 rounded-full flex items-center justify-center",
+            type === "farmer" ? "bg-white/20" : "bg-yellow-500/50"
+          )}>
+            {type === "farmer" ? (
+              <Leaf className="w-5 h-5 text-white" />
+            ) : (
               <CreditCard className="w-5 h-5 text-white" />
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Card Chip/Stripe (visual element) */}
@@ -64,7 +69,7 @@ export function TaniTrackCard({
             <p className="text-sm font-bold mt-0.5">{name}</p>
           </div>
 
-          {location && type === "buyer" && (
+          {location && (
             <div className="absolute right-5 top-[107px]">
               <p className="text-xs font-medium uppercase opacity-80">LOKASI</p>
               <p className="text-sm font-bold mt-0.5">{location}</p>
@@ -77,7 +82,7 @@ export function TaniTrackCard({
               <p className="text-sm font-bold mt-0.5">{id}</p>
             </div>
 
-            {expiryDate && type === "buyer" && (
+            {expiryDate && (
               <div>
                 <p className="text-xs font-medium uppercase opacity-80">AKTIF HINGGA</p>
                 <p className="text-sm font-bold mt-0.5">{expiryDate}</p>
