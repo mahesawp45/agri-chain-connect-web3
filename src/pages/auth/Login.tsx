@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { ArrowRightIcon, HelpCircle, Leaf, ShieldCheck, Tractor } from "lucide-react";
+import { ArrowRightIcon, HelpCircle, Leaf, ShieldCheck, Store, Tractor } from "lucide-react";
+import { TaniTrackCard } from "@/components/custom/TaniTrackCard";
 
 export default function Login() {
   const [otp, setOtp] = useState("");
@@ -64,7 +65,13 @@ export default function Login() {
         
         <div className="max-w-md mx-auto z-10">
           <div className="flex items-center mb-6">
-            <Leaf className="h-12 w-12 text-earth-dark-green mr-4" />
+            <div className="h-12 w-12 rounded-md overflow-hidden flex items-center justify-center bg-white/90 mr-4">
+              <img 
+                src="/lovable-uploads/f7fb75ca-ee07-4d12-a8ab-4e5152e13679.png" 
+                alt="TaniTrack Logo" 
+                className="h-full w-full object-contain"
+              />
+            </div>
             <h1 className="text-4xl font-bold text-earth-dark-green">TaniTrack</h1>
           </div>
           
@@ -93,15 +100,12 @@ export default function Login() {
               </div>
             </div>
             
-            <div className="mt-8 relative">
-              <img 
-                src="/lovable-uploads/74ad6f02-a99d-46d0-a365-91b2411675c1.png" 
-                alt="TaniTrack Card" 
-                className="rounded-lg shadow-lg border-4 border-white"
+            <div className="mt-8 flex justify-center">
+              <TaniTrackCard 
+                type="farmer"
+                name="AGUS SURYANA"
+                id="F-230599-JB"
               />
-              <div className="absolute -right-4 -bottom-4 bg-earth-dark-green text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
-                TaniTrack Card
-              </div>
             </div>
           </div>
         </div>
@@ -109,10 +113,10 @@ export default function Login() {
 
       {/* Right Section - Login Form */}
       <div className="w-full md:w-1/2 p-8 flex items-center justify-center bg-white md:bg-transparent">
-        <Card className="w-full max-w-md shadow-lg border-none overflow-hidden bg-white md:bg-white/90 backdrop-blur-sm">
-          <CardHeader className="bg-gradient-to-r from-earth-medium-green to-earth-dark-green text-white">
+        <Card className="w-full max-w-md shadow-lg border-earth-light-brown/40 overflow-hidden bg-white md:bg-white/95 backdrop-blur-sm">
+          <CardHeader className="bg-gradient-to-r from-earth-dark-green to-earth-medium-green text-white py-6">
             <CardTitle className="text-center text-2xl">Masuk ke TaniTrack</CardTitle>
-            <CardDescription className="text-center text-white/90">
+            <CardDescription className="text-center text-white/90 mt-2">
               {showOtpInput
                 ? "Masukkan kode OTP yang dikirim ke perangkat Anda"
                 : "Masukkan ID TaniTrack untuk memulai"}
@@ -121,7 +125,7 @@ export default function Login() {
 
           {!showOtpInput ? (
             <form onSubmit={handleLogin}>
-              <CardContent className="space-y-5 pt-6">
+              <CardContent className="space-y-5 pt-6 px-8">
                 <div className="space-y-3">
                   <label htmlFor="tanitrack-id" className="text-earth-dark-green font-medium block">
                     ID TaniTrack
@@ -131,15 +135,15 @@ export default function Login() {
                     type="text"
                     placeholder="Masukkan ID TaniTrack"
                     required
-                    className="border-earth-light-green focus:border-earth-medium-green text-base h-12"
+                    className="border-earth-light-brown focus-visible:ring-earth-medium-green text-base h-12"
                   />
-                  <div className="flex items-start text-xs text-earth-medium-green">
-                    <HelpCircle className="h-4 w-4 mr-1 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start text-xs text-earth-dark-green">
+                    <HelpCircle className="h-4 w-4 mr-1 mt-0.5 flex-shrink-0 text-earth-medium-green" />
                     <span>Format: F-XXXXXX-XX (Petani) atau B-XXXXXX-XX (Konsumen). ID ini terdapat pada kartu TaniTrack Anda.</span>
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex flex-col gap-4 pb-8">
+              <CardFooter className="flex flex-col gap-4 pb-8 px-8">
                 <Button 
                   type="submit" 
                   className="w-full bg-earth-dark-green hover:bg-earth-medium-green rounded-full h-12 text-base"
@@ -148,11 +152,11 @@ export default function Login() {
                   {loading ? "Memproses..." : "Lanjutkan"}
                   {!loading && <ArrowRightIcon className="ml-2 h-5 w-5" />}
                 </Button>
-                <div className="text-sm text-center text-earth-medium-green">
+                <div className="text-sm text-center text-earth-dark-green">
                   Belum punya akun?{" "}
                   <Link
                     to="/register"
-                    className="font-semibold text-earth-dark-green hover:underline"
+                    className="font-semibold text-earth-medium-green hover:underline"
                   >
                     Daftar sekarang
                   </Link>
@@ -161,10 +165,10 @@ export default function Login() {
             </form>
           ) : (
             <div>
-              <CardContent className="space-y-6 pt-6">
+              <CardContent className="space-y-6 pt-6 px-8">
                 <div className="space-y-3">
                   <p className="text-earth-dark-green font-medium text-center">Masukkan 6 Digit Kode OTP</p>
-                  <p className="text-sm text-earth-medium-green text-center mb-4">
+                  <p className="text-sm text-earth-dark-green text-center mb-4">
                     Kode dikirim ke perangkat yang terhubung dengan TaniTrack Card Anda
                   </p>
                   <div className="flex justify-center">
@@ -181,7 +185,7 @@ export default function Login() {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex flex-col gap-4 pb-8">
+              <CardFooter className="flex flex-col gap-4 pb-8 px-8">
                 <Button 
                   onClick={verifyOtp} 
                   className="w-full bg-earth-dark-green hover:bg-earth-medium-green rounded-full h-12 text-base"
@@ -191,7 +195,7 @@ export default function Login() {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="w-full border-earth-light-green text-earth-dark-green hover:bg-earth-pale-green rounded-full"
+                  className="w-full border-earth-light-brown text-earth-dark-green hover:bg-earth-pale-green rounded-full"
                   onClick={() => setShowOtpInput(false)}
                 >
                   Kembali
