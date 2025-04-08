@@ -33,16 +33,16 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
+    <div className="min-h-screen flex flex-col md:flex-row bg-earth-pale-green">
       {/* Left Section - Explanation */}
-      <div className="w-full md:w-1/2 bg-gray-200 p-8 flex items-center justify-center">
+      <div className="w-full md:w-1/2 bg-earth-light-green/30 p-8 flex items-center justify-center">
         <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-bold text-tani-green-dark mb-4">
+          <h1 className="text-2xl font-bold text-earth-dark-green mb-4">
             {activeTab === "petani" 
               ? "Flow singkat dari Platform untuk Petani" 
               : "Flow singkat dari Platform untuk Konsumen"}
           </h1>
-          <p className="text-gray-700">
+          <p className="text-earth-dark-green mb-6">
             {activeTab === "petani" 
               ? "Platform TaniTrack memudahkan petani dalam melacak dan menjual hasil pertanian mereka secara langsung ke konsumen dengan harga yang lebih baik. Sistem kami juga membantu petani mendapatkan informasi harga pasar terkini."
               : "Sebagai konsumen, Anda dapat membeli produk pertanian segar langsung dari petani, memastikan kualitas terbaik dengan harga yang transparan. TaniTrack menjamin keaslian dan kualitas produk yang Anda beli."}
@@ -59,16 +59,16 @@ export default function Register() {
 
       {/* Right Section - Registration Form */}
       <div className="w-full md:w-1/2 p-8 flex items-center justify-center">
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-md shadow-lg border-earth-light-green earth-card-wheat">
           <Tabs defaultValue="petani" className="w-full" onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="petani">Petani</TabsTrigger>
-              <TabsTrigger value="konsumen">Konsumen</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-earth-light-green">
+              <TabsTrigger value="petani" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">Petani</TabsTrigger>
+              <TabsTrigger value="konsumen" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">Konsumen</TabsTrigger>
             </TabsList>
             
-            <CardHeader>
+            <CardHeader className="earth-header-moss">
               <CardTitle className="text-center text-2xl">Pendaftaran</CardTitle>
-              <CardDescription className="text-center">
+              <CardDescription className="text-center text-white">
                 {activeTab === "petani" 
                   ? "Daftar sebagai petani di TaniTrack" 
                   : "Daftar sebagai konsumen di TaniTrack"}
@@ -79,30 +79,54 @@ export default function Register() {
               <form onSubmit={(e) => handleRegister(e, "petani")}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="ktp">No.KTP</Label>
-                    <Input id="ktp" placeholder="Masukkan nomor KTP" required />
+                    <Label htmlFor="ktp" className="text-earth-dark-green">No.KTP</Label>
+                    <Input 
+                      id="ktp" 
+                      placeholder="Masukkan nomor KTP" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="name">Nama (Optional)</Label>
-                    <Input id="name" placeholder="Masukkan nama lengkap" />
+                    <Label htmlFor="name" className="text-earth-dark-green">Nama (Optional)</Label>
+                    <Input 
+                      id="name" 
+                      placeholder="Masukkan nama lengkap" 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="hp">No.HP/Whatsapp</Label>
-                    <Input id="hp" placeholder="Masukkan nomor HP" required />
+                    <Label htmlFor="hp" className="text-earth-dark-green">No.HP/Whatsapp</Label>
+                    <Input 
+                      id="hp" 
+                      placeholder="Masukkan nomor HP" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="address">Alamat Utama</Label>
-                    <Input id="address" placeholder="Masukkan alamat" required />
+                    <Label htmlFor="address" className="text-earth-dark-green">Alamat Utama</Label>
+                    <Input 
+                      id="address" 
+                      placeholder="Masukkan alamat" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="mother">Nama Ibu Kandung</Label>
-                    <Input id="mother" placeholder="Masukkan nama ibu kandung" required />
+                    <Label htmlFor="mother" className="text-earth-dark-green">Nama Ibu Kandung</Label>
+                    <Input 
+                      id="mother" 
+                      placeholder="Masukkan nama ibu kandung" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="flex items-center space-x-2 mt-4">
-                    <Checkbox id="terms" required />
+                    <Checkbox id="terms" required className="border-earth-medium-green text-earth-dark-green" />
                     <label
                       htmlFor="terms"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-earth-dark-green"
                     >
                       Terms and Condition
                     </label>
@@ -110,11 +134,11 @@ export default function Register() {
                 </CardContent>
                 <CardFooter>
                   <Button 
-                    className="w-full bg-gray-700 hover:bg-gray-800"
+                    className="w-full bg-earth-dark-green hover:bg-earth-medium-green"
                     disabled={loading}
                     type="submit"
                   >
-                    {loading ? "Memproses..." : "Login"}
+                    {loading ? "Memproses..." : "Daftar"}
                   </Button>
                 </CardFooter>
               </form>
@@ -124,34 +148,67 @@ export default function Register() {
               <form onSubmit={(e) => handleRegister(e, "konsumen")}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="ktp-konsumen">No.KTP</Label>
-                    <Input id="ktp-konsumen" placeholder="Masukkan nomor KTP" required />
+                    <Label htmlFor="ktp-konsumen" className="text-earth-dark-green">No.KTP</Label>
+                    <Input 
+                      id="ktp-konsumen" 
+                      placeholder="Masukkan nomor KTP" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="name-konsumen">Nama (Optional)</Label>
-                    <Input id="name-konsumen" placeholder="Masukkan nama lengkap" />
+                    <Label htmlFor="name-konsumen" className="text-earth-dark-green">Nama (Optional)</Label>
+                    <Input 
+                      id="name-konsumen" 
+                      placeholder="Masukkan nama lengkap" 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="merchant">Nama Perusahaan/Merchant</Label>
-                    <Input id="merchant" placeholder="Masukkan nama perusahaan" required />
+                    <Label htmlFor="merchant" className="text-earth-dark-green">Nama Perusahaan/Merchant</Label>
+                    <Input 
+                      id="merchant" 
+                      placeholder="Masukkan nama perusahaan" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="hp-konsumen">No.HP/Whatsapp</Label>
-                    <Input id="hp-konsumen" placeholder="Masukkan nomor HP" required />
+                    <Label htmlFor="hp-konsumen" className="text-earth-dark-green">No.HP/Whatsapp</Label>
+                    <Input 
+                      id="hp-konsumen" 
+                      placeholder="Masukkan nomor HP" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="address-konsumen">Alamat Utama</Label>
-                    <Input id="address-konsumen" placeholder="Masukkan alamat" required />
+                    <Label htmlFor="address-konsumen" className="text-earth-dark-green">Alamat Utama</Label>
+                    <Input 
+                      id="address-konsumen" 
+                      placeholder="Masukkan alamat" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="mother-konsumen">Nama Ibu Kandung</Label>
-                    <Input id="mother-konsumen" placeholder="Masukkan nama ibu kandung" required />
+                    <Label htmlFor="mother-konsumen" className="text-earth-dark-green">Nama Ibu Kandung</Label>
+                    <Input 
+                      id="mother-konsumen" 
+                      placeholder="Masukkan nama ibu kandung" 
+                      required 
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
                   </div>
                   <div className="flex items-center space-x-2 mt-4">
-                    <Checkbox id="terms-konsumen" required />
+                    <Checkbox 
+                      id="terms-konsumen" 
+                      required 
+                      className="border-earth-medium-green text-earth-dark-green"
+                    />
                     <label
                       htmlFor="terms-konsumen"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-earth-dark-green"
                     >
                       Terms and Condition
                     </label>
@@ -159,11 +216,11 @@ export default function Register() {
                 </CardContent>
                 <CardFooter>
                   <Button 
-                    className="w-full bg-gray-700 hover:bg-gray-800"
+                    className="w-full bg-earth-dark-green hover:bg-earth-medium-green"
                     disabled={loading}
                     type="submit"
                   >
-                    {loading ? "Memproses..." : "Login"}
+                    {loading ? "Memproses..." : "Daftar"}
                   </Button>
                 </CardFooter>
               </form>

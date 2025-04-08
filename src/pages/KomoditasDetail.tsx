@@ -127,8 +127,8 @@ const KomoditasDetail = () => {
       <MainLayout>
         <div className="flex items-center justify-center h-full">
           <div className="animate-pulse text-center">
-            <div className="h-8 w-32 bg-gray-200 rounded mb-4 mx-auto"></div>
-            <div className="h-4 w-64 bg-gray-200 rounded mx-auto"></div>
+            <div className="h-8 w-32 bg-earth-light-green rounded mb-4 mx-auto"></div>
+            <div className="h-4 w-64 bg-earth-light-green rounded mx-auto"></div>
           </div>
         </div>
       </MainLayout>
@@ -139,9 +139,9 @@ const KomoditasDetail = () => {
     return (
       <MainLayout>
         <div className="text-center py-12">
-          <h2 className="text-2xl font-bold mb-2">{t("commodities.notfound")}</h2>
-          <p className="text-gray-600 mb-6">The requested commodity could not be found.</p>
-          <Button onClick={() => navigate('/komoditas')}>
+          <h2 className="text-2xl font-bold mb-2 text-earth-dark-green">{t("commodities.notfound")}</h2>
+          <p className="text-earth-medium-green mb-6">The requested commodity could not be found.</p>
+          <Button onClick={() => navigate('/komoditas')} className="bg-earth-dark-green hover:bg-earth-medium-green">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("action.back")}
           </Button>
@@ -176,25 +176,25 @@ const KomoditasDetail = () => {
           <Button 
             variant="outline" 
             size="sm" 
-            className="mb-4" 
+            className="mb-4 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20" 
             onClick={() => navigate('/komoditas')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("action.back")}
           </Button>
-          <h1 className="text-2xl font-bold">{t("commodities.detail")}</h1>
-          <p className="text-gray-600">{komoditas.id}</p>
+          <h1 className="text-2xl font-bold text-earth-dark-green">{t("commodities.detail")}</h1>
+          <p className="text-earth-medium-green">{komoditas.id}</p>
         </div>
         <div className="flex space-x-2 mt-4 md:mt-0">
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20">
             <QrCode className="h-4 w-4" />
             {t("commodities.qrcode")}
           </Button>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20">
             <Edit className="h-4 w-4" />
             {t("action.edit")}
           </Button>
-          <Button variant="outline" className="gap-2 text-red-600">
+          <Button variant="outline" className="gap-2 text-red-600 border-red-200 hover:bg-red-50">
             <Trash2 className="h-4 w-4" />
             {t("action.delete")}
           </Button>
@@ -203,14 +203,14 @@ const KomoditasDetail = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>{t("commodities.detail")}</CardTitle>
+          <Card className="earth-card-wheat">
+            <CardHeader className="pb-3 earth-header-forest">
+              <CardTitle className="text-white">{t("commodities.detail")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col md:flex-row mb-6">
                 <div className="w-full md:w-1/3 mb-4 md:mb-0">
-                  <div className="bg-gray-100 rounded-lg overflow-hidden h-64 flex items-center justify-center">
+                  <div className="bg-earth-light-green/20 rounded-lg overflow-hidden h-64 flex items-center justify-center">
                     <img 
                       src={komoditas.imageUrl} 
                       alt={komoditas.name} 
@@ -219,28 +219,28 @@ const KomoditasDetail = () => {
                   </div>
                 </div>
                 <div className="w-full md:w-2/3 md:pl-6">
-                  <h2 className="text-2xl font-bold mb-2">{komoditas.name}</h2>
+                  <h2 className="text-2xl font-bold mb-2 text-earth-dark-green">{komoditas.name}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
                     <div>
-                      <p className="text-sm text-gray-500">{t("commodities.type")}</p>
-                      <p className="font-medium">{komoditas.type}</p>
+                      <p className="text-sm text-earth-medium-green">{t("commodities.type")}</p>
+                      <p className="font-medium text-earth-dark-green">{komoditas.type}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t("commodities.grade")}</p>
+                      <p className="text-sm text-earth-medium-green">{t("commodities.grade")}</p>
                       <div>{renderGradeBadge(komoditas.grade)}</div>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t("commodities.quantity")}</p>
-                      <p className="font-medium">{komoditas.quantity.toLocaleString()} {komoditas.unit}</p>
+                      <p className="text-sm text-earth-medium-green">{t("commodities.quantity")}</p>
+                      <p className="font-medium text-earth-dark-green">{komoditas.quantity.toLocaleString()} {komoditas.unit}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{t("commodities.created")}</p>
-                      <p className="font-medium">{formatDate(new Date(komoditas.createdAt))}</p>
+                      <p className="text-sm text-earth-medium-green">{t("commodities.created")}</p>
+                      <p className="font-medium text-earth-dark-green">{formatDate(new Date(komoditas.createdAt))}</p>
                     </div>
                     <div className="md:col-span-2">
-                      <p className="text-sm text-gray-500">{t("commodities.location")}</p>
-                      <p className="font-medium flex items-center">
-                        <MapPin className="h-4 w-4 mr-1 text-gray-400" />
+                      <p className="text-sm text-earth-medium-green">{t("commodities.location")}</p>
+                      <p className="font-medium text-earth-dark-green flex items-center">
+                        <MapPin className="h-4 w-4 mr-1 text-earth-medium-green" />
                         {komoditas.location}
                       </p>
                     </div>
@@ -248,36 +248,36 @@ const KomoditasDetail = () => {
                 </div>
               </div>
 
-              <Separator className="my-6" />
+              <Separator className="my-6 bg-earth-light-green" />
               
               <div>
-                <h3 className="font-medium mb-2">Description</h3>
-                <p className="text-gray-700">{komoditas.description}</p>
+                <h3 className="font-medium mb-2 text-earth-dark-green">Description</h3>
+                <p className="text-earth-dark-green">{komoditas.description}</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>History & Activity</CardTitle>
+          <Card className="earth-card-green">
+            <CardHeader className="pb-3 earth-header-moss">
+              <CardTitle className="text-white">History & Activity</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {komoditas.history.map((event: any, index: number) => (
                   <div key={index} className="flex">
                     <div className="mr-4 flex flex-col items-center">
-                      <div className="w-3 h-3 bg-tani-green-dark rounded-full"></div>
+                      <div className="w-3 h-3 bg-earth-dark-green rounded-full"></div>
                       {index < komoditas.history.length - 1 && (
-                        <div className="w-0.5 bg-gray-200 h-full mt-1"></div>
+                        <div className="w-0.5 bg-earth-light-green h-full mt-1"></div>
                       )}
                     </div>
                     <div className="pb-4">
                       <div className="flex items-center">
-                        <p className="font-medium">{event.action}</p>
-                        <span className="mx-2 text-gray-400">•</span>
-                        <p className="text-sm text-gray-500">{formatDate(new Date(event.date))}</p>
+                        <p className="font-medium text-earth-dark-green">{event.action}</p>
+                        <span className="mx-2 text-earth-medium-green">•</span>
+                        <p className="text-sm text-earth-medium-green">{formatDate(new Date(event.date))}</p>
                       </div>
-                      <p className="text-gray-600 mt-1">{event.notes}</p>
+                      <p className="text-earth-dark-green mt-1">{event.notes}</p>
                     </div>
                   </div>
                 ))}
@@ -287,26 +287,26 @@ const KomoditasDetail = () => {
         </div>
 
         <div className="space-y-6">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>{t("commodities.qrcode")}</CardTitle>
+          <Card className="earth-card-clay">
+            <CardHeader className="pb-3 earth-header-forest">
+              <CardTitle className="text-white">{t("commodities.qrcode")}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center">
-              <div className="bg-gray-100 p-4 rounded-lg mb-4">
-                <QrCode className="h-32 w-32 text-tani-green-dark mx-auto" />
+              <div className="bg-earth-pale-green p-4 rounded-lg mb-4">
+                <QrCode className="h-32 w-32 text-earth-dark-green mx-auto" />
               </div>
-              <p className="text-center text-sm text-gray-700">
+              <p className="text-center text-sm text-earth-dark-green">
                 {t("commodities.name")}: <span className="font-medium">{komoditas.name}</span><br />
                 ID: <span className="font-medium">{komoditas.id}</span><br />
                 {t("commodities.created")}: <span className="font-medium">{formatDate(new Date(komoditas.createdAt))}</span>
               </p>
-              <Button className="mt-4 w-full">Download QR Code</Button>
+              <Button className="mt-4 w-full bg-earth-dark-green hover:bg-earth-medium-green">Download QR Code</Button>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Quick Info</CardTitle>
+          <Card className="earth-card-wheat">
+            <CardHeader className="pb-3 earth-header-moss">
+              <CardTitle className="text-white">Quick Info</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -315,8 +315,8 @@ const KomoditasDetail = () => {
                     <PackageOpen className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t("commodities.type")}</p>
-                    <p className="font-medium">{komoditas.type}</p>
+                    <p className="text-sm text-earth-medium-green">{t("commodities.type")}</p>
+                    <p className="font-medium text-earth-dark-green">{komoditas.type}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -324,8 +324,8 @@ const KomoditasDetail = () => {
                     <Scale className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t("commodities.quantity")}</p>
-                    <p className="font-medium">{komoditas.quantity.toLocaleString()} {komoditas.unit}</p>
+                    <p className="text-sm text-earth-medium-green">{t("commodities.quantity")}</p>
+                    <p className="font-medium text-earth-dark-green">{komoditas.quantity.toLocaleString()} {komoditas.unit}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -333,8 +333,8 @@ const KomoditasDetail = () => {
                     <MapPin className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t("commodities.location")}</p>
-                    <p className="font-medium">{komoditas.location}</p>
+                    <p className="text-sm text-earth-medium-green">{t("commodities.location")}</p>
+                    <p className="font-medium text-earth-dark-green">{komoditas.location}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -342,8 +342,8 @@ const KomoditasDetail = () => {
                     <Calendar className="h-5 w-5 text-amber-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t("commodities.created")}</p>
-                    <p className="font-medium">{formatDate(new Date(komoditas.createdAt))}</p>
+                    <p className="text-sm text-earth-medium-green">{t("commodities.created")}</p>
+                    <p className="font-medium text-earth-dark-green">{formatDate(new Date(komoditas.createdAt))}</p>
                   </div>
                 </div>
               </div>

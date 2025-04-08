@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { TrendingUp, Search, Filter, ArrowDown, ArrowUp, MapPin } from "lucide-react";
@@ -168,14 +167,14 @@ const Harga = () => {
   return (
     <MainLayout>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Harga Komoditas</h1>
-        <p className="text-gray-600">Pantau harga komoditas pertanian terkini</p>
+        <h1 className="text-2xl font-bold mb-2 text-earth-dark-green">Harga Komoditas</h1>
+        <p className="text-earth-medium-green">Pantau harga komoditas pertanian terkini</p>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center">
-            <TrendingUp className="h-5 w-5 mr-2 text-tani-green-dark" />
+      <Card className="mb-6 earth-card-green">
+        <CardHeader className="pb-3 earth-header-forest">
+          <CardTitle className="text-lg flex items-center text-white">
+            <TrendingUp className="h-5 w-5 mr-2" />
             Daftar Harga Komoditas
           </CardTitle>
         </CardHeader>
@@ -183,11 +182,11 @@ const Harga = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row gap-4 justify-between">
               <div className="relative flex-1">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-earth-medium-green" />
                 <Input
                   type="search"
                   placeholder="Cari komoditas atau wilayah..."
-                  className="pl-8"
+                  className="pl-8 border-earth-medium-green focus:border-earth-dark-green"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -197,10 +196,10 @@ const Harga = () => {
                   value={regionFilter}
                   onValueChange={setRegionFilter}
                 >
-                  <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectTrigger className="w-full sm:w-[180px] border-earth-medium-green">
                     <SelectValue placeholder="Pilih Wilayah" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="border-earth-light-green">
                     <SelectItem value="all">Semua Wilayah</SelectItem>
                     {regions.filter(r => r !== "all").map((region) => (
                       <SelectItem key={region} value={region}>{region}</SelectItem>
@@ -211,17 +210,17 @@ const Harga = () => {
                   value={trendFilter}
                   onValueChange={setTrendFilter}
                 >
-                  <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectTrigger className="w-full sm:w-[180px] border-earth-medium-green">
                     <SelectValue placeholder="Filter Tren" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="border-earth-light-green">
                     <SelectItem value="all">Semua Tren</SelectItem>
                     <SelectItem value="rising">Naik</SelectItem>
                     <SelectItem value="falling">Turun</SelectItem>
                     <SelectItem value="stable">Stabil</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button variant="outline" className="flex gap-2">
+                <Button variant="outline" className="flex gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20">
                   <Filter className="h-4 w-4" />
                   Filter Lanjutan
                 </Button>
@@ -229,44 +228,44 @@ const Harga = () => {
             </div>
 
             <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="mb-4">
-                <TabsTrigger value="all">Semua</TabsTrigger>
-                <TabsTrigger value="pangan">Pangan</TabsTrigger>
-                <TabsTrigger value="perkebunan">Perkebunan</TabsTrigger>
+              <TabsList className="mb-4 bg-earth-light-green">
+                <TabsTrigger value="all" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">Semua</TabsTrigger>
+                <TabsTrigger value="pangan" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">Pangan</TabsTrigger>
+                <TabsTrigger value="perkebunan" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">Perkebunan</TabsTrigger>
               </TabsList>
               <TabsContent value="all" className="mt-0">
-                <div className="rounded-md border">
+                <div className="rounded-md border border-earth-light-green">
                   <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-earth-light-green/30">
                       <TableRow>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Harga</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Prediksi Perubahan</TableHead>
-                        <TableHead>Wilayah</TableHead>
-                        <TableHead>Terakhir Diperbarui</TableHead>
+                        <TableHead className="text-earth-dark-green">Komoditas</TableHead>
+                        <TableHead className="text-earth-dark-green">Harga</TableHead>
+                        <TableHead className="text-earth-dark-green">Grade</TableHead>
+                        <TableHead className="text-earth-dark-green">Prediksi Perubahan</TableHead>
+                        <TableHead className="text-earth-dark-green">Wilayah</TableHead>
+                        <TableHead className="text-earth-dark-green">Terakhir Diperbarui</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredCommodityPrices.length > 0 ? (
                         filteredCommodityPrices.map((price) => (
-                          <TableRow key={price.id}>
-                            <TableCell className="font-medium">{price.name}</TableCell>
-                            <TableCell>
+                          <TableRow key={price.id} className="hover:bg-earth-pale-green">
+                            <TableCell className="font-medium text-earth-dark-green">{price.name}</TableCell>
+                            <TableCell className="text-earth-dark-green">
                               {formatCurrency(price.price)}/{price.unit}
                             </TableCell>
-                            <TableCell>{price.grade || "-"}</TableCell>
+                            <TableCell className="text-earth-dark-green">{price.grade || "-"}</TableCell>
                             <TableCell>{getTrendIndicator(price.predictedChange)}</TableCell>
-                            <TableCell className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4 text-gray-500" />
+                            <TableCell className="flex items-center gap-1 text-earth-dark-green">
+                              <MapPin className="h-4 w-4 text-earth-medium-green" />
                               {price.region}
                             </TableCell>
-                            <TableCell>{formatDate(price.updatedAt)}</TableCell>
+                            <TableCell className="text-earth-dark-green">{formatDate(price.updatedAt)}</TableCell>
                           </TableRow>
                         ))
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                          <TableCell colSpan={6} className="text-center py-8 text-earth-medium-green">
                             Tidak ada harga komoditas yang ditemukan
                           </TableCell>
                         </TableRow>
@@ -276,38 +275,38 @@ const Harga = () => {
                 </div>
               </TabsContent>
               <TabsContent value="pangan" className="mt-0">
-                <div className="rounded-md border">
+                <div className="rounded-md border border-earth-light-green">
                   <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-earth-light-green/30">
                       <TableRow>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Harga</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Prediksi Perubahan</TableHead>
-                        <TableHead>Wilayah</TableHead>
-                        <TableHead>Terakhir Diperbarui</TableHead>
+                        <TableHead className="text-earth-dark-green">Komoditas</TableHead>
+                        <TableHead className="text-earth-dark-green">Harga</TableHead>
+                        <TableHead className="text-earth-dark-green">Grade</TableHead>
+                        <TableHead className="text-earth-dark-green">Prediksi Perubahan</TableHead>
+                        <TableHead className="text-earth-dark-green">Wilayah</TableHead>
+                        <TableHead className="text-earth-dark-green">Terakhir Diperbarui</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredCommodityPrices.length > 0 ? (
                         filteredCommodityPrices.map((price) => (
-                          <TableRow key={price.id}>
-                            <TableCell className="font-medium">{price.name}</TableCell>
-                            <TableCell>
+                          <TableRow key={price.id} className="hover:bg-earth-pale-green">
+                            <TableCell className="font-medium text-earth-dark-green">{price.name}</TableCell>
+                            <TableCell className="text-earth-dark-green">
                               {formatCurrency(price.price)}/{price.unit}
                             </TableCell>
-                            <TableCell>{price.grade || "-"}</TableCell>
+                            <TableCell className="text-earth-dark-green">{price.grade || "-"}</TableCell>
                             <TableCell>{getTrendIndicator(price.predictedChange)}</TableCell>
-                            <TableCell className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4 text-gray-500" />
+                            <TableCell className="flex items-center gap-1 text-earth-dark-green">
+                              <MapPin className="h-4 w-4 text-earth-medium-green" />
                               {price.region}
                             </TableCell>
-                            <TableCell>{formatDate(price.updatedAt)}</TableCell>
+                            <TableCell className="text-earth-dark-green">{formatDate(price.updatedAt)}</TableCell>
                           </TableRow>
                         ))
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                          <TableCell colSpan={6} className="text-center py-8 text-earth-medium-green">
                             Tidak ada harga komoditas pangan yang ditemukan
                           </TableCell>
                         </TableRow>
@@ -317,38 +316,38 @@ const Harga = () => {
                 </div>
               </TabsContent>
               <TabsContent value="perkebunan" className="mt-0">
-                <div className="rounded-md border">
+                <div className="rounded-md border border-earth-light-green">
                   <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-earth-light-green/30">
                       <TableRow>
-                        <TableHead>Komoditas</TableHead>
-                        <TableHead>Harga</TableHead>
-                        <TableHead>Grade</TableHead>
-                        <TableHead>Prediksi Perubahan</TableHead>
-                        <TableHead>Wilayah</TableHead>
-                        <TableHead>Terakhir Diperbarui</TableHead>
+                        <TableHead className="text-earth-dark-green">Komoditas</TableHead>
+                        <TableHead className="text-earth-dark-green">Harga</TableHead>
+                        <TableHead className="text-earth-dark-green">Grade</TableHead>
+                        <TableHead className="text-earth-dark-green">Prediksi Perubahan</TableHead>
+                        <TableHead className="text-earth-dark-green">Wilayah</TableHead>
+                        <TableHead className="text-earth-dark-green">Terakhir Diperbarui</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredCommodityPrices.length > 0 ? (
                         filteredCommodityPrices.map((price) => (
-                          <TableRow key={price.id}>
-                            <TableCell className="font-medium">{price.name}</TableCell>
-                            <TableCell>
+                          <TableRow key={price.id} className="hover:bg-earth-pale-green">
+                            <TableCell className="font-medium text-earth-dark-green">{price.name}</TableCell>
+                            <TableCell className="text-earth-dark-green">
                               {formatCurrency(price.price)}/{price.unit}
                             </TableCell>
-                            <TableCell>{price.grade || "-"}</TableCell>
+                            <TableCell className="text-earth-dark-green">{price.grade || "-"}</TableCell>
                             <TableCell>{getTrendIndicator(price.predictedChange)}</TableCell>
-                            <TableCell className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4 text-gray-500" />
+                            <TableCell className="flex items-center gap-1 text-earth-dark-green">
+                              <MapPin className="h-4 w-4 text-earth-medium-green" />
                               {price.region}
                             </TableCell>
-                            <TableCell>{formatDate(price.updatedAt)}</TableCell>
+                            <TableCell className="text-earth-dark-green">{formatDate(price.updatedAt)}</TableCell>
                           </TableRow>
                         ))
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                          <TableCell colSpan={6} className="text-center py-8 text-earth-medium-green">
                             Tidak ada harga komoditas perkebunan yang ditemukan
                           </TableCell>
                         </TableRow>

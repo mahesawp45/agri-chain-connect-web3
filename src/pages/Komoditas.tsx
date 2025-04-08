@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -173,43 +172,44 @@ const Komoditas = () => {
   
   return (
     <MainLayout>
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{t("commodities.title")}</h1>
-          <p className="text-gray-600">{t("commodities.subtitle")}</p>
+          <h1 className="text-2xl font-bold text-earth-dark-green">{t("commodities.title")}</h1>
+          <p className="text-earth-medium-green">{t("commodities.subtitle")}</p>
         </div>
         <Dialog open={addKomoditasOpen} onOpenChange={setAddKomoditasOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2 bg-tani-green-dark hover:bg-tani-green-dark/90">
+            <Button className="gap-2 bg-earth-dark-green hover:bg-earth-medium-green">
               <Plus className="h-4 w-4" />
               {t("commodities.add")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[625px]">
-            <DialogHeader>
+          <DialogContent className="sm:max-w-[625px] border-earth-light-green">
+            <DialogHeader className="earth-header-moss">
               <DialogTitle>{t("commodities.add")}</DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-white">
                 Isi formulir di bawah ini untuk menambahkan komoditas baru ke daftar Anda.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">{t("commodities.name")}</Label>
+                  <Label htmlFor="name" className="text-earth-dark-green">{t("commodities.name")}</Label>
                   <Input 
                     id="name" 
                     placeholder="Masukkan nama komoditas" 
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
+                    className="border-earth-medium-green focus:border-earth-dark-green"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="unit">{t("commodities.unit")}</Label>
+                  <Label htmlFor="unit" className="text-earth-dark-green">{t("commodities.unit")}</Label>
                   <Select 
                     value={formData.unit}
                     onValueChange={(value) => handleInputChange("unit", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-earth-medium-green">
                       <SelectValue placeholder="Pilih satuan" />
                     </SelectTrigger>
                     <SelectContent>
@@ -222,12 +222,12 @@ const Komoditas = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="type">{t("commodities.type")}</Label>
+                  <Label htmlFor="type" className="text-earth-dark-green">{t("commodities.type")}</Label>
                   <Select 
                     value={formData.type}
                     onValueChange={(value) => handleInputChange("type", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-earth-medium-green">
                       <SelectValue placeholder="Pilih jenis komoditas" />
                     </SelectTrigger>
                     <SelectContent>
@@ -238,19 +238,20 @@ const Komoditas = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="image">{t("commodities.upload.image")}</Label>
+                  <Label htmlFor="image" className="text-earth-dark-green">{t("commodities.upload.image")}</Label>
                   <Input 
                     id="image" 
                     type="file" 
                     accept="image/*"
                     onChange={(e) => handleFileChange("image", e.target.files)}
+                    className="border-earth-medium-green focus:border-earth-dark-green"
                   />
-                  <p className="text-xs text-gray-500">Upload foto komoditas (maks 2MB)</p>
+                  <p className="text-xs text-earth-medium-green">Upload foto komoditas (maks 2MB)</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="quantity">{t("commodities.quantity")}</Label>
+                  <Label htmlFor="quantity" className="text-earth-dark-green">{t("commodities.quantity")}</Label>
                   <Input 
                     id="quantity" 
                     type="number" 
@@ -260,12 +261,12 @@ const Komoditas = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location">{t("commodities.location")}</Label>
+                  <Label htmlFor="location" className="text-earth-dark-green">{t("commodities.location")}</Label>
                   <Select 
                     value={formData.location}
                     onValueChange={(value) => handleInputChange("location", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-earth-medium-green">
                       <SelectValue placeholder="Pilih lokasi" />
                     </SelectTrigger>
                     <SelectContent>
@@ -278,22 +279,22 @@ const Komoditas = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="gradeFile">{t("commodities.upload.grade")}</Label>
+                  <Label htmlFor="gradeFile" className="text-earth-dark-green">{t("commodities.upload.grade")}</Label>
                   <Input 
                     id="gradeFile" 
                     type="file" 
                     accept="image/*,.pdf" 
                     onChange={(e) => handleFileChange("gradeFile", e.target.files)}
                   />
-                  <p className="text-xs text-gray-500">Upload file grading (PDF/Gambar)</p>
+                  <p className="text-xs text-earth-medium-green">Upload file grading (PDF/Gambar)</p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="grade">{t("commodities.grade")}</Label>
+                  <Label htmlFor="grade" className="text-earth-dark-green">{t("commodities.grade")}</Label>
                   <Select 
                     value={formData.grade}
                     onValueChange={(value) => handleInputChange("grade", value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border-earth-medium-green">
                       <SelectValue placeholder="Pilih grade" />
                     </SelectTrigger>
                     <SelectContent>
@@ -306,51 +307,51 @@ const Komoditas = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setAddKomoditasOpen(false)}>{t("action.cancel")}</Button>
-              <Button onClick={handleAddKomoditas}>{t("action.save")}</Button>
+              <Button variant="outline" onClick={() => setAddKomoditasOpen(false)} className="border-earth-light-green text-earth-dark-green hover:bg-earth-light-green/20">{t("action.cancel")}</Button>
+              <Button onClick={handleAddKomoditas} className="bg-earth-dark-green hover:bg-earth-medium-green">{t("action.save")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
         
         {/* QR Code Dialog */}
         <Dialog open={qrCodeDialogOpen} onOpenChange={setQrCodeDialogOpen}>
-          <DialogContent className="sm:max-w-[400px]">
-            <DialogHeader>
+          <DialogContent className="sm:max-w-[400px] border-earth-light-green">
+            <DialogHeader className="earth-header-moss">
               <DialogTitle>{t("commodities.qrcode")}</DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-white">
                 Gunakan QR Code ini untuk melacak komoditas Anda.
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col items-center py-4">
-              <div className="bg-gray-100 p-4 rounded-lg mb-4">
-                <QrCode className="h-32 w-32 text-tani-green-dark mx-auto" />
+              <div className="bg-earth-pale-green p-4 rounded-lg mb-4">
+                <QrCode className="h-32 w-32 text-earth-dark-green mx-auto" />
               </div>
-              <p className="text-center text-sm text-gray-700">
+              <p className="text-center text-sm text-earth-dark-green">
                 {t("commodities.name")}: <span className="font-medium">{selectedKomoditas}</span><br />
                 ID: <span className="font-medium">KM00{Math.floor(Math.random() * 1000)}</span><br />
                 {t("commodities.created")}: <span className="font-medium">{new Date().toLocaleDateString('id-ID')}</span>
               </p>
             </div>
             <DialogFooter>
-              <Button onClick={() => setQrCodeDialogOpen(false)}>{t("action.close")}</Button>
+              <Button onClick={() => setQrCodeDialogOpen(false)} className="bg-earth-dark-green hover:bg-earth-medium-green">{t("action.close")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card className="mb-6">
+      <Card className="mb-6 earth-card-green">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-earth-medium-green" />
               <Input 
-                className="pl-10" 
+                className="pl-10 border-earth-medium-green focus:border-earth-dark-green" 
                 placeholder={t("commodities.search")} 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20">
               <Filter className="h-4 w-4" />
               {t("action.filter")}
             </Button>
@@ -358,33 +359,33 @@ const Komoditas = () => {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center">
-            <Package className="h-5 w-5 mr-2 text-tani-green-dark" />
+      <Card className="earth-card-wheat">
+        <CardHeader className="pb-3 earth-header-forest">
+          <CardTitle className="text-lg flex items-center text-white">
+            <Package className="h-5 w-5 mr-2" />
             {t("commodities.list")}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
+          <div className="rounded-md border border-earth-light-green">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-earth-light-green/30">
                 <TableRow>
-                  <TableHead>{t("commodities.name")}</TableHead>
-                  <TableHead>{t("commodities.type")}</TableHead>
-                  <TableHead className="hidden md:table-cell">{t("commodities.quantity")}</TableHead>
-                  <TableHead className="hidden lg:table-cell">{t("commodities.location")}</TableHead>
-                  <TableHead>{t("commodities.grade")}</TableHead>
-                  <TableHead className="text-right">{t("commodities.action")}</TableHead>
+                  <TableHead className="text-earth-dark-green">{t("commodities.name")}</TableHead>
+                  <TableHead className="text-earth-dark-green">{t("commodities.type")}</TableHead>
+                  <TableHead className="hidden md:table-cell text-earth-dark-green">{t("commodities.quantity")}</TableHead>
+                  <TableHead className="hidden lg:table-cell text-earth-dark-green">{t("commodities.location")}</TableHead>
+                  <TableHead className="text-earth-dark-green">{t("commodities.grade")}</TableHead>
+                  <TableHead className="text-right text-earth-dark-green">{t("commodities.action")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredData.length > 0 ? (
                   filteredData.map((item) => (
-                    <TableRow key={item.id}>
+                    <TableRow key={item.id} className="hover:bg-earth-pale-green">
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded overflow-hidden bg-gray-100 flex items-center justify-center">
+                          <div className="h-10 w-10 rounded overflow-hidden bg-earth-light-green/20 flex items-center justify-center">
                             <img 
                               src={item.imageUrl} 
                               alt={item.name} 
@@ -392,16 +393,16 @@ const Komoditas = () => {
                             />
                           </div>
                           <div>
-                            <div className="font-medium">{item.name}</div>
-                            <div className="text-xs text-gray-500">{item.id}</div>
+                            <div className="font-medium text-earth-dark-green">{item.name}</div>
+                            <div className="text-xs text-earth-medium-green">{item.id}</div>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{item.type}</TableCell>
-                      <TableCell className="hidden md:table-cell">
+                      <TableCell className="text-earth-dark-green">{item.type}</TableCell>
+                      <TableCell className="hidden md:table-cell text-earth-dark-green">
                         {item.quantity.toLocaleString()} {item.unit}
                       </TableCell>
-                      <TableCell className="hidden lg:table-cell">{item.location}</TableCell>
+                      <TableCell className="hidden lg:table-cell text-earth-dark-green">{item.location}</TableCell>
                       <TableCell>
                         <Badge 
                           variant="outline" 
@@ -419,25 +420,25 @@ const Komoditas = () => {
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" className="text-earth-dark-green hover:bg-earth-light-green/20">
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleViewDetail(item.id)}>
+                          <DropdownMenuContent align="end" className="border-earth-light-green">
+                            <DropdownMenuItem onClick={() => handleViewDetail(item.id)} className="text-earth-dark-green hover:bg-earth-light-green/20">
                               <FileText className="h-4 w-4 mr-2" />
                               {t("action.view")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem className="text-earth-dark-green hover:bg-earth-light-green/20">
                               <Edit className="h-4 w-4 mr-2" />
                               {t("action.edit")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem className="text-earth-dark-green hover:bg-earth-light-green/20">
                               <QrCode className="h-4 w-4 mr-2" />
                               {t("commodities.qrcode")}
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">
+                            <DropdownMenuSeparator className="bg-earth-light-green" />
+                            <DropdownMenuItem className="text-red-600 hover:bg-red-50">
                               <Trash2 className="h-4 w-4 mr-2" />
                               {t("action.delete")}
                             </DropdownMenuItem>
@@ -448,7 +449,7 @@ const Komoditas = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                    <TableCell colSpan={6} className="text-center py-8 text-earth-medium-green">
                       {searchQuery 
                         ? `${t("commodities.notfound")} "${searchQuery}"`
                         : `${t("commodities.notfound")}. ${t("commodities.add")} to get started.`}
