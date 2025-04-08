@@ -10,6 +10,8 @@ interface TaniTrackCardProps {
   location?: string;
   expiryDate?: string;
   className?: string;
+  isStacked?: boolean;
+  stackPosition?: "front" | "back";
 }
 
 export function TaniTrackCard({
@@ -19,12 +21,21 @@ export function TaniTrackCard({
   location,
   expiryDate,
   className,
+  isStacked = false,
+  stackPosition = "front",
 }: TaniTrackCardProps) {
   return (
-    <div className={cn("relative", className)}>
+    <div 
+      className={cn(
+        "relative", 
+        isStacked && stackPosition === "back" && "absolute top-0 left-0 transform rotate-6 translate-y-4 translate-x-6 z-0",
+        className
+      )}
+    >
       <div
         className={cn(
-          "w-72 h-44 rounded-xl shadow-lg p-5 relative overflow-hidden transform transition-transform hover:scale-105",
+          "w-72 h-44 rounded-xl shadow-lg p-5 relative overflow-hidden transform transition-all duration-300",
+          !isStacked && "hover:scale-105",
           type === "farmer" 
             ? "bg-earth-dark-green text-white" 
             : "bg-yellow-600 text-white"

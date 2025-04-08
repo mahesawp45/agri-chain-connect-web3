@@ -60,22 +60,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-earth-pale-green to-white overflow-hidden">
-      {/* Language Switcher (visible on mobile) */}
-      <div className="absolute top-4 right-4 z-10 md:hidden">
-        <LanguageSwitcher />
-      </div>
-
       {/* Left Section - Visual & Explanation */}
       <div className="w-full md:w-1/2 p-8 flex items-center justify-center relative">
         <div className="absolute -bottom-64 -left-64 w-96 h-96 bg-earth-light-green/20 rounded-full blur-3xl" />
         <div className="absolute -top-64 -right-64 w-96 h-96 bg-earth-wheat/30 rounded-full blur-3xl" />
         
         <div className="max-w-md mx-auto z-10">
-          {/* Language Switcher (visible on desktop) */}
-          <div className="hidden md:block absolute top-4 right-4">
-            <LanguageSwitcher />
-          </div>
-
           <div className="flex items-center mb-6">
             <div className="h-12 w-12 rounded-md overflow-hidden flex items-center justify-center bg-white/90 mr-4">
               <img 
@@ -127,21 +117,37 @@ export default function Login() {
               </div>
             </div>
             
-            <div className="mt-8 flex justify-center gap-4 flex-wrap">
-              <TaniTrackCard 
-                type="farmer"
-                name="AGUS SURYANA"
-                id="F-230599-JB"
-              />
-              <TaniTrackCard
-                type="buyer"
-                name="BUDI SANTOSO"
-                id="B-145782-JB"
-                location="JAKARTA"
-                expiryDate="12/26"
-              />
+            {/* Stacked cards in perspective view */}
+            <div className="mt-8 flex justify-center">
+              <div className="relative w-72 h-60 mx-auto">
+                {/* Back card (Buyer card) */}
+                <TaniTrackCard
+                  type="buyer"
+                  name="PT PANGAN SEJAHTERA"
+                  id="B-451022-JK"
+                  location="JAKARTA"
+                  expiryDate="09/2025"
+                  isStacked={true}
+                  stackPosition="back"
+                />
+                
+                {/* Front card (Farmer card) */}
+                <TaniTrackCard 
+                  type="farmer"
+                  name="AGUS SURYANA"
+                  id="F-230599-JB"
+                  isStacked={true}
+                  stackPosition="front"
+                  className="z-10 relative transform translate-y-2 -translate-x-2 -rotate-3"
+                />
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Language Switcher positioned at bottom right */}
+        <div className="absolute bottom-4 right-4">
+          <LanguageSwitcher />
         </div>
       </div>
 

@@ -11,12 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeftIcon, ArrowRightIcon, Store, FileCheck, Leaf, MapPin, Phone, ShoppingBag, User, UserCircle2 } from "lucide-react";
 import { TaniTrackCard } from "@/components/custom/TaniTrackCard";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState("petani");
 
   const handleRegister = (e: React.FormEvent, type: string) => {
@@ -26,8 +27,10 @@ export default function Register() {
     // Simulate registration
     setTimeout(() => {
       toast({
-        title: type === "petani" ? "Pendaftaran petani berhasil!" : "Pendaftaran konsumen berhasil!",
-        description: "Silakan masuk ke akun Anda",
+        title: type === "petani" 
+          ? (language === 'id' ? "Pendaftaran petani berhasil!" : "Farmer registration successful!") 
+          : (language === 'id' ? "Pendaftaran konsumen berhasil!" : "Buyer registration successful!"),
+        description: language === 'id' ? "Silakan masuk ke akun Anda" : "Please log in to your account",
       });
       navigate("/login");
       setLoading(false);
@@ -55,15 +58,15 @@ export default function Register() {
           
           <h2 className="text-2xl font-bold text-earth-dark-green mb-6">
             {activeTab === "petani" 
-              ? "Daftar sebagai Petani" 
-              : "Daftar sebagai Konsumen"}
+              ? (language === 'id' ? "Daftar sebagai Petani" : "Register as Farmer") 
+              : (language === 'id' ? "Daftar sebagai Konsumen" : "Register as Buyer")}
           </h2>
           
           <div className="bg-white p-5 rounded-lg shadow-md border border-earth-light-green/50 mb-6">
             <h3 className="font-semibold mb-3 text-earth-dark-green text-lg">
               {activeTab === "petani" 
-                ? "Manfaat untuk Petani:" 
-                : "Manfaat untuk Konsumen:"}
+                ? (language === 'id' ? "Manfaat untuk Petani:" : "Benefits for Farmers:") 
+                : (language === 'id' ? "Manfaat untuk Konsumen:" : "Benefits for Buyers:")}
             </h3>
             
             {activeTab === "petani" ? (
@@ -72,19 +75,31 @@ export default function Register() {
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
                     <ShoppingBag className="h-4 w-4 text-earth-dark-green" />
                   </div>
-                  <span>Jual hasil panen langsung ke konsumen</span>
+                  <span>
+                    {language === 'id'
+                      ? "Jual hasil panen langsung ke konsumen"
+                      : "Sell harvest directly to buyers"}
+                  </span>
                 </li>
                 <li className="flex items-center text-earth-dark-green">
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
                     <FileCheck className="h-4 w-4 text-earth-dark-green" />
                   </div>
-                  <span>Lacak pertumbuhan tanaman & hasil panen</span>
+                  <span>
+                    {language === 'id'
+                      ? "Lacak pertumbuhan tanaman & hasil panen"
+                      : "Track crop growth & harvest yields"}
+                  </span>
                 </li>
                 <li className="flex items-center text-earth-dark-green">
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
                     <Store className="h-4 w-4 text-earth-dark-green" />
                   </div>
-                  <span>Dapatkan harga pasar yang lebih baik</span>
+                  <span>
+                    {language === 'id'
+                      ? "Dapatkan harga pasar yang lebih baik"
+                      : "Get better market prices"}
+                  </span>
                 </li>
               </ul>
             ) : (
@@ -93,19 +108,31 @@ export default function Register() {
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
                     <ShoppingBag className="h-4 w-4 text-earth-dark-green" />
                   </div>
-                  <span>Beli produk pertanian segar langsung dari petani</span>
+                  <span>
+                    {language === 'id'
+                      ? "Beli produk pertanian segar langsung dari petani"
+                      : "Buy fresh agricultural products directly from farmers"}
+                  </span>
                 </li>
                 <li className="flex items-center text-earth-dark-green">
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
                     <FileCheck className="h-4 w-4 text-earth-dark-green" />
                   </div>
-                  <span>Lacak asal-usul produk yang Anda beli</span>
+                  <span>
+                    {language === 'id'
+                      ? "Lacak asal-usul produk yang Anda beli"
+                      : "Track the origin of products you buy"}
+                  </span>
                 </li>
                 <li className="flex items-center text-earth-dark-green">
                   <div className="bg-earth-pale-green p-1.5 rounded-full mr-3">
                     <Store className="h-4 w-4 text-earth-dark-green" />
                   </div>
-                  <span>Dukung petani lokal dan pertanian berkelanjutan</span>
+                  <span>
+                    {language === 'id'
+                      ? "Dukung petani lokal dan pertanian berkelanjutan"
+                      : "Support local farmers and sustainable agriculture"}
+                  </span>
                 </li>
               </ul>
             )}
@@ -129,6 +156,11 @@ export default function Register() {
             )}
           </div>
         </div>
+
+        {/* Language Switcher positioned at bottom right */}
+        <div className="absolute bottom-4 right-4">
+          <LanguageSwitcher />
+        </div>
       </div>
 
       {/* Right Section - Registration Form */}
@@ -140,22 +172,24 @@ export default function Register() {
                 value="petani" 
                 className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white text-earth-dark-green"
               >
-                Petani
+                {language === 'id' ? "Petani" : "Farmer"}
               </TabsTrigger>
               <TabsTrigger 
                 value="konsumen" 
                 className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white text-earth-dark-green"
               >
-                Konsumen
+                {language === 'id' ? "Konsumen" : "Buyer"}
               </TabsTrigger>
             </TabsList>
             
             <CardHeader className="bg-gradient-to-r from-earth-dark-green to-earth-medium-green text-white py-6">
-              <CardTitle className="text-center text-2xl">Pendaftaran</CardTitle>
+              <CardTitle className="text-center text-2xl">
+                {language === 'id' ? "Pendaftaran" : "Registration"}
+              </CardTitle>
               <CardDescription className="text-center text-white/90 mt-2">
                 {activeTab === "petani" 
-                  ? "Isi formulir untuk mendaftar sebagai petani" 
-                  : "Isi formulir untuk mendaftar sebagai konsumen"}
+                  ? (language === 'id' ? "Isi formulir untuk mendaftar sebagai petani" : "Fill the form to register as a farmer")
+                  : (language === 'id' ? "Isi formulir untuk mendaftar sebagai konsumen" : "Fill the form to register as a buyer")}
               </CardDescription>
             </CardHeader>
 
@@ -165,11 +199,11 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="ktp" className="text-earth-dark-green flex items-center font-medium">
                       <UserCircle2 className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      No. KTP
+                      {language === 'id' ? "No. KTP" : "ID Card Number"}
                     </Label>
                     <Input 
                       id="ktp" 
-                      placeholder="Masukkan nomor KTP" 
+                      placeholder={language === 'id' ? "Masukkan nomor KTP" : "Enter ID card number"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -177,22 +211,22 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-earth-dark-green flex items-center font-medium">
                       <User className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      Nama (Optional)
+                      {language === 'id' ? "Nama (Opsional)" : "Name (Optional)"}
                     </Label>
                     <Input 
                       id="name" 
-                      placeholder="Masukkan nama lengkap" 
+                      placeholder={language === 'id' ? "Masukkan nama lengkap" : "Enter full name"} 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="hp" className="text-earth-dark-green flex items-center font-medium">
                       <Phone className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      No. HP/Whatsapp
+                      {language === 'id' ? "No. HP/Whatsapp" : "Phone/Whatsapp Number"}
                     </Label>
                     <Input 
                       id="hp" 
-                      placeholder="Masukkan nomor HP" 
+                      placeholder={language === 'id' ? "Masukkan nomor HP" : "Enter phone number"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -200,20 +234,22 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="address" className="text-earth-dark-green flex items-center font-medium">
                       <MapPin className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      Alamat Utama
+                      {language === 'id' ? "Alamat Utama" : "Main Address"}
                     </Label>
                     <Input 
                       id="address" 
-                      placeholder="Masukkan alamat" 
+                      placeholder={language === 'id' ? "Masukkan alamat" : "Enter address"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="mother" className="text-earth-dark-green font-medium">Nama Ibu Kandung</Label>
+                    <Label htmlFor="mother" className="text-earth-dark-green font-medium">
+                      {language === 'id' ? "Nama Ibu Kandung" : "Mother's Name"}
+                    </Label>
                     <Input 
                       id="mother" 
-                      placeholder="Masukkan nama ibu kandung" 
+                      placeholder={language === 'id' ? "Masukkan nama ibu kandung" : "Enter mother's name"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -224,7 +260,9 @@ export default function Register() {
                       htmlFor="terms"
                       className="text-sm font-medium leading-none text-earth-dark-green"
                     >
-                      Saya menyetujui syarat dan ketentuan
+                      {language === 'id'
+                        ? "Saya menyetujui syarat dan ketentuan"
+                        : "I agree to the terms and conditions"}
                     </label>
                   </div>
                 </CardContent>
@@ -234,16 +272,18 @@ export default function Register() {
                     disabled={loading}
                     type="submit"
                   >
-                    {loading ? "Memproses..." : "Daftar Sekarang"}
+                    {loading 
+                      ? (language === 'id' ? "Memproses..." : "Processing...") 
+                      : (language === 'id' ? "Daftar Sekarang" : "Register Now")}
                     {!loading && <ArrowRightIcon className="ml-2 h-5 w-5" />}
                   </Button>
                   <div className="text-sm text-center text-earth-dark-green">
-                    Sudah punya akun?{" "}
+                    {language === 'id' ? "Sudah punya akun? " : "Already have an account? "}
                     <Link
                       to="/login"
                       className="font-semibold text-earth-medium-green hover:underline"
                     >
-                      Masuk di sini
+                      {language === 'id' ? "Masuk di sini" : "Log in here"}
                     </Link>
                   </div>
                 </CardFooter>
@@ -256,11 +296,11 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="ktp-konsumen" className="text-earth-dark-green flex items-center font-medium">
                       <UserCircle2 className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      No. KTP
+                      {language === 'id' ? "No. KTP" : "ID Card Number"}
                     </Label>
                     <Input 
                       id="ktp-konsumen" 
-                      placeholder="Masukkan nomor KTP" 
+                      placeholder={language === 'id' ? "Masukkan nomor KTP" : "Enter ID card number"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -268,22 +308,22 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="name-konsumen" className="text-earth-dark-green flex items-center font-medium">
                       <User className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      Nama (Optional)
+                      {language === 'id' ? "Nama (Opsional)" : "Name (Optional)"}
                     </Label>
                     <Input 
                       id="name-konsumen" 
-                      placeholder="Masukkan nama lengkap" 
+                      placeholder={language === 'id' ? "Masukkan nama lengkap" : "Enter full name"} 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="merchant" className="text-earth-dark-green flex items-center font-medium">
                       <Store className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      Nama Perusahaan/Merchant
+                      {language === 'id' ? "Nama Perusahaan/Merchant" : "Company/Merchant Name"}
                     </Label>
                     <Input 
                       id="merchant" 
-                      placeholder="Masukkan nama perusahaan" 
+                      placeholder={language === 'id' ? "Masukkan nama perusahaan" : "Enter company name"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -291,11 +331,11 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="hp-konsumen" className="text-earth-dark-green flex items-center font-medium">
                       <Phone className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      No. HP/Whatsapp
+                      {language === 'id' ? "No. HP/Whatsapp" : "Phone/Whatsapp Number"}
                     </Label>
                     <Input 
                       id="hp-konsumen" 
-                      placeholder="Masukkan nomor HP" 
+                      placeholder={language === 'id' ? "Masukkan nomor HP" : "Enter phone number"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -303,20 +343,22 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="address-konsumen" className="text-earth-dark-green flex items-center font-medium">
                       <MapPin className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      Alamat Utama
+                      {language === 'id' ? "Alamat Utama" : "Main Address"}
                     </Label>
                     <Input 
                       id="address-konsumen" 
-                      placeholder="Masukkan alamat" 
+                      placeholder={language === 'id' ? "Masukkan alamat" : "Enter address"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="mother-konsumen" className="text-earth-dark-green font-medium">Nama Ibu Kandung</Label>
+                    <Label htmlFor="mother-konsumen" className="text-earth-dark-green font-medium">
+                      {language === 'id' ? "Nama Ibu Kandung" : "Mother's Name"}
+                    </Label>
                     <Input 
                       id="mother-konsumen" 
-                      placeholder="Masukkan nama ibu kandung" 
+                      placeholder={language === 'id' ? "Masukkan nama ibu kandung" : "Enter mother's name"} 
                       required 
                       className="border-earth-light-brown focus-visible:ring-earth-dark-green"
                     />
@@ -331,7 +373,9 @@ export default function Register() {
                       htmlFor="terms-konsumen"
                       className="text-sm font-medium leading-none text-earth-dark-green"
                     >
-                      Saya menyetujui syarat dan ketentuan
+                      {language === 'id'
+                        ? "Saya menyetujui syarat dan ketentuan"
+                        : "I agree to the terms and conditions"}
                     </label>
                   </div>
                 </CardContent>
@@ -341,16 +385,18 @@ export default function Register() {
                     disabled={loading}
                     type="submit"
                   >
-                    {loading ? "Memproses..." : "Daftar Sekarang"}
+                    {loading 
+                      ? (language === 'id' ? "Memproses..." : "Processing...") 
+                      : (language === 'id' ? "Daftar Sekarang" : "Register Now")}
                     {!loading && <ArrowRightIcon className="ml-2 h-5 w-5" />}
                   </Button>
                   <div className="text-sm text-center text-earth-dark-green">
-                    Sudah punya akun?{" "}
+                    {language === 'id' ? "Sudah punya akun? " : "Already have an account? "}
                     <Link
                       to="/login"
                       className="font-semibold text-earth-medium-green hover:underline"
                     >
-                      Masuk di sini
+                      {language === 'id' ? "Masuk di sini" : "Log in here"}
                     </Link>
                   </div>
                 </CardFooter>
