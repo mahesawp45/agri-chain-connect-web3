@@ -13,36 +13,38 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 interface TopNavProps {
-  onMenuButtonClick: () => void;
+  onMenuButtonClick?: () => void; // Make this prop optional
 }
 
 export function TopNav({ onMenuButtonClick }: TopNavProps) {
   return (
     <header className="fixed top-0 w-full bg-white border-b border-gray-200 z-30">
       <div className="flex h-16 items-center justify-between px-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onMenuButtonClick}
-          className="md:hidden"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {onMenuButtonClick && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onMenuButtonClick}
+            className="md:hidden"
           >
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="18" y2="18" />
-          </svg>
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="4" x2="20" y1="12" y2="12" />
+              <line x1="4" x2="20" y1="6" y2="6" />
+              <line x1="4" x2="20" y1="18" y2="18" />
+            </svg>
+            <span className="sr-only">Toggle Menu</span>
+          </Button>
+        )}
 
         <div className="flex-1 md:ml-16">
           <div className="relative max-w-md">

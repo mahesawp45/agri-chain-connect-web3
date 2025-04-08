@@ -8,6 +8,10 @@ import { TopNav } from "@/components/layout/TopNav";
 
 export function BuyerLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  const handleMenuButtonClick = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
     <div className="min-h-screen bg-earth-pale-green/30">
@@ -18,7 +22,7 @@ export function BuyerLayout() {
           sidebarOpen ? "md:ml-64" : "md:ml-20"
         }`}
       >
-        <TopNav />
+        <TopNav onMenuButtonClick={handleMenuButtonClick} />
         
         <main className="container mx-auto p-4 md:p-6 pt-20">
           <Outlet />

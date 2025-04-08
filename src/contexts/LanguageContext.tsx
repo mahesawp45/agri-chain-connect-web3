@@ -613,14 +613,17 @@ export const translations: TranslationsType = {
 
 interface LanguageContextType {
   language: Language;
+  currentLanguage: Language; // Added the currentLanguage property
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  addTranslations: (lang: Language, newTranslations: Record<string, string>) => void; // Added the addTranslations method
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<Language>('id');
+  const [translationsData, setTranslationsData] = useState<TranslationsType>(translations);
 
   // Load saved language preference from localStorage
   useEffect(() => {
@@ -635,12 +638,29 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('app-language', language);
   }, [language]);
 
+  // Function to add new translations
+  const addTranslations = (lang: Language, newTranslations: Record<string, string>) => {
+    setTranslationsData(prev => ({
+      ...prev,
+      [lang]: {
+        ...prev[lang],
+        ...newTranslations
+      }
+    }));
+  };
+
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    return translationsData[language][key] || key;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ 
+      language, 
+      currentLanguage: language, 
+      setLanguage, 
+      t,
+      addTranslations 
+    }}>
       {children}
     </LanguageContext.Provider>
   );
