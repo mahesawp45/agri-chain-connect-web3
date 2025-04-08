@@ -1,4 +1,4 @@
-
+// Export the translations as before - they're already in the correct nested structure
 export const buyerEnTranslations = {
   buyer: {
     marketplace: {

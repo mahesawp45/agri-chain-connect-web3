@@ -4,11 +4,12 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 // Define available languages
 export type Language = 'id' | 'en';
 
-// Define translation object structure
+// Define translation object structure - updated to support nested objects
+type TranslationValue = string | Record<string, TranslationValue>;
+
+// Define translations object structure
 type TranslationsType = {
-  [key in Language]: {
-    [key: string]: string;
-  };
+  [key in Language]: Record<string, TranslationValue>;
 };
 
 // Translations dictionary
@@ -613,10 +614,10 @@ export const translations: TranslationsType = {
 
 interface LanguageContextType {
   language: Language;
-  currentLanguage: Language; // Added the currentLanguage property
+  currentLanguage: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
-  addTranslations: (lang: Language, newTranslations: Record<string, string>) => void; // Added the addTranslations method
+  addTranslations: (lang: Language, newTranslations: Record<string, any>) => void; // Updated to accept nested objects
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -638,8 +639,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('app-language', language);
   }, [language]);
 
-  // Function to add new translations
-  const addTranslations = (lang: Language, newTranslations: Record<string, string>) => {
+  // Function to add new translations - updated to handle nested objects
+  const addTranslations = (lang: Language, newTranslations: Record<string, any>) => {
     setTranslationsData(prev => ({
       ...prev,
       [lang]: {
@@ -649,8 +650,17 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  // Modified to handle nested keys
   const t = (key: string): string => {
-    return translationsData[language][key] || key;
+    const keys = key.split('.');
+    let result: any = translationsData[language];
+    
+    for (const k of keys) {
+      if (result === undefined) return key;
+      result = result[k];
+    }
+    
+    return typeof result === 'string' ? result : key;
   };
 
   return (
