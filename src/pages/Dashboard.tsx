@@ -54,90 +54,90 @@ export default function Dashboard() {
     <MainLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">{t("dashboard.title")}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-earth-dark-green">{t("dashboard.title")}</h1>
           <Tabs
             value={timeframe}
             onValueChange={(value) => setTimeframe(value as any)}
             className="w-auto"
           >
-            <TabsList className="grid grid-cols-4 w-[300px]">
-              <TabsTrigger value="day">{t("time.today")}</TabsTrigger>
-              <TabsTrigger value="week">{t("time.thisWeek")}</TabsTrigger>
-              <TabsTrigger value="month">{t("time.thisMonth")}</TabsTrigger>
-              <TabsTrigger value="year">{t("time.thisYear")}</TabsTrigger>
+            <TabsList className="grid grid-cols-4 w-[300px] bg-earth-pale-green/70">
+              <TabsTrigger value="day" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.today")}</TabsTrigger>
+              <TabsTrigger value="week" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.thisWeek")}</TabsTrigger>
+              <TabsTrigger value="month" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.thisMonth")}</TabsTrigger>
+              <TabsTrigger value="year" className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white">{t("time.thisYear")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-green-50 to-green-100">
+          <Card className="earth-card-green">
             <div className="absolute top-0 right-0 p-3">
-              <ShoppingCart className="h-6 w-6 text-green-600 opacity-30" />
+              <ShoppingCart className="h-6 w-6 text-earth-medium-green opacity-30" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-green-800">{t("dashboard.summary")}</CardTitle>
+              <CardTitle className="text-sm font-medium text-earth-dark-green">{t("dashboard.summary")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-700">{formatCurrency(totalSales)}</div>
-              <p className="text-xs text-green-600 mt-1">
+              <div className="text-2xl font-bold text-earth-dark-green">{formatCurrency(totalSales)}</div>
+              <p className="text-xs text-earth-medium-green mt-1">
                 {completedTransactions.length} {t("transactions.completed").toLowerCase()}
               </p>
-              <div className="h-1 w-full bg-green-200 mt-3 rounded-full">
-                <div className="h-1 bg-green-500 rounded-full" style={{ width: '70%' }}></div>
+              <div className="h-1 w-full bg-earth-pale-green mt-3 rounded-full">
+                <div className="h-1 bg-earth-medium-green rounded-full" style={{ width: '70%' }}></div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-blue-50 to-blue-100">
+          <Card className="earth-card-brown">
             <div className="absolute top-0 right-0 p-3">
-              <Leaf className="h-6 w-6 text-blue-600 opacity-30" />
+              <Leaf className="h-6 w-6 text-earth-brown opacity-30" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-blue-800">{t("commodities.title")}</CardTitle>
+              <CardTitle className="text-sm font-medium text-earth-brown">{t("commodities.title")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-700">{totalCommodities} kg</div>
-              <p className="text-xs text-blue-600 mt-1">
+              <div className="text-2xl font-bold text-earth-brown">{totalCommodities} kg</div>
+              <p className="text-xs text-earth-brown/80 mt-1">
                 {commodities.length} {t("commodities.type").toLowerCase()}
               </p>
-              <div className="h-1 w-full bg-blue-200 mt-3 rounded-full">
-                <div className="h-1 bg-blue-500 rounded-full" style={{ width: '60%' }}></div>
+              <div className="h-1 w-full bg-earth-light-brown mt-3 rounded-full">
+                <div className="h-1 bg-earth-brown rounded-full" style={{ width: '60%' }}></div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-amber-50 to-amber-100">
+          <Card className="earth-card-wheat">
             <div className="absolute top-0 right-0 p-3">
-              <Sun className="h-6 w-6 text-amber-600 opacity-30" />
+              <Sun className="h-6 w-6 text-yellow-600 opacity-30" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-amber-800">{t("transactions.pending")}</CardTitle>
+              <CardTitle className="text-sm font-medium text-yellow-800">{t("transactions.pending")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-amber-700">{pendingTransactions.length}</div>
-              <p className="text-xs text-amber-600 mt-1">
+              <div className="text-2xl font-bold text-yellow-700">{pendingTransactions.length}</div>
+              <p className="text-xs text-yellow-600 mt-1">
                 {pendingTransactions.filter(t => t.status === 'negosiasi').length} {language === 'id' ? 'dalam negosiasi' : 'in negotiation'}
               </p>
-              <div className="h-1 w-full bg-amber-200 mt-3 rounded-full">
-                <div className="h-1 bg-amber-500 rounded-full" style={{ width: '40%' }}></div>
+              <div className="h-1 w-full bg-yellow-100 mt-3 rounded-full">
+                <div className="h-1 bg-yellow-500 rounded-full" style={{ width: '40%' }}></div>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-purple-50 to-purple-100">
+          <Card className="earth-card-clay">
             <div className="absolute top-0 right-0 p-3">
-              <Wallet className="h-6 w-6 text-purple-600 opacity-30" />
+              <Wallet className="h-6 w-6 text-orange-600 opacity-30" />
             </div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-purple-800">{t("balance.title")}</CardTitle>
+              <CardTitle className="text-sm font-medium text-orange-800">{t("balance.title")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-700">{formatCurrency(currentUser.balance)}</div>
-              <p className="text-xs text-purple-600 mt-1">
+              <div className="text-2xl font-bold text-orange-700">{formatCurrency(currentUser.balance)}</div>
+              <p className="text-xs text-orange-600 mt-1">
                 5 SOL (≈ {formatCurrency(currentUser.balance)})
               </p>
-              <div className="h-1 w-full bg-purple-200 mt-3 rounded-full">
-                <div className="h-1 bg-purple-500 rounded-full" style={{ width: '85%' }}></div>
+              <div className="h-1 w-full bg-orange-100 mt-3 rounded-full">
+                <div className="h-1 bg-orange-500 rounded-full" style={{ width: '85%' }}></div>
               </div>
             </CardContent>
           </Card>
@@ -145,16 +145,16 @@ export default function Dashboard() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
           <Card className="lg:col-span-4 border-none shadow-md bg-white">
-            <CardHeader className="bg-gradient-to-r from-teal-50 to-teal-100 rounded-t-lg border-b">
-              <CardTitle className="text-teal-800 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-teal-600" />
+            <CardHeader className="earth-header-green">
+              <CardTitle className="text-earth-dark-green flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-earth-medium-green" />
                 {t("dashboard.recentTransactions")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="relative w-full overflow-auto">
                 <table className="w-full caption-bottom text-sm">
-                  <thead className="[&_tr]:border-b bg-gray-50">
+                  <thead className="[&_tr]:border-b bg-earth-pale-green/30">
                     <tr className="border-b transition-colors">
                       <th className="h-12 px-4 text-left align-middle font-medium text-gray-500">
                         {t("transactions.commodity")}
@@ -177,7 +177,7 @@ export default function Dashboard() {
                     {transactions.slice(0, 5).map((transaction) => (
                       <tr
                         key={transaction.id}
-                        className="border-b transition-colors hover:bg-gray-50"
+                        className="border-b transition-colors hover:bg-earth-pale-green/10"
                       >
                         <td className="p-4 align-middle">
                           {transaction.commodityName}
@@ -191,7 +191,7 @@ export default function Dashboard() {
                             <div
                               className={`h-2 w-2 rounded-full mr-2 ${
                                 transaction.status === "selesai"
-                                  ? "bg-green-500"
+                                  ? "bg-earth-medium-green"
                                   : transaction.status === "dibatalkan"
                                   ? "bg-red-500"
                                   : "bg-yellow-500"
@@ -225,16 +225,16 @@ export default function Dashboard() {
             </CardContent>
           </Card>
           <Card className="lg:col-span-3 border-none shadow-md">
-            <CardHeader className="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-t-lg border-b">
-              <CardTitle className="text-indigo-800 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-indigo-600" />
+            <CardHeader className="earth-header-brown">
+              <CardTitle className="text-earth-brown flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-earth-brown" />
                 {t("prices.trends")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-4">
                 {trendingCommodities.map((commodity) => (
-                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-earth-light-brown/10 transition-colors">
                     <div className="flex-1 space-y-1">
                       <p className="text-sm font-medium leading-none">
                         {commodity.name} ({commodity.grade})
@@ -249,7 +249,7 @@ export default function Dashboard() {
                     <div
                       className={`ml-4 flex items-center ${
                         commodity.predictedChange >= 0
-                          ? "text-green-500"
+                          ? "text-earth-medium-green"
                           : "text-red-500"
                       }`}
                     >
@@ -266,7 +266,7 @@ export default function Dashboard() {
               <div className="mt-6 pt-3 border-t">
                 <a 
                   href="/harga"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-earth-brown hover:text-earth-brown/80"
                 >
                   <span>{language === 'id' ? 'Lihat semua harga' : 'View all prices'}</span>
                   <svg
@@ -291,17 +291,17 @@ export default function Dashboard() {
 
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           <Card className="border-none shadow-md bg-white overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-green-50 to-green-100 rounded-t-lg border-b">
-              <CardTitle className="text-green-800 flex items-center gap-2">
-                <Package className="h-5 w-5 text-green-600" />
+            <CardHeader className="earth-header-moss">
+              <CardTitle className="text-white flex items-center gap-2">
+                <Package className="h-5 w-5" />
                 {t("dashboard.commodityStatus")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-4">
                 {commodities.map((commodity) => (
-                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-green-100 text-green-600 mr-3">
+                  <div key={commodity.id} className="flex items-center p-3 rounded-lg hover:bg-earth-pale-green/20 transition-colors">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-earth-light-green/20 text-earth-medium-green mr-3">
                       <Leaf className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-1">
@@ -321,7 +321,7 @@ export default function Dashboard() {
               <div className="mt-6 pt-3 border-t">
                 <a 
                   href="/komoditas"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-green-600 hover:text-green-700"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-earth-medium-green hover:text-earth-dark-green"
                 >
                   <span>{language === 'id' ? 'Kelola komoditas' : 'Manage commodities'}</span>
                   <svg
@@ -344,17 +344,17 @@ export default function Dashboard() {
           </Card>
 
           <Card className="border-none shadow-md bg-white overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-t-lg border-b">
-              <CardTitle className="text-amber-800 flex items-center gap-2">
-                <CloudRain className="h-5 w-5 text-amber-600" />
+            <CardHeader className="earth-header-forest">
+              <CardTitle className="text-white flex items-center gap-2">
+                <CloudRain className="h-5 w-5" />
                 {t("dashboard.pendingOrders")}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-4">
                 {pendingTransactions.slice(0, 4).map((transaction) => (
-                  <div key={transaction.id} className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-amber-100 text-amber-600 mr-3">
+                  <div key={transaction.id} className="flex items-center p-3 rounded-lg hover:bg-earth-pale-green/20 transition-colors">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-earth-medium-green/20 text-earth-medium-green mr-3">
                       <Truck className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-1">
@@ -368,7 +368,7 @@ export default function Dashboard() {
                     <div className="text-sm font-medium">
                       {transaction.quantity} {transaction.unit}
                     </div>
-                    <div className="ml-4 text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800">
+                    <div className="ml-4 text-xs px-2 py-1 rounded-full bg-earth-pale-green text-earth-dark-green">
                       {language === 'id' 
                         ? transaction.status.replace('_', ' ') 
                         : transaction.status === 'negosiasi' 
@@ -396,7 +396,7 @@ export default function Dashboard() {
               <div className="mt-6 pt-3 border-t">
                 <a 
                   href="/transaksi"
-                  className="inline-flex items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-700"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-earth-medium-green hover:text-earth-dark-green"
                 >
                   <span>{language === 'id' ? 'Lihat semua transaksi' : 'View all transactions'}</span>
                   <svg

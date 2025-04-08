@@ -45,6 +45,16 @@
     --sidebar-accent-foreground: 180 100% 13%;
     --sidebar-border: 214.3 31.8% 91.4%;
     --sidebar-ring: 180 100% 16%;
+    
+    /* Earth/Agriculture Theme Colors */
+    --earth-dark-green: 106 32% 30%; /* #3a5a40 */
+    --earth-medium-green: 101 22% 51%; /* #588157 */
+    --earth-light-green: 83 27% 62%; /* #a3b18a */
+    --earth-pale-green: 83 25% 90%; /* #e9f0e1 */
+    --earth-brown: 33 33% 40%; /* #866a45 */
+    --earth-light-brown: 33 43% 85%; /* #ead7bb */
+    --earth-clay: 27 56% 80%; /* #f2cca0 */
+    --earth-wheat: 39 74% 85%; /* #f8e4a8 */
   }
 
   .dark {
@@ -135,10 +145,59 @@
   }
   
   .sidebar-link.active {
-    @apply bg-tani-green-light/20 text-tani-green-dark;
+    @apply bg-[#588157]/20 text-[#3a5a40];
   }
   
   .sidebar-link:hover {
-    @apply bg-gray-100;
+    @apply bg-[#e9f0e1];
+  }
+  
+  /* Earth/agriculture themed cards */
+  .earth-card-green {
+    @apply overflow-hidden border-none shadow-md bg-gradient-to-br from-[#e9f0e1] to-[#d9e7cb];
+  }
+  
+  .earth-card-brown {
+    @apply overflow-hidden border-none shadow-md bg-gradient-to-br from-[#ead7bb] to-[#e0ccac];
+  }
+  
+  .earth-card-clay {
+    @apply overflow-hidden border-none shadow-md bg-gradient-to-br from-[#f2cca0] to-[#ecc193];
+  }
+  
+  .earth-card-wheat {
+    @apply overflow-hidden border-none shadow-md bg-gradient-to-br from-[#f8e4a8] to-[#f5db91];
+  }
+  
+  .earth-card-moss {
+    @apply overflow-hidden border-none shadow-md bg-gradient-to-br from-[#a3b18a] to-[#8ea275];
+  }
+  
+  .earth-card-forest {
+    @apply overflow-hidden border-none shadow-md bg-gradient-to-br from-[#588157] to-[#4e7249];
+  }
+  
+  .earth-header-green {
+    @apply bg-gradient-to-r from-[#e9f0e1] to-[#d9e7cb] rounded-t-lg border-b;
+  }
+  
+  .earth-header-brown {
+    @apply bg-gradient-to-r from-[#ead7bb] to-[#e0ccac] rounded-t-lg border-b;
+  }
+  
+  .earth-header-clay {
+    @apply bg-gradient-to-r from-[#f2cca0] to-[#ecc193] rounded-t-lg border-b;
+  }
+  
+  .earth-header-wheat {
+    @apply bg-gradient-to-r from-[#f8e4a8] to-[#f5db91] rounded-t-lg border-b;
+  }
+  
+  .earth-header-moss {
+    @apply bg-gradient-to-r from-[#a3b18a] to-[#8ea275] rounded-t-lg border-b text-white;
+  }
+  
+  .earth-header-forest {
+    @apply bg-gradient-to-r from-[#588157] to-[#4e7249] rounded-t-lg border-b text-white;
   }
 }

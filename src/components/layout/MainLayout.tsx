@@ -15,7 +15,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[#f8f9f4] flex">
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <div className={cn("flex-1 flex flex-col relative", sidebarOpen ? "md:ml-64" : "md:ml-20")}>
         <TopNav onMenuButtonClick={() => setSidebarOpen(!sidebarOpen)} />

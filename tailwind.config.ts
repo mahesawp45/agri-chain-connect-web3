@@ -71,6 +71,17 @@ export default {
 						dark: '#005249'   // Dark green from the hexagon border
 					},
 					blue: '#003D40',    // Dark blue/teal from the background
+				},
+				// Earth/Agriculture Theme Colors
+				earth: {
+					'dark-green': '#3a5a40',
+					'medium-green': '#588157',
+					'light-green': '#a3b18a',
+					'pale-green': '#e9f0e1',
+					'brown': '#866a45',
+					'light-brown': '#ead7bb',
+					'clay': '#f2cca0',
+					'wheat': '#f8e4a8'
 				}
 			},
 			borderRadius: {

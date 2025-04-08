@@ -77,13 +77,13 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 h-full bg-gradient-to-b from-tani-green-dark/95 to-tani-green-dark border-r border-tani-green-light/20 z-50 transition-all duration-300 flex flex-col",
+          "fixed top-0 left-0 h-full bg-gradient-to-b from-[#3a5a40]/95 to-[#3a5a40] border-r border-[#588157]/20 z-50 transition-all duration-300 flex flex-col",
           open ? "w-64" : "w-20",
           isMobile && !open && "-translate-x-full",
           isMobile && open && "translate-x-0 w-64"
         )}
       >
-        <div className="flex items-center justify-between p-4 border-b border-tani-green-light/20">
+        <div className="flex items-center justify-between p-4 border-b border-[#588157]/20">
           {open && (
             <Link to="/dashboard" className="flex items-center gap-2">
               <div className="h-10 w-10 rounded-md overflow-hidden flex items-center justify-center bg-white/90">
@@ -109,7 +109,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full text-white hover:bg-tani-green-light/20"
+              className="rounded-full text-white hover:bg-[#588157]/20"
               onClick={() => setOpen(!open)}
             >
               {open ? <ChevronLeft /> : <ChevronRight />}
@@ -131,8 +131,8 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                     "sidebar-link",
                     "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-tani-green-light/30 text-white" 
-                      : "text-tani-green-light/80 hover:bg-tani-green-light/10 hover:text-white"
+                      ? "bg-[#588157]/30 text-white" 
+                      : "text-[#a3b18a] hover:bg-[#588157]/10 hover:text-white"
                   )}
                 >
                   <link.icon className="h-5 w-5" />
@@ -143,22 +143,22 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
           </nav>
         </div>
 
-        <div className="p-4 border-t border-tani-green-light/20">
+        <div className="p-4 border-t border-[#588157]/20">
           {open ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-full justify-start gap-2 px-2 text-white hover:bg-tani-green-light/20">
-                  <Avatar className="h-8 w-8 border border-tani-green-light/30">
+                <Button variant="ghost" className="w-full justify-start gap-2 px-2 text-white hover:bg-[#588157]/20">
+                  <Avatar className="h-8 w-8 border border-[#588157]/30">
                     <AvatarImage src="/placeholder.svg" alt="Profile" />
-                    <AvatarFallback className="bg-tani-green-light/30 text-white">PT</AvatarFallback>
+                    <AvatarFallback className="bg-[#588157]/30 text-white">PT</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-start text-sm">
                     <span className="font-medium">Pak Tani</span>
-                    <span className="text-tani-green-light/80 text-xs">Petani</span>
+                    <span className="text-[#a3b18a] text-xs">Petani</span>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 border-tani-green-light/20">
+              <DropdownMenuContent align="end" className="w-56 border-[#588157]/20">
                 <DropdownMenuItem>
                   <Link to="/profile" className="flex items-center w-full">
                     <User className="h-4 w-4 mr-2" />
@@ -183,14 +183,14 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full mx-auto flex justify-center items-center hover:bg-tani-green-light/20">
-                  <Avatar className="h-8 w-8 border border-tani-green-light/30">
+                <Button variant="ghost" size="icon" className="rounded-full mx-auto flex justify-center items-center hover:bg-[#588157]/20">
+                  <Avatar className="h-8 w-8 border border-[#588157]/30">
                     <AvatarImage src="/placeholder.svg" alt="Profile" />
-                    <AvatarFallback className="bg-tani-green-light/30 text-white">PT</AvatarFallback>
+                    <AvatarFallback className="bg-[#588157]/30 text-white">PT</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 border-tani-green-light/20">
+              <DropdownMenuContent align="end" className="w-56 border-[#588157]/20">
                 <DropdownMenuItem>
                   <Link to="/profile" className="flex items-center w-full">
                     <User className="h-4 w-4 mr-2" />
