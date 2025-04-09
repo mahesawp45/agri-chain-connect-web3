@@ -16,7 +16,13 @@ import {
   LogOut,
   Leaf,
   Wheat,
-  Sprout
+  Sprout,
+  Receipt,
+  History,
+  CheckCircle,
+  ShoppingBasket,
+  CreditCard,
+  Store
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -25,16 +31,20 @@ import {
   DropdownMenuContent, 
   DropdownMenuItem, 
   DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuGroup
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SidebarProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-const links = [
+// Links for farmers (default role)
+const farmerLinks = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Komoditas", href: "/komoditas", icon: Wheat },
   { name: "Saldo", href: "/saldo", icon: Wallet },
@@ -45,9 +55,31 @@ const links = [
   { name: "Profil", href: "/profile", icon: User },
 ];
 
+// New links specifically for buyers
+const buyerLinks = [
+  { name: "Dashboard", href: "/dashboard", icon: Home },
+  { name: "Market", href: "/market", icon: Store },
+  { name: "Order Book", href: "/order-book", icon: ClipboardList },
+  { name: "Saldo", href: "/saldo", icon: Wallet },
+  { name: "Transaksi", href: "/transaksi", icon: ShoppingCart },
+  { name: "Transaksi Tertunda", href: "/transaksi-pending", icon: Receipt },
+  { name: "Pengiriman", href: "/pengiriman", icon: Truck },
+  { name: "Riwayat", href: "/history", icon: History },
+  { name: "Harga Komoditas", href: "/harga", icon: TrendingUp },
+  { name: "Profil", href: "/profile", icon: User },
+];
+
 export function Sidebar({ open, setOpen }: SidebarProps) {
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(false);
+  const { t } = useLanguage();
+  
+  // For demo purposes, we'll use a state to toggle between farmer and buyer roles
+  // In a real application, this would come from authentication/user context
+  const [userRole, setUserRole] = useState<"farmer" | "buyer">("farmer");
+  
+  // Determine which links to show based on user role
+  const links = userRole === "farmer" ? farmerLinks : buyerLinks;
 
   // Check if mobile
   useEffect(() => {
@@ -117,6 +149,40 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
           )}
         </div>
 
+        {/* Role Switcher - For demonstration purposes */}
+        {open && (
+          <div className="px-3 py-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="w-full bg-[#588157]/20 border-[#588157]/30 text-white hover:bg-[#588157]/30 hover:text-white"
+                >
+                  {userRole === "farmer" ? "Petani" : "Pembeli"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuLabel>Pilih Peran</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  className={cn(userRole === "farmer" && "bg-accent")}
+                  onClick={() => setUserRole("farmer")}
+                >
+                  <Wheat className="mr-2 h-4 w-4" />
+                  <span>Petani</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  className={cn(userRole === "buyer" && "bg-accent")}
+                  onClick={() => setUserRole("buyer")}
+                >
+                  <ShoppingBasket className="mr-2 h-4 w-4" />
+                  <span>Pembeli</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+
         <div className="flex-1 overflow-y-auto py-4">
           <nav className="px-2 space-y-1">
             {links.map((link) => {
@@ -154,7 +220,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                   </Avatar>
                   <div className="flex flex-col items-start text-sm">
                     <span className="font-medium">Pak Tani</span>
-                    <span className="text-[#a3b18a] text-xs">Petani</span>
+                    <span className="text-[#a3b18a] text-xs">{userRole === "farmer" ? "Petani" : "Pembeli"}</span>
                   </div>
                 </Button>
               </DropdownMenuTrigger>

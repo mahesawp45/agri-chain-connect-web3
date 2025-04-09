@@ -21,6 +21,11 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import BlockchainVerification from "./pages/BlockchainVerification";
 
+// New buyer-specific pages
+import Market from "./pages/buyer/Market";
+import TransaksiPending from "./pages/buyer/TransaksiPending";
+import History from "./pages/buyer/History";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -43,6 +48,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            
+            {/* Farmer routes */}
             <Route path="/komoditas" element={<Komoditas />} />
             <Route path="/komoditas/:id" element={<KomoditasDetail />} />
             <Route path="/saldo" element={<Saldo />} />
@@ -54,6 +61,12 @@ const App = () => (
             <Route path="/pengiriman" element={<Pengiriman />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/blockchain/:type/:id" element={<BlockchainVerification />} />
+            
+            {/* Buyer-specific routes */}
+            <Route path="/market" element={<Market />} />
+            <Route path="/transaksi-pending" element={<TransaksiPending />} />
+            <Route path="/history" element={<History />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
