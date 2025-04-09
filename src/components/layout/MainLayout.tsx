@@ -20,13 +20,13 @@ export function MainLayout({ children }: MainLayoutProps) {
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       <div className={cn("flex-1 flex flex-col relative transition-all duration-300", sidebarOpen ? "md:ml-64" : "md:ml-20")}>
         <TopNav onMenuButtonClick={() => setSidebarOpen(!sidebarOpen)} />
-        <main className="flex-1 px-4 md:px-8 pt-20 pb-16 overflow-x-hidden">
-          <div className="max-w-7xl mx-auto w-full space-y-6">
+        <main className="flex-1 px-4 md:px-8 pt-24 pb-20 overflow-x-hidden">
+          <div className="max-w-7xl mx-auto w-full space-y-8">
             {children}
           </div>
         </main>
         <footer className="py-4 px-6 text-center text-sm text-earth-dark-green border-t bg-white shadow-sm w-full">
-          <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-center gap-2">
+          <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-center gap-3">
             <div className="flex items-center gap-2">
               <Leaf className="h-4 w-4 text-earth-medium-green" />
               <p>© 2025 TaniTrack - {t("app.name") === "TaniTrack" ? "Blockchain-powered Agriculture Management System." : "Sistem Manajemen Pertanian berbasis Blockchain."}</p>

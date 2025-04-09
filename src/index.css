@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
 
 @tailwind base;
@@ -95,9 +94,7 @@
     --sidebar-border: 180 100% 15%;
     --sidebar-ring: 142 67% 59%;
   }
-}
-
-@layer base {
+  
   * {
     @apply border-border;
   }
@@ -121,11 +118,11 @@
   }
   
   .dashboard-stats {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8;
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8;
   }
   
   .stats-card {
-    @apply bg-white rounded-lg shadow-sm p-5 card-hover border border-earth-light-brown/50;
+    @apply bg-white rounded-lg shadow-sm p-6 card-hover border border-earth-light-brown/50;
   }
   
   .table-container {
@@ -137,11 +134,11 @@
   }
   
   .input-label {
-    @apply block text-sm font-medium text-earth-dark-green mb-1.5;
+    @apply block text-sm font-medium text-earth-dark-green mb-2;
   }
   
   .sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors;
+    @apply flex items-center gap-3 px-3.5 py-2.5 rounded-md text-sm font-medium transition-colors;
   }
   
   .sidebar-link.active {
@@ -152,59 +149,59 @@
     @apply bg-[#e9f0e1];
   }
   
-  /* Earth/agriculture themed cards with improved contrast */
+  /* Earth/agriculture themed cards with improved contrast and spacing */
   .earth-card-green {
-    @apply bg-white border-2 border-earth-light-green/70 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-light-green/70 shadow-sm rounded-lg overflow-hidden p-5;
   }
   
   .earth-card-brown {
-    @apply bg-white border-2 border-earth-light-brown/70 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-light-brown/70 shadow-sm rounded-lg overflow-hidden p-5;
   }
   
   .earth-card-clay {
-    @apply bg-white border-2 border-earth-clay/70 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-clay/70 shadow-sm rounded-lg overflow-hidden p-5;
   }
   
   .earth-card-wheat {
-    @apply bg-white border-2 border-earth-wheat/70 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-wheat/70 shadow-sm rounded-lg overflow-hidden p-5;
   }
   
   .earth-card-moss {
-    @apply bg-white border-2 border-earth-light-green/70 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-light-green/70 shadow-sm rounded-lg overflow-hidden p-5;
   }
   
   .earth-card-forest {
-    @apply bg-white border-2 border-earth-medium-green/70 shadow-sm rounded-lg overflow-hidden;
+    @apply bg-white border-2 border-earth-medium-green/70 shadow-sm rounded-lg overflow-hidden p-5;
   }
   
-  /* Enhanced headers with better contrast */
+  /* Enhanced headers with better contrast and spacing */
   .earth-header-green {
-    @apply bg-earth-medium-green text-white rounded-t-lg border-b border-earth-light-green/50 py-4 px-5;
+    @apply bg-earth-medium-green text-white rounded-t-lg border-b border-earth-light-green/50 py-4 px-6;
   }
   
   .earth-header-brown {
-    @apply bg-earth-brown text-white rounded-t-lg border-b border-earth-light-brown/50 py-4 px-5;
+    @apply bg-earth-brown text-white rounded-t-lg border-b border-earth-light-brown/50 py-4 px-6;
   }
   
   .earth-header-clay {
-    @apply bg-[#e69b55] text-white rounded-t-lg border-b border-earth-clay/50 py-4 px-5;
+    @apply bg-[#e69b55] text-white rounded-t-lg border-b border-earth-clay/50 py-4 px-6;
   }
   
   .earth-header-wheat {
-    @apply bg-[#d4b145] text-white rounded-t-lg border-b border-earth-wheat/50 py-4 px-5;
+    @apply bg-[#d4b145] text-white rounded-t-lg border-b border-earth-wheat/50 py-4 px-6;
   }
   
   .earth-header-moss {
-    @apply bg-earth-medium-green text-white rounded-t-lg border-b border-earth-light-green/50 py-4 px-5;
+    @apply bg-earth-medium-green text-white rounded-t-lg border-b border-earth-light-green/50 py-4 px-6;
   }
   
   .earth-header-forest {
-    @apply bg-earth-dark-green text-white rounded-t-lg border-b border-earth-medium-green/50 py-4 px-5;
+    @apply bg-earth-dark-green text-white rounded-t-lg border-b border-earth-medium-green/50 py-4 px-6;
   }
   
-  /* Standard table styling for consistency */
+  /* Standard table styling for consistency with better spacing */
   .table-header {
-    @apply bg-earth-medium-green/20 text-earth-dark-green font-bold;
+    @apply bg-earth-medium-green/20 text-earth-dark-green font-bold py-3 px-4;
   }
   
   .table-body {
@@ -215,33 +212,46 @@
     @apply hover:bg-earth-pale-green transition-colors duration-150;
   }
   
-  /* UI Improvement Classes with better contrast */
+  /* UI Improvement Classes with better spacing and contrast */
   .data-card {
-    @apply p-5 bg-white border-2 border-earth-light-brown/50 rounded-lg shadow-sm;
+    @apply p-6 bg-white border-2 border-earth-light-brown/50 rounded-lg shadow-sm;
   }
   
   .section-title {
-    @apply text-2xl font-bold text-earth-dark-green mb-4;
+    @apply text-2xl font-bold text-earth-dark-green mb-6;
   }
   
   .section-container {
-    @apply bg-white p-6 rounded-lg shadow-sm border-2 border-earth-light-brown/50 mb-6;
+    @apply bg-white p-6 rounded-lg shadow-sm border-2 border-earth-light-brown/50 mb-8;
   }
   
-  /* Status indicators with better contrast */
+  /* Status indicators with better contrast and spacing */
   .status-completed {
-    @apply bg-green-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+    @apply bg-green-600 text-white px-2.5 py-1 text-xs font-medium rounded-full;
   }
   
   .status-pending {
-    @apply bg-yellow-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+    @apply bg-yellow-600 text-white px-2.5 py-1 text-xs font-medium rounded-full;
   }
   
   .status-canceled {
-    @apply bg-red-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+    @apply bg-red-600 text-white px-2.5 py-1 text-xs font-medium rounded-full;
   }
   
   .status-processing {
-    @apply bg-blue-600 text-white px-2 py-1 text-xs font-medium rounded-full;
+    @apply bg-blue-600 text-white px-2.5 py-1 text-xs font-medium rounded-full;
+  }
+  
+  /* Adding consistent form spacing */
+  .form-group {
+    @apply mb-4;
+  }
+  
+  .form-row {
+    @apply flex flex-col md:flex-row gap-4 mb-4;
+  }
+  
+  .form-field {
+    @apply flex-1 min-w-0;
   }
 }
