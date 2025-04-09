@@ -1,5 +1,5 @@
 
-import { Bell, Search, HelpCircle } from "lucide-react";
+import { Bell, Search, HelpCircle, User, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -30,7 +30,7 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
   
   return (
     <header className="fixed top-0 w-full bg-white border-b border-gray-200 z-30">
-      <div className="flex h-16 items-center px-4 lg:px-6 justify-between">
+      <div className="flex h-16 items-center px-3 sm:px-4 lg:px-5 justify-between">
         <Button
           variant="ghost"
           size="icon"
@@ -55,8 +55,8 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           <span className="sr-only">Toggle Menu</span>
         </Button>
 
-        <div className="flex-1 md:ml-16 lg:ml-10">
-          <div className="relative max-w-md w-full">
+        <div className="flex-1 md:ml-4 xl:ml-6 max-w-md">
+          <div className="relative w-full">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
               type="search"
@@ -66,12 +66,12 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-3 lg:gap-4">
           {/* Blockchain Verification Status */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="hidden md:flex items-center gap-2 px-2 md:px-3 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full">
+                <div className="hidden sm:flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full">
                   <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
                   <span className="text-xs font-medium whitespace-nowrap">
                     {t("language") === "id" ? "Blockchain Aktif" : "Blockchain Active"}
@@ -99,6 +99,38 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
               <TooltipContent>
                 <p>
                   {t("language") === "id" ? "Bantuan" : "Help"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          {/* Settings Button - New */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
+                  <Settings className="h-5 w-5 text-earth-medium-green" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {t("language") === "id" ? "Pengaturan" : "Settings"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          {/* User Profile Button - New */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
+                  <User className="h-5 w-5 text-earth-medium-green" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {t("language") === "id" ? "Profil" : "Profile"}
                 </p>
               </TooltipContent>
             </Tooltip>

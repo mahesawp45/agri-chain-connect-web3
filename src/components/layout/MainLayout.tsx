@@ -18,14 +18,17 @@ export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="min-h-screen bg-earth-pale-green/50 flex">
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <div className={cn("flex-1 flex flex-col relative transition-all duration-300", sidebarOpen ? "md:ml-64" : "md:ml-20")}>
+      <div className={cn(
+        "flex-1 flex flex-col relative transition-all duration-300", 
+        sidebarOpen ? "md:ml-64" : "md:ml-20"
+      )}>
         <TopNav onMenuButtonClick={() => setSidebarOpen(!sidebarOpen)} />
-        <main className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-16 overflow-x-hidden">
-          <div className="max-w-7xl mx-auto w-full space-y-6 md:space-y-8">
+        <main className="flex-1 px-3 sm:px-4 md:px-5 lg:px-6 pt-20 pb-16 overflow-x-hidden">
+          <div className="max-w-7xl mx-auto w-full space-y-5 md:space-y-6">
             {children}
           </div>
         </main>
-        <footer className="py-3 px-4 md:px-6 text-center text-sm text-earth-dark-green border-t bg-white shadow-sm w-full">
+        <footer className="py-3 px-3 sm:px-4 md:px-5 text-center text-sm text-earth-dark-green border-t bg-white shadow-sm w-full">
           <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-center gap-2 md:gap-3">
             <div className="flex items-center gap-2">
               <Leaf className="h-4 w-4 text-earth-medium-green" />
