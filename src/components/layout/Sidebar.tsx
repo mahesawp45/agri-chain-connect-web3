@@ -74,9 +74,16 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
   const [isMobile, setIsMobile] = useState(false);
   const { t } = useLanguage();
   
-  // For demo purposes, we'll use a state to toggle between farmer and buyer roles
-  // In a real application, this would come from authentication/user context
-  const [userRole, setUserRole] = useState<"farmer" | "buyer">("farmer");
+  // Use localStorage to persist the user role
+  const [userRole, setUserRole] = useState<"farmer" | "buyer">(() => {
+    const savedRole = localStorage.getItem("userRole");
+    return (savedRole === "buyer" ? "buyer" : "farmer");
+  });
+  
+  // Save role to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("userRole", userRole);
+  }, [userRole]);
   
   // Determine which links to show based on user role
   const links = userRole === "farmer" ? farmerLinks : buyerLinks;
@@ -284,3 +291,4 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
     </>
   );
 }
+

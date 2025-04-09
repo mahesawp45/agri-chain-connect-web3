@@ -35,6 +35,13 @@ const queryClient = new QueryClient({
   },
 });
 
+// Simplistic auth check for demo purposes
+const isAuthenticated = () => {
+  // In a real app, this would check for a token, session, etc.
+  // For demo, we'll assume user is authenticated unless explicitly directed to login
+  return true;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
@@ -43,8 +50,10 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Redirect root path to login */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            {/* Redirect root path to dashboard if authenticated, otherwise to login */}
+            <Route path="/" element={
+              isAuthenticated() ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+            } />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
