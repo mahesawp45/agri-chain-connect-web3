@@ -257,7 +257,7 @@ const Pengiriman = () => {
                     <SelectValue placeholder="Filter Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Semua Status</SelectItem>
+                    <SelectItem value="all">Semua Status</SelectItem>
                     <SelectItem value="menunggu">Menunggu</SelectItem>
                     <SelectItem value="dalam_persiapan">Dalam Persiapan</SelectItem>
                     <SelectItem value="dalam_perjalanan">Dalam Perjalanan</SelectItem>
