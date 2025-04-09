@@ -171,6 +171,7 @@ const KomoditasDetail = () => {
 
   return (
     <MainLayout>
+      {/* Top action bar */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <Button 
@@ -202,15 +203,17 @@ const KomoditasDetail = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Main content area - 2/3 width on desktop */}
         <div className="md:col-span-2 space-y-6">
-          <Card className="earth-card-wheat">
-            <CardHeader className="pb-3 earth-header-forest">
+          {/* Commodity Details Card */}
+          <Card className="overflow-hidden border-2 border-earth-light-green/70 shadow-md">
+            <CardHeader className="pb-3 bg-gradient-to-r from-earth-dark-green to-earth-medium-green">
               <CardTitle className="text-white">{t("commodities.detail")}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="flex flex-col md:flex-row mb-6">
                 <div className="w-full md:w-1/3 mb-4 md:mb-0">
-                  <div className="bg-earth-light-green/20 rounded-lg overflow-hidden h-64 flex items-center justify-center">
+                  <div className="bg-earth-pale-green rounded-lg overflow-hidden h-64 flex items-center justify-center border-2 border-earth-light-green/40">
                     <img 
                       src={komoditas.imageUrl} 
                       alt={komoditas.name} 
@@ -257,11 +260,12 @@ const KomoditasDetail = () => {
             </CardContent>
           </Card>
 
-          <Card className="earth-card-green">
-            <CardHeader className="pb-3 earth-header-moss">
+          {/* History Card */}
+          <Card className="overflow-hidden border-2 border-earth-clay/70 shadow-md">
+            <CardHeader className="pb-3 bg-gradient-to-r from-earth-brown to-earth-light-brown">
               <CardTitle className="text-white">History & Activity</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
                 {komoditas.history.map((event: any, index: number) => (
                   <div key={index} className="flex">
@@ -286,13 +290,15 @@ const KomoditasDetail = () => {
           </Card>
         </div>
 
+        {/* Sidebar area - 1/3 width on desktop */}
         <div className="space-y-6">
-          <Card className="earth-card-clay">
-            <CardHeader className="pb-3 earth-header-forest">
+          {/* QR Code Card */}
+          <Card className="overflow-hidden border-2 border-earth-wheat/70 shadow-md">
+            <CardHeader className="pb-3 bg-gradient-to-r from-[#d4b145] to-[#e6be70]">
               <CardTitle className="text-white">{t("commodities.qrcode")}</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
-              <div className="bg-earth-pale-green p-4 rounded-lg mb-4">
+            <CardContent className="flex flex-col items-center p-6">
+              <div className="bg-earth-pale-green p-4 rounded-lg mb-4 border-2 border-earth-light-green/30">
                 <QrCode className="h-32 w-32 text-earth-dark-green mx-auto" />
               </div>
               <p className="text-center text-sm text-earth-dark-green">
@@ -300,17 +306,20 @@ const KomoditasDetail = () => {
                 ID: <span className="font-medium">{komoditas.id}</span><br />
                 {t("commodities.created")}: <span className="font-medium">{formatDate(new Date(komoditas.createdAt))}</span>
               </p>
-              <Button className="mt-4 w-full bg-earth-dark-green hover:bg-earth-medium-green">Download QR Code</Button>
+              <Button className="mt-4 w-full bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green transition-all duration-300">
+                Download QR Code
+              </Button>
             </CardContent>
           </Card>
 
-          <Card className="earth-card-wheat">
-            <CardHeader className="pb-3 earth-header-moss">
+          {/* Quick Info Card */}
+          <Card className="overflow-hidden border-2 border-earth-light-green/70 shadow-md">
+            <CardHeader className="pb-3 bg-gradient-to-r from-earth-medium-green to-earth-light-green">
               <CardTitle className="text-white">Quick Info</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="flex items-center">
+                <div className="flex items-center p-3 rounded-lg bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
                     <PackageOpen className="h-5 w-5 text-blue-600" />
                   </div>
@@ -319,7 +328,7 @@ const KomoditasDetail = () => {
                     <p className="font-medium text-earth-dark-green">{komoditas.type}</p>
                   </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center p-3 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
                     <Scale className="h-5 w-5 text-green-600" />
                   </div>
@@ -328,7 +337,7 @@ const KomoditasDetail = () => {
                     <p className="font-medium text-earth-dark-green">{komoditas.quantity.toLocaleString()} {komoditas.unit}</p>
                   </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center p-3 rounded-lg bg-purple-50 border border-purple-100 hover:bg-purple-100 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
                     <MapPin className="h-5 w-5 text-purple-600" />
                   </div>
@@ -337,7 +346,7 @@ const KomoditasDetail = () => {
                     <p className="font-medium text-earth-dark-green">{komoditas.location}</p>
                   </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center p-3 rounded-lg bg-amber-50 border border-amber-100 hover:bg-amber-100 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mr-3">
                     <Calendar className="h-5 w-5 text-amber-600" />
                   </div>
