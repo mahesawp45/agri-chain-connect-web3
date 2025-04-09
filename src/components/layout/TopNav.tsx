@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TopNavProps {
   onMenuButtonClick: () => void;
@@ -25,10 +26,11 @@ interface TopNavProps {
 
 export function TopNav({ onMenuButtonClick }: TopNavProps) {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   
   return (
     <header className="fixed top-0 w-full bg-white border-b border-gray-200 z-30">
-      <div className="flex h-16 items-center justify-between px-4">
+      <div className="flex h-16 items-center px-4 lg:px-6 justify-between">
         <Button
           variant="ghost"
           size="icon"
@@ -53,25 +55,25 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           <span className="sr-only">Toggle Menu</span>
         </Button>
 
-        <div className="flex-1 md:ml-16">
-          <div className="relative max-w-md">
+        <div className="flex-1 md:ml-16 lg:ml-10">
+          <div className="relative max-w-md w-full">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
               type="search"
               placeholder={t("action.search") + "..."}
-              className="w-full bg-gray-50 pl-8 focus-visible:ring-earth-medium-green"
+              className="w-full bg-gray-50 pl-8 pr-4 focus-visible:ring-earth-medium-green"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           {/* Blockchain Verification Status */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full">
+                <div className="hidden md:flex items-center gap-2 px-2 md:px-3 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full">
                   <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-                  <span className="text-xs font-medium">
+                  <span className="text-xs font-medium whitespace-nowrap">
                     {t("language") === "id" ? "Blockchain Aktif" : "Blockchain Active"}
                   </span>
                 </div>
@@ -90,7 +92,7 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="h-9 w-9">
                   <HelpCircle className="h-5 w-5 text-earth-medium-green" />
                 </Button>
               </TooltipTrigger>
@@ -105,14 +107,14 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative h-9 w-9">
                 <Bell className="h-5 w-5" />
                 <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-earth-medium-green">
                   3
                 </Badge>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuContent align="end" className="w-[280px] md:w-80">
               <DropdownMenuLabel>{t("nav.notifications")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
