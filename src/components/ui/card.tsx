@@ -77,4 +77,44 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+// Adding blockchain-themed card styles for better tracking visualization
+const BlockchainCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border-2 border-earth-light-green/70 bg-white text-earth-dark-green shadow-md relative overflow-hidden",
+      className
+    )}
+    {...props}
+  />
+))
+BlockchainCard.displayName = "BlockchainCard"
+
+const BlockchainCardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "flex flex-col space-y-1.5 p-6 bg-gradient-to-r from-earth-dark-green to-earth-medium-green",
+      className
+    )}
+    {...props}
+  />
+))
+BlockchainCardHeader.displayName = "BlockchainCardHeader"
+
+export { 
+  Card, 
+  CardHeader, 
+  CardFooter, 
+  CardTitle, 
+  CardDescription, 
+  CardContent,
+  BlockchainCard,
+  BlockchainCardHeader
+}

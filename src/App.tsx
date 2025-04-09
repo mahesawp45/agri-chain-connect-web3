@@ -19,6 +19,7 @@ import Harga from "./pages/Harga";
 import Pengiriman from "./pages/Pengiriman";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import BlockchainVerification from "./pages/BlockchainVerification";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/harga" element={<Harga />} />
             <Route path="/pengiriman" element={<Pengiriman />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/blockchain/:type/:id" element={<BlockchainVerification />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

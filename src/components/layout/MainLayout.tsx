@@ -5,6 +5,7 @@ import { TopNav } from "./TopNav";
 import { cn } from "@/lib/utils";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Leaf } from "lucide-react";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -26,8 +27,16 @@ export function MainLayout({ children }: MainLayoutProps) {
         </main>
         <footer className="py-4 px-6 text-center text-sm text-earth-dark-green border-t bg-white shadow-sm w-full">
           <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-center gap-2">
-            <p>© 2025 TaniTrack - Agriculture Management System. {t("app.name") === "TaniTrack" ? "All rights reserved." : "Hak cipta dilindungi."}</p>
-            <LanguageSwitcher />
+            <div className="flex items-center gap-2">
+              <Leaf className="h-4 w-4 text-earth-medium-green" />
+              <p>© 2025 TaniTrack - {t("app.name") === "TaniTrack" ? "Blockchain-powered Agriculture Management System." : "Sistem Manajemen Pertanian berbasis Blockchain."}</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-xs bg-earth-light-green/20 text-earth-dark-green px-2 py-1 rounded-full">
+                {t("app.name") === "TaniTrack" ? "Powered by Blockchain" : "Didukung oleh Blockchain"}
+              </span>
+              <LanguageSwitcher />
+            </div>
           </div>
         </footer>
       </div>

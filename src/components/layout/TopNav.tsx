@@ -1,5 +1,5 @@
 
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TopNavProps {
   onMenuButtonClick: () => void;
@@ -53,17 +59,55 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
             <Input
               type="search"
               placeholder={t("action.search") + "..."}
-              className="w-full bg-gray-50 pl-8 focus-visible:ring-agriGreen-500"
+              className="w-full bg-gray-50 pl-8 focus-visible:ring-earth-medium-green"
             />
           </div>
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Blockchain Verification Status */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full">
+                  <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+                  <span className="text-xs font-medium">
+                    {t("language") === "id" ? "Blockchain Aktif" : "Blockchain Active"}
+                  </span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {t("language") === "id" 
+                    ? "Semua transaksi dilacak dengan blockchain untuk transparansi" 
+                    : "All transactions are tracked with blockchain for transparency"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          {/* Help Button */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <HelpCircle className="h-5 w-5 text-earth-medium-green" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {t("language") === "id" ? "Bantuan" : "Help"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-agriWarn-500">
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-earth-medium-green">
                   3
                 </Badge>
               </Button>
@@ -91,16 +135,16 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <div className="flex flex-col gap-1">
-                  <p className="font-medium text-sm">{t("language") === "id" ? "Harga Beras Naik" : "Rice Price Increased"}</p>
+                  <p className="font-medium text-sm">{t("language") === "id" ? "Transaksi Blockchain Berhasil" : "Blockchain Transaction Successful"}</p>
                   <p className="text-sm text-gray-500">
-                    {t("language") === "id" ? "Harga beras naik 5% dari minggu lalu." : "Rice price increased by 5% from last week."}
+                    {t("language") === "id" ? "Transaksi beras telah terverifikasi di blockchain." : "Rice transaction has been verified on the blockchain."}
                   </p>
                   <p className="text-xs text-gray-400">{t("language") === "id" ? "1 hari yang lalu" : "1 day ago"}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="justify-center">
-                <span className="text-agriGreen-600 font-medium text-sm">
+                <span className="text-earth-dark-green font-medium text-sm">
                   {t("language") === "id" ? "Lihat Semua Notifikasi" : "View All Notifications"}
                 </span>
               </DropdownMenuItem>
