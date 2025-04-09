@@ -181,53 +181,53 @@ const TransaksiDetail = () => {
     const statusMap: Record<string, { label: string; className: string }> = {
       menunggu_konfirmasi: {
         label: t("status.pending"),
-        className: "bg-blue-100 text-blue-800",
+        className: "bg-earth-wheat text-earth-brown font-medium",
       },
       dikonfirmasi: {
         label: t("status.confirmed"),
-        className: "bg-purple-100 text-purple-800",
+        className: "bg-earth-light-brown text-earth-brown font-medium",
       },
       negosiasi: {
         label: t("status.negotiating"),
-        className: "bg-amber-100 text-amber-800",
+        className: "bg-earth-clay text-earth-brown font-medium",
       },
       dibayar: {
         label: t("status.paid"),
-        className: "bg-emerald-100 text-emerald-800",
+        className: "bg-earth-light-green text-earth-dark-green font-medium",
       },
       persiapan_pengiriman: {
         label: t("status.processing"),
-        className: "bg-indigo-100 text-indigo-800",
+        className: "bg-earth-light-green/70 text-earth-dark-green font-medium",
       },
       sedang_dikirim: {
         label: t("status.shipping"),
-        className: "bg-cyan-100 text-cyan-800",
+        className: "bg-earth-medium-green/30 text-earth-dark-green font-medium",
       },
       sudah_dikirim: {
         label: t("status.shipped"),
-        className: "bg-green-100 text-green-800",
+        className: "bg-earth-medium-green/60 text-earth-dark-green font-medium",
       },
       diterima: {
         label: t("status.received"),
-        className: "bg-teal-100 text-teal-800",
+        className: "bg-earth-medium-green/90 text-white font-medium",
       },
       selesai: {
         label: t("status.completed"),
-        className: "bg-green-100 text-green-800",
+        className: "bg-earth-dark-green text-white font-medium",
       },
       dibatalkan: {
         label: t("status.canceled"),
-        className: "bg-red-100 text-red-800",
+        className: "bg-red-100 text-red-800 font-medium",
       },
     };
 
     const statusInfo = statusMap[status] || {
       label: status,
-      className: "bg-gray-100 text-gray-800",
+      className: "bg-gray-100 text-gray-800 font-medium",
     };
 
     return (
-      <Badge className={`${statusInfo.className}`}>
+      <Badge className={`${statusInfo.className} px-3 py-1 rounded-full`}>
         {statusInfo.label}
       </Badge>
     );
@@ -264,11 +264,11 @@ const TransaksiDetail = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("action.back")}
           </Button>
-          <h1 className="text-2xl font-bold">{t("transactions.detail")}</h1>
-          <p className="text-gray-600">{transaction.id}</p>
+          <h1 className="text-2xl font-bold text-earth-dark-green">{t("transactions.detail")}</h1>
+          <p className="text-earth-medium-green font-medium">{transaction.id}</p>
         </div>
         <div className="flex space-x-2 mt-4 md:mt-0">
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green">
             <FileText className="h-4 w-4" />
             {t("action.print")}
           </Button>
@@ -277,17 +277,17 @@ const TransaksiDetail = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <Card>
-            <CardHeader className="pb-3">
+          <Card className="earth-card-forest overflow-hidden">
+            <CardHeader className="earth-header-forest pb-3">
               <div className="flex justify-between items-center">
-                <CardTitle>{t("transactions.detail")}</CardTitle>
+                <CardTitle className="text-white">{t("transactions.detail")}</CardTitle>
                 {getStatusBadge(transaction.status)}
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-4">
               <div className="mb-6">
-                <Progress value={calculateProgress()} className="h-2" />
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <Progress value={calculateProgress()} className="h-2 bg-earth-pale-green" />
+                <div className="flex justify-between text-xs text-earth-medium-green mt-1">
                   <span>{t("status.pending")}</span>
                   <span>{t("status.processing")}</span>
                   <span>{t("status.shipped")}</span>
@@ -297,65 +297,65 @@ const TransaksiDetail = () => {
 
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">{t("transactions.commodity")}</h3>
+                  <div className="p-4 rounded-lg bg-earth-pale-green/50">
+                    <h3 className="text-sm font-medium text-earth-medium-green mb-1">{t("transactions.commodity")}</h3>
                     <div className="flex items-center">
-                      <div className="h-10 w-10 rounded overflow-hidden bg-gray-100 flex items-center justify-center mr-3">
-                        <Package className="h-5 w-5 text-gray-400" />
+                      <div className="h-12 w-12 rounded-full overflow-hidden bg-earth-medium-green/20 flex items-center justify-center mr-3">
+                        <Package className="h-6 w-6 text-earth-medium-green" />
                       </div>
                       <div>
-                        <p className="font-medium">{transaction.commodityName}</p>
-                        <p className="text-sm text-gray-500">{transaction.quantity.toLocaleString()} {transaction.unit}</p>
+                        <p className="font-bold text-earth-dark-green">{transaction.commodityName}</p>
+                        <p className="text-sm text-earth-medium-green">{transaction.quantity.toLocaleString()} {transaction.unit}</p>
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">{t("transactions.total")}</h3>
-                    <p className="text-xl font-bold text-tani-green-dark">
+                  <div className="p-4 rounded-lg bg-earth-wheat/30">
+                    <h3 className="text-sm font-medium text-earth-brown mb-1">{t("transactions.total")}</h3>
+                    <p className="text-xl font-bold text-earth-dark-green">
                       {formatCurrency(transaction.totalPrice)}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-earth-medium-green">
                       @{formatCurrency(transaction.price)}/{transaction.unit}
                     </p>
                   </div>
                 </div>
 
-                <Separator />
+                <Separator className="bg-earth-light-brown/30" />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-2">{t("transactions.buyer")}</h3>
+                  <div className="p-4 rounded-lg bg-earth-clay/20">
+                    <h3 className="text-sm font-medium text-earth-brown mb-2">{t("transactions.buyer")}</h3>
                     <div className="flex items-start">
-                      <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center mr-3">
-                        <User className="h-5 w-5 text-gray-400" />
+                      <div className="h-12 w-12 rounded-full overflow-hidden bg-earth-clay/30 flex items-center justify-center mr-3">
+                        <User className="h-6 w-6 text-earth-brown" />
                       </div>
                       <div>
-                        <p className="font-medium">{transaction.buyerName}</p>
-                        <p className="text-sm text-gray-500">{transaction.buyerId}</p>
+                        <p className="font-bold text-earth-dark-green">{transaction.buyerName}</p>
+                        <p className="text-sm text-earth-medium-green">{transaction.buyerId}</p>
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-2">{t("transactions.seller")}</h3>
+                  <div className="p-4 rounded-lg bg-earth-light-green/20">
+                    <h3 className="text-sm font-medium text-earth-medium-green mb-2">{t("transactions.seller")}</h3>
                     <div className="flex items-start">
-                      <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center mr-3">
-                        <User className="h-5 w-5 text-gray-400" />
+                      <div className="h-12 w-12 rounded-full overflow-hidden bg-earth-light-green/30 flex items-center justify-center mr-3">
+                        <User className="h-6 w-6 text-earth-medium-green" />
                       </div>
                       <div>
-                        <p className="font-medium">{transaction.sellerName}</p>
-                        <p className="text-sm text-gray-500">{transaction.sellerId}</p>
+                        <p className="font-bold text-earth-dark-green">{transaction.sellerName}</p>
+                        <p className="text-sm text-earth-medium-green">{transaction.sellerId}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <Separator />
+                <Separator className="bg-earth-light-brown/30" />
 
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">{t("transactions.terms")}</h3>
-                  <p className="text-gray-700 mb-4">{transaction.notes}</p>
+                <div className="p-4 rounded-lg bg-earth-light-brown/20">
+                  <h3 className="text-sm font-medium text-earth-brown mb-2">{t("transactions.terms")}</h3>
+                  <p className="text-earth-dark-green mb-4">{transaction.notes}</p>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="gap-1">
+                    <Button variant="outline" size="sm" className="gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green">
                       <FileText className="h-4 w-4" />
                       View Agreement
                     </Button>
@@ -365,57 +365,57 @@ const TransaksiDetail = () => {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Shipping Information</CardTitle>
+          <Card className="earth-card-moss overflow-hidden">
+            <CardHeader className="earth-header-moss pb-3">
+              <CardTitle className="text-white">Shipping Information</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-4">
               {transaction.shippingStatus !== "belum_dikirim" ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 mb-1">Shipping Address</h3>
-                      <p className="text-gray-700">{transaction.shippingDetails.address}</p>
+                    <div className="p-3 rounded-lg bg-earth-pale-green/50">
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Shipping Address</h3>
+                      <p className="text-earth-dark-green">{transaction.shippingDetails.address}</p>
                     </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 mb-1">Courier</h3>
-                      <p className="text-gray-700">{transaction.shippingDetails.courier}</p>
+                    <div className="p-3 rounded-lg bg-earth-pale-green/50">
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Courier</h3>
+                      <p className="text-earth-dark-green">{transaction.shippingDetails.courier}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 mb-1">Tracking Number</h3>
-                      <p className="text-gray-700 font-mono">{transaction.shippingDetails.trackingNumber || "-"}</p>
+                    <div className="p-3 rounded-lg bg-earth-light-green/20">
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Tracking Number</h3>
+                      <p className="text-earth-dark-green font-mono">{transaction.shippingDetails.trackingNumber || "-"}</p>
                     </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 mb-1">Estimated Arrival</h3>
-                      <p className="text-gray-700">
+                    <div className="p-3 rounded-lg bg-earth-light-green/20">
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Estimated Arrival</h3>
+                      <p className="text-earth-dark-green">
                         {transaction.shippingDetails.estimatedArrival ? 
                           formatDate(new Date(transaction.shippingDetails.estimatedArrival)) : 
                           "-"}
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1">Shipped Date</h3>
-                    <p className="text-gray-700">
+                  <div className="p-3 rounded-lg bg-earth-wheat/30">
+                    <h3 className="text-sm font-medium text-earth-brown mb-1">Shipped Date</h3>
+                    <p className="text-earth-dark-green">
                       {transaction.shippingDetails.shippedDate ? 
                         formatDate(new Date(transaction.shippingDetails.shippedDate)) : 
                         "Not shipped yet"}
                     </p>
                   </div>
                   <div className="flex justify-end">
-                    <Button variant="outline" className="gap-2">
+                    <Button variant="outline" className="gap-2 border-earth-light-brown text-earth-dark-green hover:bg-earth-pale-green">
                       <Truck className="h-4 w-4" />
                       Track Shipment
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <Truck className="h-12 w-12 mx-auto mb-2 text-gray-300" />
-                  <p className="mb-4">Shipping information not available yet</p>
-                  <p className="text-sm">Shipping details will be updated once the order is processed for delivery.</p>
+                <div className="text-center py-8 bg-earth-pale-green/30 rounded-lg">
+                  <Truck className="h-12 w-12 mx-auto mb-2 text-earth-light-green" />
+                  <p className="mb-4 text-earth-medium-green font-medium">Shipping information not available yet</p>
+                  <p className="text-sm text-earth-medium-green">Shipping details will be updated once the order is processed for delivery.</p>
                 </div>
               )}
             </CardContent>
@@ -423,70 +423,72 @@ const TransaksiDetail = () => {
         </div>
 
         <div className="space-y-6">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Transaction Summary</CardTitle>
+          <Card className="earth-card-brown overflow-hidden">
+            <CardHeader className="earth-header-brown pb-3">
+              <CardTitle className="text-white">Transaction Summary</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-4">
               <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Transaction Type</span>
-                  <Badge variant="outline" className="capitalize">
+                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
+                  <span className="text-earth-brown">Transaction Type</span>
+                  <Badge variant="outline" className="capitalize border-earth-brown text-earth-brown">
                     {transaction.type === "order_book" ? "Order Book" : "Regular"}
                   </Badge>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t("transactions.date")}</span>
-                  <span>{formatDate(new Date(transaction.createdAt))}</span>
+                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
+                  <span className="text-earth-brown">{t("transactions.date")}</span>
+                  <span className="text-earth-dark-green">{formatDate(new Date(transaction.createdAt))}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Last Updated</span>
-                  <span>{formatDate(new Date(transaction.updatedAt))}</span>
-                </div>
-
-                <Separator />
-
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Commodity</span>
-                  <span>{transaction.commodityName}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Quantity</span>
-                  <span>{transaction.quantity.toLocaleString()} {transaction.unit}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Unit Price</span>
-                  <span>{formatCurrency(transaction.price)}/{transaction.unit}</span>
+                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
+                  <span className="text-earth-brown">Last Updated</span>
+                  <span className="text-earth-dark-green">{formatDate(new Date(transaction.updatedAt))}</span>
                 </div>
 
-                <Separator />
+                <Separator className="bg-earth-light-brown/30" />
 
-                <div className="flex justify-between items-center font-bold">
-                  <span>Total Amount</span>
-                  <span className="text-tani-green-dark">{formatCurrency(transaction.totalPrice)}</span>
+                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
+                  <span className="text-earth-brown">Commodity</span>
+                  <span className="text-earth-dark-green">{transaction.commodityName}</span>
+                </div>
+                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
+                  <span className="text-earth-brown">Quantity</span>
+                  <span className="text-earth-dark-green">{transaction.quantity.toLocaleString()} {transaction.unit}</span>
+                </div>
+                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
+                  <span className="text-earth-brown">Unit Price</span>
+                  <span className="text-earth-dark-green">{formatCurrency(transaction.price)}/{transaction.unit}</span>
+                </div>
+
+                <Separator className="bg-earth-light-brown/30" />
+
+                <div className="flex justify-between items-center p-3 rounded bg-earth-wheat/40 font-bold">
+                  <span className="text-earth-dark-green">Total Amount</span>
+                  <span className="text-earth-dark-green">{formatCurrency(transaction.totalPrice)}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Transaction Timeline</CardTitle>
+          <Card className="earth-card-clay overflow-hidden">
+            <CardHeader className="earth-header-clay pb-3">
+              <CardTitle className="text-white">Transaction Timeline</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-4">
               <div className="space-y-4">
                 {transaction.history.map((event: any, index: number) => (
                   <div key={index} className="flex">
                     <div className="mr-4 flex flex-col items-center">
-                      <div className="w-3 h-3 bg-tani-green-dark rounded-full"></div>
+                      <div className="w-4 h-4 bg-earth-brown rounded-full flex items-center justify-center">
+                        <div className="w-2 h-2 bg-earth-clay rounded-full"></div>
+                      </div>
                       {index < transaction.history.length - 1 && (
-                        <div className="w-0.5 bg-gray-200 h-full mt-1"></div>
+                        <div className="w-0.5 bg-earth-light-brown h-full mt-1"></div>
                       )}
                     </div>
                     <div className="pb-4">
                       <div className="flex flex-col">
-                        <p className="font-medium">{event.description}</p>
-                        <p className="text-sm text-gray-500">{formatDate(new Date(event.date))}</p>
+                        <p className="font-medium text-earth-dark-green">{event.description}</p>
+                        <p className="text-sm text-earth-brown">{formatDate(new Date(event.date))}</p>
                       </div>
                     </div>
                   </div>
@@ -495,21 +497,21 @@ const TransaksiDetail = () => {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Quick Actions</CardTitle>
+          <Card className="earth-card-wheat overflow-hidden">
+            <CardHeader className="earth-header-wheat pb-3">
+              <CardTitle className="text-white">Quick Actions</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-4">
               <div className="space-y-3">
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
                   <FileText className="h-4 w-4" />
                   View Invoice
                 </Button>
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
                   <ShoppingCart className="h-4 w-4" />
                   View Commodity
                 </Button>
-                <Button variant="outline" className="w-full justify-start gap-2">
+                <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
                   <PackageCheck className="h-4 w-4" />
                   Update Status
                 </Button>
