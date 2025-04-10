@@ -1,6 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { TransactionStatus } from "@/lib/data/types";
 
 interface TimelineEvent {
   date: Date;
@@ -10,23 +12,48 @@ interface TimelineEvent {
 
 interface TransactionTimelineProps {
   history: TimelineEvent[];
+  currentStatus: TransactionStatus;
 }
 
-export const TransactionTimeline = ({ history }: TransactionTimelineProps) => {
+export const TransactionTimeline = ({ history, currentStatus }: TransactionTimelineProps) => {
+  const { language } = useLanguage();
+  
   // Ensure we have a valid history array to work with
   const timelineEvents = Array.isArray(history) && history.length > 0 
     ? history 
     : [];
   
+  // The order of statuses for our timeline
+  const statusOrder = [
+    "menunggu_konfirmasi",
+    "dikonfirmasi",
+    "negosiasi",
+    "dibayar",
+    "persiapan_pengiriman",
+    "sedang_dikirim",
+    "sudah_dikirim",
+    "diterima",
+    "selesai"
+  ];
+  
+  // Find the current step index
+  const currentStepIndex = statusOrder.findIndex(
+    (step) => step === currentStatus
+  );
+  
   if (timelineEvents.length === 0) {
     return (
       <Card className="earth-card-clay overflow-hidden">
         <CardHeader className="earth-header-clay pb-3">
-          <CardTitle className="text-white">Transaction Timeline</CardTitle>
+          <CardTitle className="text-white">
+            {language === "id" ? "Linimasa Transaksi" : "Transaction Timeline"}
+          </CardTitle>
         </CardHeader>
         <CardContent className="mt-4">
           <div className="text-center py-4">
-            <p className="text-earth-brown">No timeline events available.</p>
+            <p className="text-earth-brown">
+              {language === "id" ? "Belum ada riwayat." : "No timeline events available."}
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -36,28 +63,64 @@ export const TransactionTimeline = ({ history }: TransactionTimelineProps) => {
   return (
     <Card className="earth-card-clay overflow-hidden">
       <CardHeader className="earth-header-clay pb-3">
-        <CardTitle className="text-white">Transaction Timeline</CardTitle>
+        <CardTitle className="text-white">
+          {language === "id" ? "Linimasa Transaksi" : "Transaction Timeline"}
+        </CardTitle>
       </CardHeader>
       <CardContent className="mt-4">
         <div className="space-y-4">
-          {timelineEvents.map((event, index) => (
-            <div key={index} className="flex">
-              <div className="mr-4 flex flex-col items-center">
-                <div className="w-4 h-4 bg-earth-brown rounded-full flex items-center justify-center">
-                  <div className="w-2 h-2 bg-earth-clay rounded-full"></div>
+          {timelineEvents.map((event, index) => {
+            // Check if this status is past, current, or future based on the current status
+            const eventStatusIndex = statusOrder.findIndex(status => status === event.status);
+            const isPast = eventStatusIndex < currentStepIndex;
+            const isCurrent = eventStatusIndex === currentStepIndex;
+            const isFuture = eventStatusIndex > currentStepIndex;
+            
+            // Determine colors based on status
+            const dotColorClass = isCurrent 
+              ? "bg-earth-medium-green" 
+              : isPast 
+                ? "bg-earth-dark-green" 
+                : "bg-gray-300";
+            
+            const lineColorClass = isPast 
+              ? "bg-earth-medium-green" 
+              : "bg-gray-200";
+            
+            const textColorClass = isFuture 
+              ? "text-gray-400" 
+              : "text-earth-dark-green";
+            
+            const dateColorClass = isFuture 
+              ? "text-gray-400" 
+              : "text-earth-brown";
+              
+            return (
+              <div key={index} className="flex">
+                <div className="mr-4 flex flex-col items-center">
+                  <div className={`w-4 h-4 ${dotColorClass} rounded-full flex items-center justify-center`}>
+                    {isCurrent && <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>}
+                  </div>
+                  {index < timelineEvents.length - 1 && (
+                    <div className={`w-0.5 ${lineColorClass} h-full mt-1`}></div>
+                  )}
                 </div>
-                {index < timelineEvents.length - 1 && (
-                  <div className="w-0.5 bg-earth-light-brown h-full mt-1"></div>
-                )}
-              </div>
-              <div className="pb-4">
-                <div className="flex flex-col">
-                  <p className="font-medium text-earth-dark-green">{event.description}</p>
-                  <p className="text-sm text-earth-brown">{formatDate(event.date)}</p>
+                <div className="pb-4">
+                  <div className="flex flex-col">
+                    <p className={`font-medium ${textColorClass}`}>
+                      {event.description}
+                      {isCurrent && (
+                        <span className="ml-2 inline-block px-2 py-0.5 text-xs bg-earth-wheat text-earth-brown rounded-full">
+                          {language === "id" ? "Saat ini" : "Current"}
+                        </span>
+                      )}
+                    </p>
+                    <p className={`text-sm ${dateColorClass}`}>{formatDate(event.date)}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </CardContent>
     </Card>

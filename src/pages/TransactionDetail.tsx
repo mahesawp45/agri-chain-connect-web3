@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -284,7 +283,7 @@ const TransactionDetail = () => {
             <h2 className="text-xl font-semibold text-earth-dark-green">
               {language === "id" ? "Detail Transaksi" : "Transaction Details"}
             </h2>
-            {/* Moved Transaction Guide button here for better accessibility */}
+            {/* Transaction Guide button for better accessibility */}
             <TransactionGuideDialog currentStep={transaction.status} />
           </div>
           
@@ -322,7 +321,10 @@ const TransactionDetail = () => {
           />
 
           <div className="mt-6">
-            <TransactionTimeline history={transaction.history} />
+            <TransactionTimeline 
+              history={transaction.history} 
+              currentStatus={transaction.status}
+            />
           </div>
         </div>
       </div>
