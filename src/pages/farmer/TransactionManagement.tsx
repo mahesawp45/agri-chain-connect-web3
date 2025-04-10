@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -769,3 +770,154 @@ const TransactionManagement = () => {
                               placeholder="Add any additional information about the pricing" 
                               disabled={transaction.status === "dibayar" || transaction.status === "persiapan_pengiriman" || transaction.status === "sedang_dikirim" || transaction.status === "selesai"} 
                             />
+                          </FormControl>
+                          <p className="text-xs text-earth-medium-green mt-1">
+                            Include any details about quality, delivery, or other factors that influence the price
+                          </p>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="flex justify-end">
+                      <Button
+                        type="submit"
+                        variant="farmer"
+                        className="gap-2"
+                        disabled={transaction.status === "dibayar" || transaction.status === "persiapan_pengiriman" || transaction.status === "sedang_dikirim" || transaction.status === "selesai"}
+                      >
+                        <DollarSign className="h-4 w-4" />
+                        Submit Price
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="terms" className="space-y-4">
+          <Card className="earth-card-forest overflow-hidden">
+            <CardHeader className="earth-header-forest pb-3">
+              <CardTitle className="text-white">Terms & Conditions</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-4">
+              <div className="space-y-6">
+                {transaction.termsDocUrl ? (
+                  <div className="border rounded-lg p-4 bg-earth-pale-green/30">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <FileCheck className="h-5 w-5 text-earth-dark-green" />
+                        <h3 className="font-medium text-earth-dark-green">Terms Document Available</h3>
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="gap-1 border-earth-medium-green text-earth-dark-green"
+                      >
+                        <CloudDownload className="h-4 w-4" />
+                        Download
+                      </Button>
+                    </div>
+                    
+                    <p className="text-sm text-earth-medium-green mb-2">
+                      Please review the terms and conditions document carefully before approving.
+                    </p>
+                    
+                    {transaction.signatureUrl ? (
+                      <div className="p-3 rounded bg-earth-light-green/20 mt-4">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-5 w-5 text-earth-dark-green" />
+                          <p className="font-medium text-earth-dark-green">Terms approved and signed</p>
+                        </div>
+                        <p className="text-sm text-earth-medium-green mt-1">
+                          You have already approved the terms and conditions for this transaction.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="mt-6 space-y-4 border-t pt-4">
+                        <h4 className="font-medium text-earth-dark-green">Upload Signature to Approve</h4>
+                        <p className="text-sm text-earth-medium-green">
+                          To approve the terms and conditions, please upload your signature below.
+                        </p>
+                        
+                        <div className="flex flex-col gap-4">
+                          <div className="p-4 border-2 border-dashed border-earth-light-brown rounded-lg text-center">
+                            <input
+                              type="file"
+                              id="signature-upload"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleSignatureUpload}
+                            />
+                            <label
+                              htmlFor="signature-upload"
+                              className="flex flex-col items-center justify-center cursor-pointer"
+                            >
+                              <Upload className="h-8 w-8 text-earth-medium-green mb-2" />
+                              <p className="font-medium text-earth-dark-green">Click to upload signature</p>
+                              <p className="text-xs text-earth-medium-green mt-1">
+                                JPG, PNG or PDF (max. 2MB)
+                              </p>
+                            </label>
+                          </div>
+                          
+                          {signature && (
+                            <div className="p-3 rounded bg-earth-light-green/20 flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <FileCheck className="h-5 w-5 text-earth-dark-green" />
+                                <p className="font-medium text-earth-dark-green">{signature.name}</p>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSignature(null)}
+                                className="h-8 w-8 p-0 text-earth-medium-green hover:text-red-500"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          )}
+                          
+                          <Button
+                            variant="farmer"
+                            className="gap-2 w-full sm:w-auto"
+                            onClick={handleApproveTerms}
+                            disabled={!signature}
+                          >
+                            <CheckCircle className="h-4 w-4" />
+                            Approve Terms & Conditions
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="border rounded-lg p-6 bg-earth-wheat/20 text-center">
+                    <div className="flex flex-col items-center gap-2 mb-4">
+                      <FileText className="h-12 w-12 text-earth-light-brown" />
+                      <h3 className="font-medium text-earth-dark-green">No Terms Document Yet</h3>
+                    </div>
+                    <p className="text-earth-medium-green max-w-md mx-auto mb-4">
+                      The buyer has not yet uploaded a terms and conditions document for this transaction.
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      onClick={handleStartWhatsAppChat}
+                      className="gap-2 border-earth-medium-green text-earth-dark-green"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Contact Buyer
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </MainLayout>
+  );
+};
+
+export default TransactionManagement;
