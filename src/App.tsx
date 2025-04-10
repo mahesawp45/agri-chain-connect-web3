@@ -33,6 +33,7 @@ import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
 // New farmer-specific pages
 import TransactionManagement from "./pages/farmer/TransactionManagement";
 import OrderBookApproval from "./pages/farmer/OrderBookApproval";
+import TransactionPriceSubmitted from "./pages/farmer/TransactionPriceSubmitted";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -82,6 +83,7 @@ const App = () => (
             
             {/* New farmer transaction management routes */}
             <Route path="/farmer/transaction/:id" element={<TransactionManagement />} />
+            <Route path="/farmer/transaction-price-submitted/:id" element={<TransactionPriceSubmitted />} />
             <Route path="/farmer/order-book/:id" element={<OrderBookApproval />} />
             
             {/* Buyer-specific routes */}

@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -20,6 +21,7 @@ export const PriceInputForm = ({
 }: PriceInputFormProps) => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [price, setPrice] = useState<string>(transaction.price?.toString() || "");
   const [submitting, setSubmitting] = useState(false);
 
@@ -62,6 +64,9 @@ export const PriceInputForm = ({
           ? "Harga telah dikirim ke pembeli" 
           : "Price has been submitted to the buyer",
       });
+      
+      // Redirect to the transaction price submitted page
+      navigate(`/farmer/transaction-price-submitted/${transaction.id}`);
     }, 800);
   };
 
