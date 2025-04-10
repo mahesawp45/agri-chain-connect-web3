@@ -68,6 +68,11 @@ export interface Transaction {
   termsDocUrl?: string;
   signatureUrl?: string;
   shippingStatus?: ShippingStatus;
+  // Add the new properties needed for buyer information
+  buyerLocation?: string;
+  buyerPhone?: string;
+  notes?: string;
+  history?: Array<{date: Date, status: TransactionStatus, description: string}>;
 }
 
 export interface OrderBook {

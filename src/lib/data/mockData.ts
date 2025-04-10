@@ -1,4 +1,3 @@
-
 import { Commodity, CommodityPrice, Transaction, OrderBook, User } from './types';
 
 // Generate a random ID
@@ -227,7 +226,10 @@ export const transactions: Transaction[] = [
     shippingStatus: 'belum_dikirim',
     buyerLocation: "Surabaya, Jawa Timur",
     buyerPhone: "+628123456789",
-    notes: "Membutuhkan padi organik untuk produksi beras premium."
+    notes: "Membutuhkan padi organik untuk produksi beras premium.",
+    history: [
+      { date: new Date('2025-04-05'), status: 'menunggu_konfirmasi', description: "Pesanan dibuat oleh pembeli" }
+    ]
   }
 ];
 
