@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { TransactionStatus } from "@/lib/data/types";
+import { Check } from "lucide-react";
 
 interface TimelineEvent {
   date: Date;
@@ -62,10 +63,14 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
     );
   }
   
+  // Special case for completed transactions
+  const isCompleted = currentStatus === "selesai";
+  
   return (
-    <Card className="earth-card-clay overflow-hidden">
-      <CardHeader className="earth-header-clay pb-3">
-        <CardTitle className="text-white">
+    <Card className={`${isCompleted ? "earth-card-wheat" : "earth-card-clay"} overflow-hidden`}>
+      <CardHeader className={`${isCompleted ? "earth-header-wheat" : "earth-header-clay"} pb-3`}>
+        <CardTitle className="text-white flex items-center">
+          {isCompleted && <Check className="mr-2 h-5 w-5" />}
           {language === "id" ? "Linimasa Transaksi" : "Transaction Timeline"}
         </CardTitle>
       </CardHeader>
@@ -91,7 +96,9 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
             
             const textColorClass = isFuture 
               ? "text-gray-400" 
-              : "text-earth-dark-green";
+              : isCompleted && isCurrent
+                ? "text-earth-dark-green font-bold"
+                : "text-earth-dark-green";
             
             const dateColorClass = isFuture 
               ? "text-gray-400" 
@@ -101,7 +108,11 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
               <div key={index} className="flex">
                 <div className="mr-4 flex flex-col items-center">
                   <div className={`w-4 h-4 ${dotColorClass} rounded-full flex items-center justify-center`}>
-                    {isCurrent && <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>}
+                    {isCurrent && (
+                      isCompleted 
+                        ? <Check className="h-3 w-3 text-white" />
+                        : <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    )}
                   </div>
                   {index < timelineEvents.length - 1 && (
                     <div className={`w-0.5 ${lineColorClass} h-full mt-1`}></div>
@@ -114,8 +125,14 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
                         {event.description}
                       </p>
                       {isCurrent && (
-                        <span className="ml-2 inline-block px-2 py-0.5 text-xs bg-earth-wheat text-earth-brown rounded-full">
-                          {language === "id" ? "Saat ini" : "Current"}
+                        <span className={`ml-2 inline-block px-2 py-0.5 text-xs ${
+                          isCompleted 
+                            ? "bg-earth-medium-green text-white" 
+                            : "bg-earth-wheat text-earth-brown"
+                        } rounded-full`}>
+                          {isCompleted 
+                            ? (language === "id" ? "Selesai" : "Completed") 
+                            : (language === "id" ? "Saat ini" : "Current")}
                         </span>
                       )}
                     </div>
