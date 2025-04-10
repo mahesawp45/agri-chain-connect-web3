@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -16,7 +17,7 @@ import { transactions } from "@/lib/data/mockData";  // Import directly from moc
 const TransactionDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [transaction, setTransaction] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,7 @@ const TransactionDetail = () => {
           {
             date: new Date(),
             status: "dikonfirmasi",
-            description: "Transaksi dikonfirmasi oleh penjual"
+            description: language === "id" ? "Transaksi dikonfirmasi oleh penjual" : "Transaction confirmed by seller"
           }
         ]
       };
@@ -74,8 +75,8 @@ const TransactionDetail = () => {
     });
     
     toast({
-      title: "Transaction confirmed",
-      description: "The transaction has been confirmed",
+      title: language === "id" ? "Transaksi dikonfirmasi" : "Transaction confirmed",
+      description: language === "id" ? "Transaksi telah dikonfirmasi" : "The transaction has been confirmed",
     });
   };
 
@@ -93,15 +94,15 @@ const TransactionDetail = () => {
           {
             date: new Date(),
             status: "dibatalkan",
-            description: "Transaksi ditolak oleh penjual"
+            description: language === "id" ? "Transaksi ditolak oleh penjual" : "Transaction declined by seller"
           }
         ]
       };
     });
     
     toast({
-      title: "Transaction declined",
-      description: "The transaction has been declined",
+      title: language === "id" ? "Transaksi ditolak" : "Transaction declined",
+      description: language === "id" ? "Transaksi telah ditolak" : "The transaction has been declined",
     });
   };
 
@@ -123,7 +124,9 @@ const TransactionDetail = () => {
           {
             date: new Date(),
             status: "negosiasi",
-            description: `Harga ditetapkan: Rp ${price.toLocaleString()}/${prev.unit}`
+            description: language === "id" 
+              ? `Harga ditetapkan: Rp ${price.toLocaleString()}/${prev.unit}` 
+              : `Price set: Rp ${price.toLocaleString()}/${prev.unit}`
           }
         ]
       };
@@ -145,7 +148,9 @@ const TransactionDetail = () => {
     if (!transaction) return;
     
     // Format WhatsApp message
-    const message = `Halo ${transaction.buyerName}, saya dari ${transaction.sellerName}. Mari bicarakan detail lebih lanjut tentang ${transaction.commodityName} yang Anda pesan. Terima kasih.`;
+    const message = language === "id"
+      ? `Halo ${transaction.buyerName}, saya dari ${transaction.sellerName}. Mari bicarakan detail lebih lanjut tentang ${transaction.commodityName} yang Anda pesan. Terima kasih.`
+      : `Hello ${transaction.buyerName}, I'm from ${transaction.sellerName}. Let's discuss the details of the ${transaction.commodityName} you ordered. Thank you.`;
     
     // Create WhatsApp URL with phone number and message
     const whatsappUrl = `https://wa.me/${transaction.buyerPhone.replace(/\+/g, '')}?text=${encodeURIComponent(message)}`;
@@ -172,12 +177,12 @@ const TransactionDetail = () => {
       <MainLayout>
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-2">{t("transactions.notfound")}</h2>
-          <p className="text-gray-600 mb-6">The requested transaction could not be found.</p>
+          <p className="text-gray-600 mb-6">{language === "id" ? "Transaksi yang diminta tidak dapat ditemukan." : "The requested transaction could not be found."}</p>
           <button 
             onClick={() => navigate('/transaksi')}
             className="bg-earth-dark-green text-white px-4 py-2 rounded hover:bg-earth-medium-green transition-colors"
           >
-            Back to Transactions
+            {language === "id" ? "Kembali ke Transaksi" : "Back to Transactions"}
           </button>
         </div>
       </MainLayout>
@@ -275,6 +280,14 @@ const TransactionDetail = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-earth-dark-green">
+              {language === "id" ? "Detail Transaksi" : "Transaction Details"}
+            </h2>
+            {/* Moved Transaction Guide button here for better accessibility */}
+            <TransactionGuideDialog currentStep={transaction.status} />
+          </div>
+          
           <TransactionInfo 
             transaction={transaction}
             handleProceedToNegotiation={handleProceedToNegotiation}
@@ -307,11 +320,6 @@ const TransactionDetail = () => {
             transaction={transaction}
             openWhatsAppChat={openWhatsAppChat}
           />
-
-          {/* Add Transaction Guide Dialog Button */}
-          <div className="flex justify-end mb-4">
-            <TransactionGuideDialog currentStep={transaction.status} />
-          </div>
 
           <div className="mt-6">
             <TransactionTimeline history={transaction.history} />
