@@ -23,6 +23,7 @@ import BlockchainVerification from "./pages/BlockchainVerification";
 
 // New buyer-specific pages
 import Market from "./pages/buyer/Market";
+import MarketDetail from "./pages/buyer/MarketDetail";
 import TransaksiPending from "./pages/buyer/TransaksiPending";
 import History from "./pages/buyer/History";
 
@@ -73,6 +74,7 @@ const App = () => (
             
             {/* Buyer-specific routes */}
             <Route path="/market" element={<Market />} />
+            <Route path="/market/:id" element={<MarketDetail />} />
             <Route path="/transaksi-pending" element={<TransaksiPending />} />
             <Route path="/history" element={<History />} />
             
