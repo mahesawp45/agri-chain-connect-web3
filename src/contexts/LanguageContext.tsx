@@ -408,6 +408,7 @@ export const translations: TranslationsType = {
     "action.details": "Detail",
     "action.showAll": "Tampilkan Semua",
     "action.showMore": "Tampilkan Lebih",
+    "action.print": "Cetak",
 
     // Navigation
     "nav.dashboard": "Dasbor",
@@ -488,6 +489,8 @@ export const translations: TranslationsType = {
     "transactions.regular": "Reguler",
     "transactions.list": "Daftar Transaksi",
     "transactions.print": "Cetak Transaksi",
+    "transactions.updatedAt": "Tanggal Diperbarui",
+    "transactions.summary": "Ringkasan Transaksi",
 
     // Order Book
     "orderbook.title": "Order Book",
@@ -726,6 +729,4 @@ export const translations: TranslationsType = {
     "flow.helpText": "Jika Anda membutuhkan bantuan pada langkah mana pun dalam proses ini, silakan hubungi tim dukungan kami melalui pusat bantuan atau WhatsApp.",
     
     "flow.pending.title": "1. Pesanan Diterima",
-    "flow.pending.description": "Pembeli telah melakukan pemesanan untuk komoditas Anda. Tinjau detail pesanan dan putuskan untuk menerima atau menolak.",
-    
-    "
+    "flow
