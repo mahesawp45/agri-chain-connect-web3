@@ -187,16 +187,16 @@ const TransaksiPage = () => {
             <div className="rounded-md border">
               {filteredTransactions.length > 0 ? (
                 <Table>
-                  <TableHeader className="bg-earth-dark-green">
+                  <TableHeader className="bg-earth-dark-green/50">
                     <TableRow>
-                      <TableHead>{t("transactions.id")}</TableHead>
-                      <TableHead>{t("transactions.buyer")}</TableHead>
-                      <TableHead>{t("transactions.commodity")}</TableHead>
-                      <TableHead>{t("transactions.quantity")}</TableHead>
-                      <TableHead>{t("transactions.status")}</TableHead>
-                      <TableHead>{t("transactions.date")}</TableHead>
-                      <TableHead className="text-right">{t("transactions.total")}</TableHead>
-                      <TableHead className="text-right">{t("action.details")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold">{t("transactions.id")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold">{t("transactions.buyer")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold">{t("transactions.commodity")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold">{t("transactions.quantity")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold">{t("transactions.status")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold">{t("transactions.date")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold text-right">{t("transactions.total")}</TableHead>
+                      <TableHead className="text-earth-dark-green font-semibold text-right">{t("action.details")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -207,7 +207,7 @@ const TransaksiPage = () => {
                         <TableCell>
                           {transaction.commodityName}
                           <div className="text-xs text-earth-medium-green mt-1">
-                            {transaction.type === "order_book" ? "Order Book" : "Regular"}
+                            {transaction.type === "order_book" ? "Order Book" : t("transactions.regular")}
                           </div>
                         </TableCell>
                         <TableCell>
