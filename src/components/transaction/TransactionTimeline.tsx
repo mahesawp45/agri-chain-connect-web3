@@ -6,11 +6,11 @@ import { TransactionStatus } from "@/lib/data/types";
 
 interface TimelineEvent {
   date: Date;
-  status: string;
+  status: TransactionStatus;
   description: string;
 }
 
-interface TransactionTimelineProps {
+export interface TransactionTimelineProps {
   history: TimelineEvent[];
   currentStatus: TransactionStatus;
 }
@@ -24,7 +24,7 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
     : [];
   
   // The order of statuses for our timeline
-  const statusOrder = [
+  const statusOrder: TransactionStatus[] = [
     "menunggu_konfirmasi",
     "dikonfirmasi",
     "negosiasi",
@@ -73,7 +73,7 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
             // Check if this status is past, current, or future based on the current status
             const eventStatusIndex = statusOrder.findIndex(status => status === event.status);
             const isPast = eventStatusIndex < currentStepIndex;
-            const isCurrent = eventStatusIndex === currentStepIndex;
+            const isCurrent = event.status === currentStatus;
             const isFuture = eventStatusIndex > currentStepIndex;
             
             // Determine colors based on status
@@ -107,14 +107,16 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
                 </div>
                 <div className="pb-4">
                   <div className="flex flex-col">
-                    <p className={`font-medium ${textColorClass}`}>
-                      {event.description}
+                    <div className="flex items-center">
+                      <p className={`font-medium ${textColorClass}`}>
+                        {event.description}
+                      </p>
                       {isCurrent && (
                         <span className="ml-2 inline-block px-2 py-0.5 text-xs bg-earth-wheat text-earth-brown rounded-full">
                           {language === "id" ? "Saat ini" : "Current"}
                         </span>
                       )}
-                    </p>
+                    </div>
                     <p className={`text-sm ${dateColorClass}`}>{formatDate(event.date)}</p>
                   </div>
                 </div>

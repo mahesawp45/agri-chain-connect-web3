@@ -21,7 +21,7 @@ export type TransactionStatus =
 
 export type TransactionType = 'regular' | 'order_book';
 
-export type ShippingStatus = 'belum_dikirim' | 'sedang_dikirim' | 'sudah_dikirim';
+export type ShippingStatus = 'belum_dikirim' | 'sedang_dikirim' | 'sudah_dikirim' | 'diterima';
 
 export interface Commodity {
   id: string;
@@ -73,6 +73,11 @@ export interface Transaction {
   buyerPhone?: string;
   notes?: string;
   history?: Array<{date: Date, status: TransactionStatus, description: string}>;
+  deliveryStartedAt?: Date;
+  estimatedDeliveryDate?: Date;
+  actualDeliveryDate?: Date;
+  courier?: string;
+  trackingNumber?: string;
 }
 
 export interface OrderBook {

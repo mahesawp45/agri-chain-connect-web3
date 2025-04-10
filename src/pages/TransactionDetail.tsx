@@ -15,8 +15,9 @@ import { PriceInputForm } from "@/components/transaction/PriceInputForm";
 import { transactions } from "@/lib/data/mockData";  // Import directly from mockData
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Package, Truck, FileText, ClipboardCheck, Calendar, MessageCircle } from "lucide-react";
+import { Package, Truck, FileText, ClipboardCheck, Calendar, MessageCircle, CheckCircle2, Camera, UploadCloud, BookCheck } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
+import { TransactionStatus, ShippingStatus } from "@/lib/data/types";
 
 const TransactionDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,8 @@ const TransactionDetail = () => {
   const [transaction, setTransaction] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [processingActive, setProcessingActive] = useState<string>("preparation"); // preparation, delivery, documents
+  const [trackingNumber, setTrackingNumber] = useState<string>("");
+  const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -195,16 +198,23 @@ const TransactionDetail = () => {
     setTransaction(prev => {
       if (!prev) return null;
       
+      const now = new Date();
+      // Calculate estimated delivery date (2 days from now)
+      const estimatedDate = new Date(now);
+      estimatedDate.setDate(estimatedDate.getDate() + 2);
+      
       return {
         ...prev,
-        status: "sedang_dikirim",
-        shippingStatus: "sedang_dikirim",
-        updatedAt: new Date(),
+        status: "sedang_dikirim" as TransactionStatus,
+        shippingStatus: "sedang_dikirim" as ShippingStatus,
+        deliveryStartedAt: now,
+        estimatedDeliveryDate: estimatedDate,
+        updatedAt: now,
         history: [
           ...prev.history,
           {
-            date: new Date(),
-            status: "sedang_dikirim",
+            date: now,
+            status: "sedang_dikirim" as TransactionStatus,
             description: language === "id" 
               ? "Komoditas sedang dalam pengiriman" 
               : "Commodity is being shipped"
@@ -220,19 +230,33 @@ const TransactionDetail = () => {
   };
 
   const handleCompleteDelivery = () => {
+    if (!uploadedPhoto && !trackingNumber) {
+      toast({
+        title: language === "id" ? "Informasi dibutuhkan" : "Information needed",
+        description: language === "id" 
+          ? "Harap unggah bukti pengiriman atau masukkan nomor pelacakan" 
+          : "Please upload delivery proof or enter tracking number",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setTransaction(prev => {
       if (!prev) return null;
       
+      const now = new Date();
       return {
         ...prev,
-        status: "sudah_dikirim",
-        shippingStatus: "sudah_dikirim",
-        updatedAt: new Date(),
+        status: "sudah_dikirim" as TransactionStatus,
+        shippingStatus: "sudah_dikirim" as ShippingStatus,
+        actualDeliveryDate: now,
+        trackingNumber: trackingNumber || prev.trackingNumber,
+        updatedAt: now,
         history: [
           ...prev.history,
           {
-            date: new Date(),
-            status: "sudah_dikirim",
+            date: now,
+            status: "sudah_dikirim" as TransactionStatus,
             description: language === "id" 
               ? "Komoditas telah dikirim" 
               : "Commodity has been delivered"
@@ -245,6 +269,20 @@ const TransactionDetail = () => {
       title: language === "id" ? "Pengiriman selesai" : "Delivery completed",
       description: language === "id" ? "Komoditas telah dikirim ke pembeli" : "The commodity has been delivered to the buyer",
     });
+    
+    // Reset form fields
+    setTrackingNumber("");
+    setUploadedPhoto(null);
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setUploadedPhoto(e.target.files[0]);
+      toast({
+        title: language === "id" ? "Foto diunggah" : "Photo uploaded",
+        description: language === "id" ? "Bukti pengiriman telah diunggah" : "Delivery proof has been uploaded",
+      });
+    }
   };
 
   if (loading) {
@@ -570,51 +608,146 @@ const TransactionDetail = () => {
                             {transaction.courier || "Pengiriman Sendiri"}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center mt-1">
-                          <span className="text-earth-brown">{language === "id" ? "Estimasi" : "Estimated"}:</span>
-                          <span className="text-earth-dark-green font-medium">
-                            {language === "id" ? "1-2 hari" : "1-2 days"}
-                          </span>
-                        </div>
+                        
+                        {transaction.status === "sedang_dikirim" && (
+                          <>
+                            <div className="flex justify-between items-center mt-1">
+                              <span className="text-earth-brown">{language === "id" ? "Tanggal Mulai" : "Start Date"}:</span>
+                              <span className="text-earth-dark-green font-medium">
+                                {transaction.deliveryStartedAt ? formatDate(transaction.deliveryStartedAt) : formatDate(new Date())}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center mt-1">
+                              <span className="text-earth-brown">{language === "id" ? "Estimasi Tiba" : "Est. Arrival"}:</span>
+                              <span className="text-earth-dark-green font-medium">
+                                {transaction.estimatedDeliveryDate ? formatDate(transaction.estimatedDeliveryDate) : language === "id" ? "1-2 hari" : "1-2 days"}
+                              </span>
+                            </div>
+                          </>
+                        )}
+                        
+                        {transaction.status === "sudah_dikirim" && (
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-earth-brown">{language === "id" ? "Tanggal Kirim" : "Delivery Date"}:</span>
+                            <span className="text-earth-dark-green font-medium">
+                              {transaction.actualDeliveryDate ? formatDate(transaction.actualDeliveryDate) : formatDate(new Date())}
+                            </span>
+                          </div>
+                        )}
+                        
+                        {transaction.trackingNumber && (
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-earth-brown">{language === "id" ? "No. Pelacakan" : "Tracking No."}:</span>
+                            <span className="text-earth-dark-green font-medium">
+                              {transaction.trackingNumber}
+                            </span>
+                          </div>
+                        )}
                       </div>
                       
-                      <p className="text-earth-medium-green mb-4">
-                        {language === "id" 
-                          ? "Pastikan komoditas dikemas dengan baik dan aman selama pengiriman. Hubungi pembeli untuk koordinasi waktu pengiriman."
-                          : "Ensure commodities are well-packaged and safe during delivery. Contact the buyer to coordinate delivery time."}
-                      </p>
+                      {transaction.status === "sedang_dikirim" && (
+                        <div className="space-y-4">
+                          <p className="text-earth-medium-green mb-2">
+                            {language === "id" 
+                              ? "Pastikan komoditas dikemas dengan baik dan aman selama pengiriman. Hubungi pembeli untuk koordinasi waktu pengiriman."
+                              : "Ensure commodities are well-packaged and safe during delivery. Contact the buyer to coordinate delivery time."}
+                          </p>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Delivery Proof Upload */}
+                            <div className="border border-dashed border-earth-light-brown p-4 rounded-lg">
+                              <div className="flex items-center mb-2">
+                                <Camera className="h-4 w-4 text-earth-brown mr-2" />
+                                <h4 className="font-medium text-earth-dark-green">{language === "id" ? "Bukti Pengiriman" : "Delivery Proof"}</h4>
+                              </div>
+                              
+                              <div className="text-center py-6">
+                                <input 
+                                  type="file" 
+                                  id="delivery-proof" 
+                                  className="hidden" 
+                                  onChange={handlePhotoUpload}
+                                  accept="image/*"
+                                />
+                                <label htmlFor="delivery-proof" className="cursor-pointer">
+                                  <UploadCloud className="h-10 w-10 text-earth-medium-green mx-auto mb-2" />
+                                  <p className="text-earth-medium-green">
+                                    {language === "id" ? "Unggah foto bukti pengiriman" : "Upload delivery proof photo"}
+                                  </p>
+                                </label>
+                                
+                                {uploadedPhoto && (
+                                  <div className="mt-2 text-earth-dark-green bg-earth-light-green/20 p-2 rounded-lg">
+                                    <CheckCircle2 className="h-4 w-4 inline-block mr-1" />
+                                    {uploadedPhoto.name}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            
+                            {/* Tracking Number */}
+                            <div className="border border-earth-light-brown p-4 rounded-lg">
+                              <div className="flex items-center mb-2">
+                                <BookCheck className="h-4 w-4 text-earth-brown mr-2" />
+                                <h4 className="font-medium text-earth-dark-green">{language === "id" ? "Nomor Pelacakan" : "Tracking Number"}</h4>
+                              </div>
+                              
+                              <input 
+                                type="text" 
+                                className="w-full p-2 border border-earth-light-brown/70 rounded-lg mb-2"
+                                placeholder={language === "id" ? "Masukkan nomor resi/pelacakan" : "Enter receipt/tracking number"}
+                                value={trackingNumber}
+                                onChange={(e) => setTrackingNumber(e.target.value)}
+                              />
+                              
+                              <p className="text-xs text-earth-medium-green">
+                                {language === "id" 
+                                  ? "Opsional: Isi jika menggunakan jasa kurir" 
+                                  : "Optional: Fill if using courier service"}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6">
+                            <Button 
+                              variant="farmer" 
+                              className="w-full"
+                              onClick={handleCompleteDelivery}
+                            >
+                              <CheckCircle2 className="h-4 w-4 mr-2" />
+                              {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                       
-                      <div className="mt-6">
-                        {(transaction.status === "persiapan_pengiriman") && (
+                      {transaction.status === "persiapan_pengiriman" && (
+                        <div className="mt-6">
+                          <p className="text-earth-medium-green mb-4">
+                            {language === "id" 
+                              ? "Pastikan komoditas sudah disiapkan dengan baik dan siap untuk dikirim ke pembeli."
+                              : "Make sure the commodity is well prepared and ready to be shipped to the buyer."}
+                          </p>
                           <Button 
                             variant="farmer" 
                             className="w-full"
                             onClick={handleStartDelivery}
                           >
+                            <Truck className="h-4 w-4 mr-2" />
                             {language === "id" ? "Mulai Pengiriman" : "Start Delivery"}
                           </Button>
-                        )}
-                        
-                        {transaction.status === "sedang_dikirim" && (
-                          <Button 
-                            variant="farmer" 
-                            className="w-full"
-                            onClick={handleCompleteDelivery}
-                          >
-                            {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
-                          </Button>
-                        )}
-                        
-                        {transaction.status === "sudah_dikirim" && (
-                          <div className="bg-earth-light-green/20 p-3 rounded-lg text-center">
-                            <p className="text-earth-dark-green font-medium">
-                              {language === "id" 
-                                ? "Pengiriman telah selesai. Menunggu konfirmasi penerimaan dari pembeli."
-                                : "Delivery completed. Waiting for receipt confirmation from buyer."}
-                            </p>
-                          </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
+                      
+                      {transaction.status === "sudah_dikirim" && (
+                        <div className="bg-earth-light-green/20 p-3 rounded-lg text-center">
+                          <p className="text-earth-dark-green font-medium">
+                            {language === "id" 
+                              ? "Pengiriman telah selesai. Menunggu konfirmasi penerimaan dari pembeli."
+                              : "Delivery completed. Waiting for receipt confirmation from buyer."}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
