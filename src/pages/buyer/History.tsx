@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 // Mock data for transaction history
 const mockRegularTransactions = [
   {
-    id: "1",
+    id: "TRX-2023-001",
     type: "Regular",
     status: "Selesai",
     statusEn: "Completed",
@@ -60,7 +60,7 @@ const mockRegularTransactions = [
 
 const mockOrderBookTransactions = [
   {
-    id: "4",
+    id: "TRX-2023-002",
     type: "Order Book",
     status: "Selesai",
     statusEn: "Completed",
@@ -97,13 +97,14 @@ const History = () => {
   const [activeTab, setActiveTab] = useState("all");
   
   const handleView = (id: string) => {
-    navigate(`/transaksi/${id}`);
+    // Update to use transaction/:id route for consistency
+    navigate(`/transaction/${id}`);
   };
   
   const handleUpdateShippingStatus = (id: string) => {
     // In a real application, this would update the shipping status
     console.log(`Updating shipping status for transaction ${id}`);
-    navigate(`/transaksi/${id}`);
+    navigate(`/transaction/${id}`);
   };
   
   const getStatusBadge = (status: string) => {

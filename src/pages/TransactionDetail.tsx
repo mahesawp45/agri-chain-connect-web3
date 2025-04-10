@@ -94,14 +94,18 @@ const TransactionDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API call with setTimeout
-    const timer = setTimeout(() => {
-      const found = transactionsData.find(item => item.id === id);
-      setTransaction(found || null);
-      setLoading(false);
-    }, 500);
+    const fetchData = async () => {
+      // For demo, use setTimeout to simulate API call
+      setTimeout(() => {
+        console.log("Fetching transaction with ID:", id);
+        const found = transactionsData.find(item => item.id === id);
+        console.log("Found transaction:", found);
+        setTransaction(found || null);
+        setLoading(false);
+      }, 500);
+    };
 
-    return () => clearTimeout(timer);
+    fetchData();
   }, [id]);
 
   const handleConfirmTransaction = () => {
@@ -109,7 +113,7 @@ const TransactionDetail = () => {
     setTransaction(prev => {
       if (!prev) return null;
       
-      return {
+      const updated = {
         ...prev,
         status: "dikonfirmasi",
         updatedAt: new Date(),
@@ -122,6 +126,9 @@ const TransactionDetail = () => {
           }
         ]
       };
+      
+      console.log("Transaction updated:", updated);
+      return updated;
     });
     
     toast({
@@ -162,6 +169,19 @@ const TransactionDetail = () => {
   const handleProceedToNegotiation = () => {
     // Redirect to the transaction management page where price can be set
     navigate(`/farmer/transaction/${id}`);
+  };
+
+  const openWhatsAppChat = () => {
+    if (!transaction) return;
+    
+    // Format WhatsApp message
+    const message = `Halo ${transaction.buyerName}, saya dari ${transaction.sellerName}. Mari bicarakan detail lebih lanjut tentang ${transaction.commodityName} yang Anda pesan. Terima kasih.`;
+    
+    // Create WhatsApp URL with phone number and message
+    const whatsappUrl = `https://wa.me/${transaction.buyerPhone.replace(/\+/g, '')}?text=${encodeURIComponent(message)}`;
+    
+    // Open WhatsApp in a new window
+    window.open(whatsappUrl, '_blank');
   };
 
   if (loading) {
@@ -412,16 +432,7 @@ const TransactionDetail = () => {
                           variant="outline" 
                           size="sm" 
                           className="mt-2 gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
-                          onClick={() => {
-                            // Format WhatsApp message
-                            const message = `Halo ${transaction.buyerName}, saya dari ${transaction.sellerName}. Mari bicarakan detail lebih lanjut tentang ${transaction.commodityName} yang Anda pesan. Terima kasih.`;
-                            
-                            // Create WhatsApp URL with phone number and message
-                            const whatsappUrl = `https://wa.me/${transaction.buyerPhone.replace(/\+/g, '')}?text=${encodeURIComponent(message)}`;
-                            
-                            // Open WhatsApp in a new window
-                            window.open(whatsappUrl, '_blank');
-                          }}
+                          onClick={openWhatsAppChat}
                         >
                           <MessageCircle className="h-3 w-3" />
                           Chat via WhatsApp
@@ -608,16 +619,7 @@ const TransactionDetail = () => {
                 <Button 
                   variant="outline" 
                   className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
-                  onClick={() => {
-                    // Format WhatsApp message
-                    const message = `Halo ${transaction.buyerName}, saya dari ${transaction.sellerName}. Mari bicarakan detail lebih lanjut tentang ${transaction.commodityName} yang Anda pesan. Terima kasih.`;
-                    
-                    // Create WhatsApp URL with phone number and message
-                    const whatsappUrl = `https://wa.me/${transaction.buyerPhone.replace(/\+/g, '')}?text=${encodeURIComponent(message)}`;
-                    
-                    // Open WhatsApp in a new window
-                    window.open(whatsappUrl, '_blank');
-                  }}
+                  onClick={openWhatsAppChat}
                 >
                   <MessageCircle className="h-4 w-4" />
                   Chat with Buyer
