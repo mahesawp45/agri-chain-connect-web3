@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -12,6 +13,10 @@ import { TransactionSummary } from "@/components/transaction/TransactionSummary"
 import { TransactionGuideDialog } from "@/components/transaction/TransactionGuideDialog";
 import { PriceInputForm } from "@/components/transaction/PriceInputForm";
 import { transactions } from "@/lib/data/mockData";  // Import directly from mockData
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Package, Truck, FileText, ClipboardCheck, Calendar, MessageCircle } from "lucide-react";
+import { formatDate, formatCurrency } from "@/lib/utils";
 
 const TransactionDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +25,7 @@ const TransactionDetail = () => {
   const { toast } = useToast();
   const [transaction, setTransaction] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [processingActive, setProcessingActive] = useState<string>("preparation"); // preparation, delivery, documents
 
   useEffect(() => {
     const fetchData = async () => {
@@ -158,6 +164,89 @@ const TransactionDetail = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleStartPreparation = () => {
+    setTransaction(prev => {
+      if (!prev) return null;
+      
+      return {
+        ...prev,
+        status: "persiapan_pengiriman",
+        updatedAt: new Date(),
+        history: [
+          ...prev.history,
+          {
+            date: new Date(),
+            status: "persiapan_pengiriman",
+            description: language === "id" 
+              ? "Mulai persiapan pengiriman" 
+              : "Started order preparation"
+          }
+        ]
+      };
+    });
+    
+    toast({
+      title: language === "id" ? "Persiapan dimulai" : "Preparation started",
+      description: language === "id" ? "Persiapan pengiriman telah dimulai" : "Order preparation has started",
+    });
+  };
+
+  const handleStartDelivery = () => {
+    setTransaction(prev => {
+      if (!prev) return null;
+      
+      return {
+        ...prev,
+        status: "sedang_dikirim",
+        shippingStatus: "sedang_dikirim",
+        updatedAt: new Date(),
+        history: [
+          ...prev.history,
+          {
+            date: new Date(),
+            status: "sedang_dikirim",
+            description: language === "id" 
+              ? "Komoditas sedang dalam pengiriman" 
+              : "Commodity is being shipped"
+          }
+        ]
+      };
+    });
+    
+    toast({
+      title: language === "id" ? "Pengiriman dimulai" : "Shipping started",
+      description: language === "id" ? "Komoditas sedang dalam pengiriman" : "The commodity is now being shipped",
+    });
+  };
+
+  const handleCompleteDelivery = () => {
+    setTransaction(prev => {
+      if (!prev) return null;
+      
+      return {
+        ...prev,
+        status: "sudah_dikirim",
+        shippingStatus: "sudah_dikirim",
+        updatedAt: new Date(),
+        history: [
+          ...prev.history,
+          {
+            date: new Date(),
+            status: "sudah_dikirim",
+            description: language === "id" 
+              ? "Komoditas telah dikirim" 
+              : "Commodity has been delivered"
+          }
+        ]
+      };
+    });
+    
+    toast({
+      title: language === "id" ? "Pengiriman selesai" : "Delivery completed",
+      description: language === "id" ? "Komoditas telah dikirim ke pembeli" : "The commodity has been delivered to the buyer",
+    });
+  };
+
   if (loading) {
     return (
       <MainLayout>
@@ -266,6 +355,9 @@ const TransactionDetail = () => {
 
   // Determine whether to show the price input form
   const shouldShowPriceInput = transaction?.status === "dikonfirmasi" || transaction?.status === "negosiasi";
+  
+  // Check if status is in processing stage
+  const isProcessingStage = ["dibayar", "persiapan_pengiriman", "sedang_dikirim", "sudah_dikirim"].includes(transaction?.status);
 
   return (
     <MainLayout>
@@ -310,6 +402,294 @@ const TransactionDetail = () => {
                 onPriceSubmit={handleSubmitPrice}
                 openWhatsAppChat={openWhatsAppChat}
               />
+            </div>
+          )}
+
+          {/* Processing Stage Cards */}
+          {isProcessingStage && (
+            <div className="space-y-6">
+              <div className="flex space-x-2 border-b pb-4">
+                <Button 
+                  variant={processingActive === "preparation" ? "farmer" : "outline"}
+                  onClick={() => setProcessingActive("preparation")}
+                  className="flex-1"
+                >
+                  <Package className="h-4 w-4 mr-2" />
+                  {language === "id" ? "Persiapan" : "Preparation"}
+                </Button>
+                <Button 
+                  variant={processingActive === "delivery" ? "farmer" : "outline"}
+                  onClick={() => setProcessingActive("delivery")}
+                  className="flex-1"
+                >
+                  <Truck className="h-4 w-4 mr-2" />
+                  {language === "id" ? "Pengiriman" : "Delivery"}
+                </Button>
+                <Button 
+                  variant={processingActive === "documents" ? "farmer" : "outline"}
+                  onClick={() => setProcessingActive("documents")}
+                  className="flex-1"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  {language === "id" ? "Dokumen" : "Documents"}
+                </Button>
+              </div>
+
+              {/* Preparation Card */}
+              {processingActive === "preparation" && (
+                <Card className="earth-card-wheat overflow-hidden">
+                  <CardHeader className="earth-header-wheat pb-3">
+                    <CardTitle className="text-white">
+                      {language === "id" ? "Persiapan Pengiriman" : "Order Preparation"}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 mt-2">
+                    <div className="p-4 bg-earth-wheat/30 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-3">
+                        <Package className="h-5 w-5 text-earth-brown" />
+                        <h3 className="font-medium text-earth-dark-green">
+                          {language === "id" ? "Persiapan Komoditas" : "Commodity Preparation"}
+                        </h3>
+                      </div>
+                      
+                      <p className="text-earth-medium-green mb-4">
+                        {language === "id" 
+                          ? `Siapkan ${transaction.quantity} ${transaction.unit} ${transaction.commodityName} sesuai dengan pesanan.`
+                          : `Prepare ${transaction.quantity} ${transaction.unit} of ${transaction.commodityName} as per order.`}
+                      </p>
+                      
+                      <div className="bg-earth-pale-green/40 p-3 rounded-lg mb-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-earth-brown">{language === "id" ? "Jumlah" : "Quantity"}:</span>
+                          <span className="text-earth-dark-green font-medium">
+                            {transaction.quantity.toLocaleString()} {transaction.unit}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-earth-brown">{language === "id" ? "Harga" : "Price"}:</span>
+                          <span className="text-earth-dark-green font-medium">
+                            {formatCurrency(transaction.price)} / {transaction.unit}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-earth-brown">{language === "id" ? "Total" : "Total"}:</span>
+                          <span className="text-earth-dark-green font-medium">
+                            {formatCurrency(transaction.totalPrice)}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="p-3 bg-earth-light-green/20 rounded-lg">
+                          <h4 className="font-medium text-earth-dark-green mb-1">
+                            {language === "id" ? "Checklist Persiapan" : "Preparation Checklist"}
+                          </h4>
+                          <ul className="space-y-2 text-sm">
+                            <li className="flex items-center text-earth-medium-green">
+                              <ClipboardCheck className="h-4 w-4 mr-2" />
+                              {language === "id" ? "Periksa kualitas komoditas" : "Check commodity quality"}
+                            </li>
+                            <li className="flex items-center text-earth-medium-green">
+                              <ClipboardCheck className="h-4 w-4 mr-2" />
+                              {language === "id" ? "Siapkan kemasan yang sesuai" : "Prepare appropriate packaging"}
+                            </li>
+                            <li className="flex items-center text-earth-medium-green">
+                              <ClipboardCheck className="h-4 w-4 mr-2" />
+                              {language === "id" ? "Pastikan jumlah sesuai pesanan" : "Ensure quantity matches order"}
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="p-3 bg-earth-light-green/10 rounded-lg">
+                          <h4 className="font-medium text-earth-dark-green mb-1">
+                            {language === "id" ? "Tenggat Waktu" : "Timeline"}
+                          </h4>
+                          <div className="flex items-center text-sm text-earth-medium-green mb-2">
+                            <Calendar className="h-4 w-4 mr-2" />
+                            {language === "id" ? "Siapkan dalam 3 hari" : "Prepare within 3 days"}
+                          </div>
+                          <div className="flex items-center text-sm text-earth-medium-green">
+                            <MessageCircle className="h-4 w-4 mr-2" />
+                            {language === "id" ? "Hubungi pembeli untuk konfirmasi" : "Contact buyer for confirmation"}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-6">
+                        {transaction.status === "dibayar" && (
+                          <Button 
+                            variant="farmer" 
+                            className="w-full"
+                            onClick={handleStartPreparation}
+                          >
+                            {language === "id" ? "Mulai Persiapan" : "Start Preparation"}
+                          </Button>
+                        )}
+                        
+                        {transaction.status === "persiapan_pengiriman" && (
+                          <Button 
+                            variant="farmer" 
+                            className="w-full"
+                            onClick={handleStartDelivery}
+                          >
+                            {language === "id" ? "Mulai Pengiriman" : "Start Delivery"}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Delivery Card */}
+              {processingActive === "delivery" && (
+                <Card className="earth-card-clay overflow-hidden">
+                  <CardHeader className="earth-header-clay pb-3">
+                    <CardTitle className="text-white">
+                      {language === "id" ? "Informasi Pengiriman" : "Delivery Information"}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 mt-2">
+                    <div className="p-4 bg-earth-clay/20 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-3">
+                        <Truck className="h-5 w-5 text-earth-brown" />
+                        <h3 className="font-medium text-earth-dark-green">
+                          {language === "id" ? "Status Pengiriman" : "Delivery Status"}
+                        </h3>
+                      </div>
+                      
+                      <div className="bg-earth-wheat/30 p-3 rounded-lg mb-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-earth-brown">{language === "id" ? "Alamat" : "Address"}:</span>
+                          <span className="text-earth-dark-green font-medium">
+                            {transaction.buyerLocation || "Jakarta Utara, DKI Jakarta"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-earth-brown">{language === "id" ? "Kurir" : "Courier"}:</span>
+                          <span className="text-earth-dark-green font-medium">
+                            {transaction.courier || "Pengiriman Sendiri"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-earth-brown">{language === "id" ? "Estimasi" : "Estimated"}:</span>
+                          <span className="text-earth-dark-green font-medium">
+                            {language === "id" ? "1-2 hari" : "1-2 days"}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <p className="text-earth-medium-green mb-4">
+                        {language === "id" 
+                          ? "Pastikan komoditas dikemas dengan baik dan aman selama pengiriman. Hubungi pembeli untuk koordinasi waktu pengiriman."
+                          : "Ensure commodities are well-packaged and safe during delivery. Contact the buyer to coordinate delivery time."}
+                      </p>
+                      
+                      <div className="mt-6">
+                        {(transaction.status === "persiapan_pengiriman") && (
+                          <Button 
+                            variant="farmer" 
+                            className="w-full"
+                            onClick={handleStartDelivery}
+                          >
+                            {language === "id" ? "Mulai Pengiriman" : "Start Delivery"}
+                          </Button>
+                        )}
+                        
+                        {transaction.status === "sedang_dikirim" && (
+                          <Button 
+                            variant="farmer" 
+                            className="w-full"
+                            onClick={handleCompleteDelivery}
+                          >
+                            {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                          </Button>
+                        )}
+                        
+                        {transaction.status === "sudah_dikirim" && (
+                          <div className="bg-earth-light-green/20 p-3 rounded-lg text-center">
+                            <p className="text-earth-dark-green font-medium">
+                              {language === "id" 
+                                ? "Pengiriman telah selesai. Menunggu konfirmasi penerimaan dari pembeli."
+                                : "Delivery completed. Waiting for receipt confirmation from buyer."}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Documents Card */}
+              {processingActive === "documents" && (
+                <Card className="earth-card-forest overflow-hidden">
+                  <CardHeader className="earth-header-forest pb-3">
+                    <CardTitle className="text-white">
+                      {language === "id" ? "Dokumen Transaksi" : "Transaction Documents"}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 mt-2">
+                    <div className="p-4 bg-earth-pale-green/30 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-3">
+                        <FileText className="h-5 w-5 text-earth-dark-green" />
+                        <h3 className="font-medium text-earth-dark-green">
+                          {language === "id" ? "Dokumen Penting" : "Important Documents"}
+                        </h3>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div className="bg-white p-3 rounded-lg border border-earth-light-green">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <FileText className="h-5 w-5 text-earth-dark-green mr-2" />
+                              <span className="text-earth-dark-green font-medium">
+                                {language === "id" ? "Syarat & Ketentuan" : "Terms & Conditions"}
+                              </span>
+                            </div>
+                            <Button variant="outline" size="sm" className="border-earth-light-green text-earth-dark-green">
+                              {language === "id" ? "Lihat" : "View"}
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-white p-3 rounded-lg border border-earth-light-green">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <FileText className="h-5 w-5 text-earth-dark-green mr-2" />
+                              <span className="text-earth-dark-green font-medium">
+                                {language === "id" ? "Invoice Transaksi" : "Transaction Invoice"}
+                              </span>
+                            </div>
+                            <Button variant="outline" size="sm" className="border-earth-light-green text-earth-dark-green">
+                              {language === "id" ? "Unduh" : "Download"}
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-white p-3 rounded-lg border border-earth-light-green">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <FileText className="h-5 w-5 text-earth-dark-green mr-2" />
+                              <span className="text-earth-dark-green font-medium">
+                                {language === "id" ? "Tanda Terima" : "Receipt"}
+                              </span>
+                            </div>
+                            <Button variant="outline" size="sm" className="border-earth-light-green text-earth-dark-green">
+                              {language === "id" ? "Cetak" : "Print"}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-earth-medium-green mt-4">
+                        {language === "id" 
+                          ? "Semua dokumen transaksi dapat diakses dan diunduh dari halaman ini untuk referensi Anda."
+                          : "All transaction documents can be accessed and downloaded from this page for your reference."}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </div>
