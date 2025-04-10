@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -429,7 +428,10 @@ const TransactionPriceSubmitted = () => {
           />
 
           <div className="mt-6">
-            <TransactionTimeline history={transaction.history} />
+            <TransactionTimeline 
+              history={transaction.history} 
+              currentStatus={transaction.status} 
+            />
           </div>
         </div>
       </div>
