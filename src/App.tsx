@@ -20,6 +20,7 @@ import Pengiriman from "./pages/Pengiriman";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import BlockchainVerification from "./pages/BlockchainVerification";
+import TransactionDetail from "./pages/TransactionDetail";
 
 // New buyer-specific pages
 import Market from "./pages/buyer/Market";
@@ -77,6 +78,7 @@ const App = () => (
             <Route path="/pengiriman" element={<Pengiriman />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/blockchain/:type/:id" element={<BlockchainVerification />} />
+            <Route path="/transaction/:id" element={<TransactionDetail />} />
             
             {/* New farmer transaction management routes */}
             <Route path="/farmer/transaction/:id" element={<TransactionManagement />} />
