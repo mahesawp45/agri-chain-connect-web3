@@ -13,7 +13,12 @@ interface TransactionTimelineProps {
 }
 
 export const TransactionTimeline = ({ history }: TransactionTimelineProps) => {
-  if (!history || history.length === 0) {
+  // Ensure we have a valid history array to work with
+  const timelineEvents = Array.isArray(history) && history.length > 0 
+    ? history 
+    : [];
+  
+  if (timelineEvents.length === 0) {
     return (
       <Card className="earth-card-clay overflow-hidden">
         <CardHeader className="earth-header-clay pb-3">
@@ -35,13 +40,13 @@ export const TransactionTimeline = ({ history }: TransactionTimelineProps) => {
       </CardHeader>
       <CardContent className="mt-4">
         <div className="space-y-4">
-          {history.map((event, index) => (
+          {timelineEvents.map((event, index) => (
             <div key={index} className="flex">
               <div className="mr-4 flex flex-col items-center">
                 <div className="w-4 h-4 bg-earth-brown rounded-full flex items-center justify-center">
                   <div className="w-2 h-2 bg-earth-clay rounded-full"></div>
                 </div>
-                {index < history.length - 1 && (
+                {index < timelineEvents.length - 1 && (
                   <div className="w-0.5 bg-earth-light-brown h-full mt-1"></div>
                 )}
               </div>

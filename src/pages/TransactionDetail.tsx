@@ -94,6 +94,33 @@ const transactionsData = [
       { date: new Date("2023-12-03T10:30:00Z"), status: "dibayar", description: "Pembayaran diterima" },
       { date: new Date("2023-12-12T09:15:00Z"), status: "selesai", description: "Transaksi selesai" }
     ]
+  },
+  // Added a transaction with ID TRX-2023-005 for the specific route
+  {
+    id: "TRX-2023-005",
+    type: "regular",
+    commodityId: "KM005",
+    commodityName: "Padi Organik",
+    quantity: 2000,
+    unit: "kg",
+    price: null, // Not yet set
+    totalPrice: null, // Not yet set
+    status: "menunggu_konfirmasi",
+    buyerId: "BUY-005",
+    buyerName: "PT Beras Sejahtera",
+    sellerId: "SEL-001",
+    sellerName: "Koperasi Tani Makmur",
+    createdAt: new Date("2023-12-15T11:15:00Z"),
+    updatedAt: new Date("2023-12-15T11:15:00Z"),
+    termsDocUrl: null,
+    signatureUrl: null,
+    shippingStatus: null,
+    buyerLocation: "Surabaya, Jawa Timur",
+    buyerPhone: "+628123456789",
+    notes: "Membutuhkan padi organik untuk produksi beras premium.",
+    history: [
+      { date: new Date("2023-12-15T11:15:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dibuat oleh pembeli" }
+    ]
   }
 ];
 
