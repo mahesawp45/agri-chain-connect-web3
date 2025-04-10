@@ -26,6 +26,8 @@ import Market from "./pages/buyer/Market";
 import MarketDetail from "./pages/buyer/MarketDetail";
 import TransaksiPending from "./pages/buyer/TransaksiPending";
 import History from "./pages/buyer/History";
+import BuyTransaction from "./pages/buyer/BuyTransaction";
+import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -75,6 +77,8 @@ const App = () => (
             {/* Buyer-specific routes */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/:id" element={<MarketDetail />} />
+            <Route path="/buy/:id" element={<BuyTransaction />} />
+            <Route path="/transaction-nego/:id" element={<TransactionNegotiation />} />
             <Route path="/transaksi-pending" element={<TransaksiPending />} />
             <Route path="/history" element={<History />} />
             

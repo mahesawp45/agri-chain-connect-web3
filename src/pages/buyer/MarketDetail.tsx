@@ -164,9 +164,8 @@ const MarketDetail = () => {
   }
   
   const handleBuy = () => {
-    // In a real application, this would initiate the purchase process
-    // For demo purposes, navigate to transaction detail
-    navigate(`/transaksi/${commodity.id}`);
+    // Navigate to buy transaction page
+    navigate(`/buy/${commodity.id}`);
   };
   
   return (

@@ -78,9 +78,8 @@ const Market = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   const handleBuy = (commodityId: string) => {
-    // In a real application, this would initiate the purchase process
-    // For demo purposes, navigate to transaction detail
-    navigate(`/transaksi/${commodityId}`);
+    // Navigate to the buy transaction page
+    navigate(`/buy/${commodityId}`);
   };
   
   const handleViewDetails = (commodityId: string) => {
