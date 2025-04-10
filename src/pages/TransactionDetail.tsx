@@ -8,7 +8,18 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, FileText, MessageCircle, CheckCircle, FileCheck, Timer, Upload, Truck, Camera, Check } from "lucide-react";
+import { 
+  ArrowLeft, 
+  FileText, 
+  MessageCircle, 
+  CheckCircle, 
+  FileCheck, 
+  Timer, 
+  Upload, 
+  Truck, 
+  Camera, 
+  Check 
+} from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { transactions } from "@/lib/data/mockData";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
@@ -752,7 +763,3 @@ const TransactionDetail = () => {
                         placeholder={language === "id" ? "Masukkan nomor resi/pelacakan" : "Enter receipt/tracking number"}
                         value={trackingNumber}
                         onChange={(e) => setTrackingNumber(e.target.value)}
-                      />
-                      
-                      <p className="text-xs text-earth-medium-green">
-                        {language === "id"
