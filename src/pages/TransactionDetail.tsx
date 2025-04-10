@@ -195,33 +195,38 @@ const TransactionDetail = () => {
   };
 
   const handleStartDelivery = () => {
-    setTransaction(prev => {
-      if (!prev) return null;
-      
-      const now = new Date();
-      // Calculate estimated delivery date (2 days from now)
-      const estimatedDate = new Date(now);
-      estimatedDate.setDate(estimatedDate.getDate() + 2);
-      
-      return {
-        ...prev,
-        status: "sedang_dikirim" as TransactionStatus,
-        shippingStatus: "sedang_dikirim" as ShippingStatus,
-        deliveryStartedAt: now,
-        estimatedDeliveryDate: estimatedDate,
-        updatedAt: now,
-        history: [
-          ...prev.history,
-          {
-            date: now,
-            status: "sedang_dikirim" as TransactionStatus,
-            description: language === "id" 
-              ? "Komoditas sedang dalam pengiriman" 
-              : "Commodity is being shipped"
-          }
-        ]
-      };
-    });
+    console.log("handleStartDelivery called in TransactionDetail, current transaction:", transaction);
+    
+    // Create a new transaction object with updated status
+    const now = new Date();
+    // Calculate estimated delivery date (2 days from now)
+    const estimatedDate = new Date(now);
+    estimatedDate.setDate(estimatedDate.getDate() + 2);
+    
+    const updatedTransaction = {
+      ...transaction,
+      status: "sedang_dikirim" as TransactionStatus,
+      shippingStatus: "sedang_dikirim" as ShippingStatus,
+      deliveryStartedAt: now,
+      estimatedDeliveryDate: estimatedDate,
+      updatedAt: now,
+      history: [
+        ...(transaction?.history || []),
+        {
+          date: now,
+          status: "sedang_dikirim" as TransactionStatus,
+          description: language === "id" 
+            ? "Komoditas sedang dalam pengiriman" 
+            : "Commodity is being shipped"
+        }
+      ]
+    };
+    
+    console.log("Transaction updated to:", updatedTransaction);
+    setTransaction(updatedTransaction);
+    
+    // Switch to delivery tab to show shipping interface
+    setProcessingActive("delivery");
     
     toast({
       title: language === "id" ? "Pengiriman dimulai" : "Shipping started",
