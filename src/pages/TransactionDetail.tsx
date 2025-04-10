@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -95,7 +94,6 @@ const transactionsData = [
       { date: new Date("2023-12-12T09:15:00Z"), status: "selesai", description: "Transaksi selesai" }
     ]
   },
-  // Added a transaction with ID TRX-2023-005 for the specific route
   {
     id: "TRX-2023-005",
     type: "regular",
