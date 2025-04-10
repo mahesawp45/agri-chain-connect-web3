@@ -29,6 +29,10 @@ import History from "./pages/buyer/History";
 import BuyTransaction from "./pages/buyer/BuyTransaction";
 import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
 
+// New farmer-specific pages
+import TransactionManagement from "./pages/farmer/TransactionManagement";
+import OrderBookApproval from "./pages/farmer/OrderBookApproval";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -73,6 +77,10 @@ const App = () => (
             <Route path="/pengiriman" element={<Pengiriman />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/blockchain/:type/:id" element={<BlockchainVerification />} />
+            
+            {/* New farmer transaction management routes */}
+            <Route path="/farmer/transaction/:id" element={<TransactionManagement />} />
+            <Route path="/farmer/order-book/:id" element={<OrderBookApproval />} />
             
             {/* Buyer-specific routes */}
             <Route path="/market" element={<Market />} />
