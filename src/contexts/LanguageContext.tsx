@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define available languages
@@ -729,4 +730,80 @@ export const translations: TranslationsType = {
     "flow.helpText": "Jika Anda membutuhkan bantuan pada langkah mana pun dalam proses ini, silakan hubungi tim dukungan kami melalui pusat bantuan atau WhatsApp.",
     
     "flow.pending.title": "1. Pesanan Diterima",
-    "flow
+    "flow.pending.description": "Pembeli telah melakukan pemesanan untuk komoditas Anda. Tinjau detail pesanan dan putuskan untuk menerima atau menolak.",
+    
+    "flow.confirmed.title": "2. Pesanan Dikonfirmasi",
+    "flow.confirmed.description": "Anda telah mengkonfirmasi pesanan. Pembeli telah diberi tahu dan menunggu informasi lebih lanjut.",
+    
+    "flow.negotiating.title": "3. Negosiasi Harga",
+    "flow.negotiating.description": "Diskusikan dan negosiasikan syarat harga dengan pembeli hingga kedua belah pihak puas.",
+    
+    "flow.paid.title": "4. Pembayaran Diterima",
+    "flow.paid.description": "Pembeli telah melakukan pembayaran untuk pesanan. Anda sekarang dapat melanjutkan dengan persiapan pengiriman.",
+    
+    "flow.processing.title": "5. Persiapan Pengiriman",
+    "flow.processing.description": "Siapkan komoditas yang dipesan untuk pengiriman. Pastikan pengemasan dan dokumentasi yang tepat.",
+    
+    "flow.shipping.title": "6. Pengiriman dalam Perjalanan",
+    "flow.shipping.description": "Komoditas sedang dalam perjalanan ke pembeli. Informasi pelacakan telah diberikan kepada pembeli.",
+    
+    "flow.shipped.title": "7. Pengiriman Terkirim",
+    "flow.shipped.description": "Pengiriman telah sampai di alamat yang ditentukan pembeli.",
+    
+    "flow.received.title": "8. Pesanan Diterima",
+    "flow.received.description": "Pembeli telah mengkonfirmasi penerimaan komoditas dan sedang memeriksa barang.",
+    
+    "flow.completed.title": "9. Transaksi Selesai",
+    "flow.completed.description": "Transaksi telah berhasil diselesaikan. Dana telah dilepaskan ke akun Anda."
+  }
+};
+
+// Create the language context
+type LanguageContextType = {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
+};
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Language provider component
+export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState<Language>('id');
+
+  // Load saved language preference from localStorage on initialization
+  useEffect(() => {
+    const savedLang = localStorage.getItem('language') as Language;
+    if (savedLang && (savedLang === 'id' || savedLang === 'en')) {
+      setLanguage(savedLang);
+    }
+  }, []);
+
+  // Save language preference to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  // Translation function
+  const t = (key: string): string => {
+    if (translations[language][key]) {
+      return translations[language][key];
+    }
+    return key; // Fallback: return the key itself if translation not found
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+// Custom hook for using the language context
+export const useLanguage = (): LanguageContextType => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
