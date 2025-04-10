@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -800,4 +801,139 @@ const TransactionDetail = () => {
                   </div>
                   
                   <Button 
-                    variant="farmer
+                    variant="farmer"
+                    className="w-full"
+                    onClick={handleCompleteDelivery}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {/* Add any additional status cards that were previously missing */}
+          {(transaction?.status === "sudah_dikirim" || transaction?.status === "diterima" || transaction?.status === "selesai") && (
+            <Card className="earth-card-clay overflow-hidden">
+              <CardHeader className="earth-header-clay pb-3">
+                <CardTitle className="text-white">
+                  {language === "id" ? "Status Pengiriman" : "Delivery Status"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 mt-2">
+                <div className="p-4 bg-earth-clay/20 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <CheckCircle className="h-5 w-5 text-earth-dark-green" />
+                    <h3 className="font-medium text-earth-dark-green">
+                      {transaction?.status === "sudah_dikirim" 
+                        ? (language === "id" ? "Komoditas Telah Dikirim" : "Commodity Has Been Delivered") 
+                        : transaction?.status === "diterima"
+                          ? (language === "id" ? "Komoditas Telah Diterima" : "Commodity Has Been Received")
+                          : (language === "id" ? "Transaksi Selesai" : "Transaction Completed")}
+                    </h3>
+                  </div>
+                  
+                  <div className="bg-earth-wheat/30 p-3 rounded-lg mb-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-earth-brown">{language === "id" ? "Alamat" : "Address"}:</span>
+                      <span className="text-earth-dark-green font-medium">
+                        {transaction.buyerLocation || "Jakarta Utara, DKI Jakarta"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-earth-brown">{language === "id" ? "Tanggal Pengiriman" : "Delivery Date"}:</span>
+                      <span className="text-earth-dark-green font-medium">
+                        {transaction.actualDeliveryDate ? formatDate(transaction.actualDeliveryDate) : formatDate(new Date())}
+                      </span>
+                    </div>
+                    {transaction.trackingNumber && (
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-earth-brown">{language === "id" ? "Nomor Pelacakan" : "Tracking Number"}:</span>
+                        <span className="text-earth-dark-green font-medium">
+                          {transaction.trackingNumber}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <p className="text-earth-medium-green mb-4">
+                    {transaction?.status === "sudah_dikirim" 
+                      ? (language === "id" 
+                          ? "Komoditas telah dikirim ke pembeli. Menunggu konfirmasi penerimaan dari pembeli." 
+                          : "The commodity has been delivered to the buyer. Waiting for the buyer's confirmation of receipt.")
+                      : transaction?.status === "diterima"
+                        ? (language === "id" 
+                            ? "Pembeli telah mengkonfirmasi penerimaan komoditas. Transaksi hampir selesai." 
+                            : "The buyer has confirmed receipt of the commodity. Transaction is almost complete.")
+                        : (language === "id" 
+                            ? "Transaksi telah selesai. Terima kasih telah menggunakan TaniTrack!" 
+                            : "Transaction has been completed. Thank you for using TaniTrack!")}
+                  </p>
+                  
+                  {transaction?.status === "diterima" && (
+                    <Button 
+                      variant="farmer"
+                      className="w-full"
+                      onClick={() => {
+                        setTransaction(prev => {
+                          if (!prev) return null;
+                          return {
+                            ...prev, 
+                            status: "selesai" as TransactionStatus,
+                            updatedAt: new Date(),
+                            history: [
+                              ...(prev.history || []),
+                              {
+                                date: new Date(),
+                                status: "selesai" as TransactionStatus,
+                                description: language === "id" 
+                                  ? "Transaksi selesai" 
+                                  : "Transaction completed"
+                              }
+                            ]
+                          };
+                        });
+                        
+                        toast({
+                          title: language === "id" ? "Transaksi Selesai" : "Transaction Completed",
+                          description: language === "id" 
+                            ? "Transaksi telah selesai dengan sukses" 
+                            : "Transaction has been successfully completed",
+                        });
+                      }}
+                    >
+                      <Check className="h-4 w-4 mr-2" />
+                      {language === "id" ? "Selesaikan Transaksi" : "Complete Transaction"}
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+        
+        {/* Right sidebar */}
+        <div className="space-y-6">
+          <TransactionSummary 
+            transaction={transaction} 
+            openWhatsAppChat={handleStartWhatsAppChat} 
+          />
+          
+          <TransactionTimeline 
+            history={transaction.history || []} 
+            currentStatus={transaction.status} 
+          />
+          
+          <TransactionQRCode 
+            transactionId={transaction.id}
+            status={transaction.status}
+            timestamp={transaction.updatedAt || transaction.createdAt}
+          />
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default TransactionDetail;
