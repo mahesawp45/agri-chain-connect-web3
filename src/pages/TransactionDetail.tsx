@@ -10,6 +10,7 @@ import { StatusCard } from "@/components/transaction/StatusCard";
 import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
 import { TransactionGuideDialog } from "@/components/transaction/TransactionGuideDialog";
+import { PriceInputForm } from "@/components/transaction/PriceInputForm";
 import { transactions } from "@/lib/data/mockData";  // Import directly from mockData
 
 const TransactionDetail = () => {
@@ -76,9 +77,6 @@ const TransactionDetail = () => {
       title: "Transaction confirmed",
       description: "The transaction has been confirmed",
     });
-
-    // Redirect to the transaction management page where price can be set
-    navigate(`/farmer/transaction/${id}`);
   };
 
   const handleDeclineTransaction = () => {
@@ -107,9 +105,40 @@ const TransactionDetail = () => {
     });
   };
 
+  const handleSubmitPrice = (price: number) => {
+    // In a real app, this would be an API call
+    setTransaction(prev => {
+      if (!prev) return null;
+      
+      const totalPrice = price * prev.quantity;
+      
+      return {
+        ...prev,
+        status: "negosiasi",
+        price: price,
+        totalPrice: totalPrice,
+        updatedAt: new Date(),
+        history: [
+          ...prev.history,
+          {
+            date: new Date(),
+            status: "negosiasi",
+            description: `Harga ditetapkan: Rp ${price.toLocaleString()}/${prev.unit}`
+          }
+        ]
+      };
+    });
+  };
+
   const handleProceedToNegotiation = () => {
-    // Redirect to the transaction management page where price can be set
-    navigate(`/farmer/transaction/${id}`);
+    // Scroll to the price input form if on the same page
+    const priceFormElement = document.getElementById('price-input-form');
+    if (priceFormElement) {
+      priceFormElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // Redirect to the transaction management page where price can be set
+      navigate(`/farmer/transaction/${id}`);
+    }
   };
 
   const openWhatsAppChat = () => {
@@ -231,6 +260,9 @@ const TransactionDetail = () => {
     return ((currentIndex + 1) / statusOrder.length) * 100;
   };
 
+  // Determine whether to show the price input form
+  const shouldShowPriceInput = transaction?.status === "dikonfirmasi" || transaction?.status === "negosiasi";
+
   return (
     <MainLayout>
       <TransactionHeader 
@@ -257,6 +289,16 @@ const TransactionDetail = () => {
               onDeclineTransaction={handleDeclineTransaction}
               onProceedToNegotiation={handleProceedToNegotiation}
             />
+          )}
+
+          {shouldShowPriceInput && (
+            <div id="price-input-form">
+              <PriceInputForm 
+                transaction={transaction}
+                onPriceSubmit={handleSubmitPrice}
+                openWhatsAppChat={openWhatsAppChat}
+              />
+            </div>
           )}
         </div>
 

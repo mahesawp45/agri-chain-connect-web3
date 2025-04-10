@@ -21,7 +21,43 @@ export const TransactionInfo = ({
   getStatusBadge,
   calculateProgress,
 }: TransactionInfoProps) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const renderPriceSection = () => {
+    if (transaction.price) {
+      return (
+        <>
+          <p className="text-xl font-bold text-earth-dark-green">
+            {formatCurrency(transaction.totalPrice)}
+          </p>
+          <p className="text-sm text-earth-medium-green">
+            @{formatCurrency(transaction.price)}/{transaction.unit}
+          </p>
+        </>
+      );
+    }
+    
+    const isPriceSettingPhase = transaction.status === "dikonfirmasi" || transaction.status === "negosiasi";
+    
+    return (
+      <div className="flex items-center justify-between">
+        <p className="text-earth-medium-green italic">
+          {language === "id" ? "Harga belum ditetapkan" : "Price not set yet"}
+        </p>
+        {transaction.status === "dikonfirmasi" && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleProceedToNegotiation}
+            className="gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
+          >
+            <DollarSign className="h-3 w-3" />
+            {language === "id" ? "Tetapkan Harga" : "Set Price"}
+          </Button>
+        )}
+      </div>
+    );
+  };
 
   return (
     <Card className="earth-card-forest overflow-hidden">
@@ -58,31 +94,7 @@ export const TransactionInfo = ({
             </div>
             <div className="p-4 rounded-lg bg-earth-wheat/30">
               <h3 className="text-sm font-medium text-earth-brown mb-1">{t("transactions.total")}</h3>
-              {transaction.price ? (
-                <>
-                  <p className="text-xl font-bold text-earth-dark-green">
-                    {formatCurrency(transaction.totalPrice)}
-                  </p>
-                  <p className="text-sm text-earth-medium-green">
-                    @{formatCurrency(transaction.price)}/{transaction.unit}
-                  </p>
-                </>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <p className="text-earth-medium-green italic">Price not set yet</p>
-                  {transaction.status === "dikonfirmasi" && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={handleProceedToNegotiation}
-                      className="gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
-                    >
-                      <DollarSign className="h-3 w-3" />
-                      Set Price
-                    </Button>
-                  )}
-                </div>
-              )}
+              {renderPriceSection()}
             </div>
           </div>
 
