@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -10,118 +9,7 @@ import { TransactionInfo } from "@/components/transaction/TransactionInfo";
 import { StatusCard } from "@/components/transaction/StatusCard";
 import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
-
-// Mock transaction data for the demo - updated to have a clear "menunggu_konfirmasi" transaction
-const transactionsData = [
-  {
-    id: "TRX-2023-001",
-    type: "regular",
-    commodityId: "KM001",
-    commodityName: "Beras Putih",
-    quantity: 1000,
-    unit: "kg",
-    price: null, // Not yet set
-    totalPrice: null, // Not yet set
-    status: "menunggu_konfirmasi",
-    buyerId: "BUY-001",
-    buyerName: "PT Agrimax Food",
-    sellerId: "SEL-001",
-    sellerName: "Koperasi Tani Makmur",
-    createdAt: new Date("2023-12-10T08:30:00Z"),
-    updatedAt: new Date("2023-12-10T08:30:00Z"),
-    termsDocUrl: null,
-    signatureUrl: null,
-    shippingStatus: null,
-    buyerLocation: "Jakarta Timur",
-    buyerPhone: "+6281234567890",
-    notes: "Membutuhkan beras kualitas premium untuk restoran kami.",
-    history: [
-      { date: new Date("2023-12-10T08:30:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dibuat oleh pembeli" }
-    ]
-  },
-  {
-    id: "TRX-2023-002",
-    type: "order_book",
-    commodityId: "KM002",
-    commodityName: "Jagung Manis",
-    quantity: 500,
-    unit: "kg",
-    price: null, // Not yet set
-    totalPrice: null,
-    status: "dikonfirmasi",
-    buyerId: "BUY-002",
-    buyerName: "Restoran Padang Jaya",
-    sellerId: "SEL-001",
-    sellerName: "Koperasi Tani Makmur",
-    createdAt: new Date("2023-12-08T10:45:00Z"),
-    updatedAt: new Date("2023-12-09T09:20:00Z"),
-    termsDocUrl: "/placeholder.svg",
-    signatureUrl: null,
-    shippingStatus: null,
-    buyerLocation: "Jakarta Selatan",
-    buyerPhone: "+6287654321098",
-    notes: "Dari order book untuk kebutuhan restoran. Butuh pengiriman dalam 1 minggu.",
-    history: [
-      { date: new Date("2023-12-08T10:45:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dari Order Book" },
-      { date: new Date("2023-12-09T09:20:00Z"), status: "dikonfirmasi", description: "Pesanan dikonfirmasi penjual" }
-    ]
-  },
-  {
-    id: "TRX-2023-003",
-    type: "regular",
-    commodityId: "KM003",
-    commodityName: "Kedelai",
-    quantity: 800,
-    unit: "kg",
-    price: 15000,
-    totalPrice: 12000000,
-    status: "selesai",
-    buyerId: "BUY-003",
-    buyerName: "Pabrik Tahu Murni",
-    sellerId: "SEL-002",
-    sellerName: "PT Agro Nusantara",
-    createdAt: new Date("2023-12-01T14:20:00Z"),
-    updatedAt: new Date("2023-12-12T09:15:00Z"),
-    termsDocUrl: "/placeholder.svg",
-    signatureUrl: "/placeholder.svg",
-    shippingStatus: "sudah_dikirim",
-    buyerLocation: "Bekasi",
-    buyerPhone: "+6285678901234",
-    notes: "Transaksi selesai. Barang telah diterima dengan kondisi baik.",
-    history: [
-      { date: new Date("2023-12-01T14:20:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dibuat" },
-      { date: new Date("2023-12-02T08:45:00Z"), status: "dikonfirmasi", description: "Pesanan dikonfirmasi penjual" },
-      { date: new Date("2023-12-03T10:30:00Z"), status: "dibayar", description: "Pembayaran diterima" },
-      { date: new Date("2023-12-12T09:15:00Z"), status: "selesai", description: "Transaksi selesai" }
-    ]
-  },
-  {
-    id: "TRX-2023-005",
-    type: "regular",
-    commodityId: "KM005",
-    commodityName: "Padi Organik",
-    quantity: 2000,
-    unit: "kg",
-    price: null, // Not yet set
-    totalPrice: null, // Not yet set
-    status: "menunggu_konfirmasi",
-    buyerId: "BUY-005",
-    buyerName: "PT Beras Sejahtera",
-    sellerId: "SEL-001",
-    sellerName: "Koperasi Tani Makmur",
-    createdAt: new Date("2023-12-15T11:15:00Z"),
-    updatedAt: new Date("2023-12-15T11:15:00Z"),
-    termsDocUrl: null,
-    signatureUrl: null,
-    shippingStatus: null,
-    buyerLocation: "Surabaya, Jawa Timur",
-    buyerPhone: "+628123456789",
-    notes: "Membutuhkan padi organik untuk produksi beras premium.",
-    history: [
-      { date: new Date("2023-12-15T11:15:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dibuat oleh pembeli" }
-    ]
-  }
-];
+import { transactions } from "@/lib/data/mockData";  // Import directly from mockData
 
 const TransactionDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -137,15 +25,16 @@ const TransactionDetail = () => {
         // For demo, use setTimeout to simulate API call
         setTimeout(() => {
           console.log("Fetching transaction with ID:", id);
-          const found = transactionsData.find(item => item.id === id);
+          // Use the imported transactions from mockData instead of the local array
+          const found = transactions.find(item => item.id === id);
           console.log("Found transaction:", found);
           
           if (found) {
             setTransaction(found);
           } else {
             console.error("Transaction not found with ID:", id);
-            // Check if id matches any transaction in transactionsData
-            console.log("Available transaction IDs:", transactionsData.map(t => t.id));
+            // Log all available transactions for debugging
+            console.log("Available transaction IDs:", transactions.map(t => t.id));
           }
           
           setLoading(false);
