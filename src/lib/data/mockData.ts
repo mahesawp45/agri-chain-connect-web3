@@ -204,6 +204,30 @@ export const transactions: Transaction[] = [
     createdAt: new Date('2025-04-02'),
     updatedAt: new Date('2025-04-02'),
     shippingStatus: 'belum_dikirim'
+  },
+  // Add TRX-2023-005 to the transactions array for completeness
+  {
+    id: 'TRX-2023-005',
+    type: 'regular',
+    commodityId: 'c1',
+    commodityName: 'Padi Organik',
+    quantity: 2000,
+    unit: 'kg',
+    price: null, // Not yet set
+    totalPrice: null, // Not yet set
+    status: 'menunggu_konfirmasi',
+    buyerId: 'b5',
+    buyerName: 'PT Beras Sejahtera',
+    sellerId: currentUser.id,
+    sellerName: currentUser.name,
+    createdAt: new Date('2025-04-05'),
+    updatedAt: new Date('2025-04-05'),
+    termsDocUrl: null,
+    signatureUrl: null,
+    shippingStatus: 'belum_dikirim',
+    buyerLocation: "Surabaya, Jawa Timur",
+    buyerPhone: "+628123456789",
+    notes: "Membutuhkan padi organik untuk produksi beras premium."
   }
 ];
 

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -132,14 +133,27 @@ const TransactionDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // For demo, use setTimeout to simulate API call
-      setTimeout(() => {
-        console.log("Fetching transaction with ID:", id);
-        const found = transactionsData.find(item => item.id === id);
-        console.log("Found transaction:", found);
-        setTransaction(found || null);
+      try {
+        // For demo, use setTimeout to simulate API call
+        setTimeout(() => {
+          console.log("Fetching transaction with ID:", id);
+          const found = transactionsData.find(item => item.id === id);
+          console.log("Found transaction:", found);
+          
+          if (found) {
+            setTransaction(found);
+          } else {
+            console.error("Transaction not found with ID:", id);
+            // Check if id matches any transaction in transactionsData
+            console.log("Available transaction IDs:", transactionsData.map(t => t.id));
+          }
+          
+          setLoading(false);
+        }, 500);
+      } catch (error) {
+        console.error("Error fetching transaction:", error);
         setLoading(false);
-      }, 500);
+      }
     };
 
     fetchData();
@@ -240,7 +254,10 @@ const TransactionDetail = () => {
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-2">{t("transactions.notfound")}</h2>
           <p className="text-gray-600 mb-6">The requested transaction could not be found.</p>
-          <button onClick={() => navigate('/transaksi')}>
+          <button 
+            onClick={() => navigate('/transaksi')}
+            className="bg-earth-dark-green text-white px-4 py-2 rounded hover:bg-earth-medium-green transition-colors"
+          >
             Back to Transactions
           </button>
         </div>

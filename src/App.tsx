@@ -78,7 +78,7 @@ const App = () => (
             <Route path="/pengiriman" element={<Pengiriman />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/blockchain/:type/:id" element={<BlockchainVerification />} />
-            <Route path="/transaction/:id" element={<TransactionDetail />} />
+            <Route path="/transaction/:id" element={<TransactionDetail />} /> 
             
             {/* New farmer transaction management routes */}
             <Route path="/farmer/transaction/:id" element={<TransactionManagement />} />
