@@ -27,7 +27,8 @@ import {
   CheckCircle,
   FileCheck,
   Upload,
-  DownloadCloud
+  DownloadCloud,
+  MapPin
 } from "lucide-react";
 
 // Mock transaction data
