@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -233,6 +234,39 @@ const TransactionDetail = () => {
     setUploadedPhoto(null);
   };
 
+  const handleCompleteTransaction = () => {
+    console.log("Marking transaction as complete");
+    
+    // Create a new transaction object with updated status
+    const now = new Date();
+    
+    const updatedTransaction = {
+      ...transaction,
+      status: "selesai" as TransactionStatus,
+      updatedAt: now,
+      history: [
+        ...(transaction?.history || []),
+        {
+          date: now,
+          status: "selesai" as TransactionStatus,
+          description: language === "id" 
+            ? "Transaksi selesai" 
+            : "Transaction completed"
+        }
+      ]
+    };
+    
+    console.log("Transaction marked as complete:", updatedTransaction);
+    setTransaction(updatedTransaction);
+    
+    toast({
+      title: language === "id" ? "Transaksi Selesai" : "Transaction Completed",
+      description: language === "id" 
+        ? "Transaksi telah berhasil diselesaikan" 
+        : "The transaction has been successfully completed",
+    });
+  };
+
   if (loading) {
     return (
       <MainLayout>
@@ -393,6 +427,86 @@ const TransactionDetail = () => {
             calculateProgress={calculateProgress}
           />
 
+          {/* Show completed transaction section */}
+          {isCompleted && (
+            <Card className="overflow-hidden border-2 border-earth-medium-green shadow-md">
+              <CardHeader className="pb-3 bg-gradient-to-r from-earth-dark-green to-earth-medium-green">
+                <CardTitle className="text-white flex items-center">
+                  <Check className="mr-2 h-5 w-5" />
+                  {language === "id" ? "Transaksi Selesai" : "Transaction Completed"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="bg-earth-light-green/20 p-4 rounded-lg mb-6">
+                  <div className="flex items-center mb-3">
+                    <div className="bg-earth-medium-green h-10 w-10 rounded-full flex items-center justify-center mr-3">
+                      <Check className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-earth-dark-green text-lg">
+                        {language === "id" ? "Transaksi Ini Telah Selesai" : "This Transaction Is Complete"}
+                      </h3>
+                      <p className="text-earth-medium-green">
+                        {formatDate(transaction?.updatedAt || new Date())}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-earth-dark-green mt-2">
+                    {language === "id" 
+                      ? "Semua tahapan transaksi telah selesai. Komoditas telah berhasil dikirim dan diterima oleh pembeli." 
+                      : "All transaction steps have been completed. The commodity has been successfully delivered and received by the buyer."}
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="border border-earth-light-green rounded-lg p-4">
+                    <h4 className="font-medium text-earth-dark-green mb-2">
+                      {language === "id" ? "Detail Pengiriman" : "Delivery Details"}
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-earth-medium-green">{language === "id" ? "Tanggal Pengiriman" : "Delivery Date"}</span>
+                        <span className="text-earth-dark-green">{formatDate(transaction?.actualDeliveryDate || transaction?.updatedAt || new Date())}</span>
+                      </div>
+                      {transaction?.trackingNumber && (
+                        <div className="flex justify-between">
+                          <span className="text-earth-medium-green">{language === "id" ? "No. Pelacakan" : "Tracking No."}</span>
+                          <span className="text-earth-dark-green">{transaction.trackingNumber}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between">
+                        <span className="text-earth-medium-green">{language === "id" ? "Diterima Pada" : "Received On"}</span>
+                        <span className="text-earth-dark-green">{formatDate(transaction?.updatedAt || new Date())}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="border border-earth-light-green rounded-lg p-4">
+                    <h4 className="font-medium text-earth-dark-green mb-2">
+                      {language === "id" ? "Detail Pembayaran" : "Payment Details"}
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-earth-medium-green">{language === "id" ? "Jumlah" : "Amount"}</span>
+                        <span className="text-earth-dark-green font-medium">
+                          {transaction?.totalPrice ? formatCurrency(transaction.totalPrice) : "-"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-earth-medium-green">{language === "id" ? "Status" : "Status"}</span>
+                        <span className="text-green-600 font-medium">
+                          {language === "id" ? "Lunas" : "Paid"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Show different content based on transaction status */}
           {transaction?.status === "menunggu_konfirmasi" && (
             <Card className="earth-card-wheat overflow-hidden">
               <CardHeader className="earth-header-wheat pb-3">
@@ -671,6 +785,7 @@ const TransactionDetail = () => {
             </Card>
           )}
 
+          {/* Shipping section for sedang_dikirim status */}
           {transaction?.status === "sedang_dikirim" && (
             <Card className="earth-card-clay overflow-hidden">
               <CardHeader className="earth-header-clay pb-3">
@@ -763,4 +878,50 @@ const TransactionDetail = () => {
                       
                       <p className="text-xs text-earth-medium-green">
                         {language === "id" 
-                          ? "Opsional: Isi jika menggunakan jasa kurir"
+                          ? "Opsional: Isi jika menggunakan jasa kurir" 
+                          : "Optional: Fill if using courier service"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    variant="farmer"
+                    className="w-full"
+                    onClick={handleCompleteDelivery}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Additional completed sections would go here */}
+
+        </div>
+
+        {/* Sidebar content */}
+        <div className="space-y-6">
+          <TransactionSummary 
+            transaction={transaction}
+            openWhatsAppChat={handleStartWhatsAppChat}
+          />
+          
+          <TransactionTimeline 
+            history={transaction.history || []}
+            currentStatus={transaction.status}
+          />
+          
+          <TransactionQRCode
+            transactionId={transaction.id}
+            status={transaction.status}
+            timestamp={transaction.updatedAt || transaction.createdAt}
+          />
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default TransactionDetail;
