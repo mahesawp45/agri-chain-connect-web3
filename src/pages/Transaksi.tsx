@@ -3,27 +3,37 @@ import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Eye } from "lucide-react";
+import { Plus, Eye, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { transactions } from "@/lib/data/mockData"; // Import transactions from mockData
+import { Input } from "@/components/ui/input";
 
 const TransaksiPage = () => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Filter transactions based on active tab
   const filteredTransactions = transactions.filter(transaction => {
-    if (activeTab === "all") return true;
-    if (activeTab === "pending") return ["menunggu_konfirmasi", "dikonfirmasi", "negosiasi"].includes(transaction.status);
-    if (activeTab === "processed") return ["dibayar", "persiapan_pengiriman", "sedang_dikirim"].includes(transaction.status);
-    if (activeTab === "completed") return ["sudah_dikirim", "diterima", "selesai"].includes(transaction.status);
-    if (activeTab === "cancelled") return transaction.status === "dibatalkan";
-    return true;
+    // Apply search filter
+    const matchesSearch =
+      searchQuery === "" ||
+      transaction.commodityName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      transaction.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      transaction.buyerName.toLowerCase().includes(searchQuery.toLowerCase());
+
+    // Apply tab filter
+    if (activeTab === "all") return matchesSearch;
+    if (activeTab === "pending") return matchesSearch && ["menunggu_konfirmasi", "dikonfirmasi", "negosiasi"].includes(transaction.status);
+    if (activeTab === "processed") return matchesSearch && ["dibayar", "persiapan_pengiriman", "sedang_dikirim"].includes(transaction.status);
+    if (activeTab === "completed") return matchesSearch && ["sudah_dikirim", "diterima", "selesai"].includes(transaction.status);
+    if (activeTab === "cancelled") return matchesSearch && transaction.status === "dibatalkan";
+    return matchesSearch;
   });
 
   // Get status badge style based on status
@@ -31,7 +41,7 @@ const TransaksiPage = () => {
     const statusMap: Record<string, { label: string; className: string }> = {
       menunggu_konfirmasi: {
         label: t("status.pending"),
-        className: "bg-earth-wheat text-earth-brown",
+        className: "bg-blue-100 text-blue-800",
       },
       dikonfirmasi: {
         label: t("status.confirmed"),
@@ -63,7 +73,7 @@ const TransaksiPage = () => {
       },
       selesai: {
         label: t("status.completed"),
-        className: "bg-earth-dark-green text-white",
+        className: "bg-green-100 text-green-800",
       },
       dibatalkan: {
         label: t("status.canceled"),
@@ -85,95 +95,157 @@ const TransaksiPage = () => {
 
   return (
     <MainLayout>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-earth-dark-green">{t("transactions.title")}</h1>
-          <p className="text-earth-medium-green">{t("transactions.subtitle")}</p>
-        </div>
-        <Button className="mt-4 md:mt-0 bg-earth-dark-green hover:bg-earth-medium-green">
-          <Plus className="mr-2 h-4 w-4" />
-          {t("transactions.new")}
-        </Button>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-earth-dark-green">{t("transactions.title")}</h1>
+        <p className="text-gray-600">{t("transactions.subtitle")}</p>
       </div>
 
-      <Card className="mb-6 overflow-hidden border-2 border-earth-light-green/70 shadow-md">
-        <CardHeader className="pb-3 bg-gradient-to-r from-earth-dark-green to-earth-medium-green">
-          <CardTitle className="text-white">{t("transactions.filter")}</CardTitle>
+      <Card className="mb-6">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5 mr-2 text-earth-dark-green"
+            >
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+            {t("transactions.list")}
+          </CardTitle>
         </CardHeader>
-        <CardContent className="pt-6">
-          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              <TabsTrigger value="all">{t("transactions.all")}</TabsTrigger>
-              <TabsTrigger value="pending">{t("transactions.pending")}</TabsTrigger>
-              <TabsTrigger value="processed">{t("transactions.processed")}</TabsTrigger>
-              <TabsTrigger value="completed">{t("transactions.completed")}</TabsTrigger>
-              <TabsTrigger value="cancelled">{t("transactions.canceled")}</TabsTrigger>
-            </TabsList>
-          </Tabs>
+        <CardContent>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between">
+              <div className="relative flex-1">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                <Input
+                  type="search"
+                  placeholder={t("transactions.search")}
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button variant="outline" className="flex gap-2">
+                  <Filter className="h-4 w-4" />
+                  {t("action.filter")}
+                </Button>
+                <Button className="bg-earth-dark-green hover:bg-earth-medium-green">
+                  <Plus className="mr-2 h-4 w-4" />
+                  {t("transactions.new")}
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex overflow-x-auto sm:flex-row space-x-2 py-2">
+              <Button
+                variant={activeTab === "all" ? "default" : "outline"}
+                onClick={() => setActiveTab("all")}
+                className={activeTab === "all" ? "bg-earth-dark-green hover:bg-earth-medium-green" : ""}
+              >
+                {t("transactions.all")}
+              </Button>
+              <Button
+                variant={activeTab === "pending" ? "default" : "outline"}
+                onClick={() => setActiveTab("pending")}
+                className={activeTab === "pending" ? "bg-earth-dark-green hover:bg-earth-medium-green" : ""}
+              >
+                {t("transactions.pending")}
+              </Button>
+              <Button
+                variant={activeTab === "processed" ? "default" : "outline"}
+                onClick={() => setActiveTab("processed")}
+                className={activeTab === "processed" ? "bg-earth-dark-green hover:bg-earth-medium-green" : ""}
+              >
+                {t("transactions.processed")}
+              </Button>
+              <Button
+                variant={activeTab === "completed" ? "default" : "outline"}
+                onClick={() => setActiveTab("completed")}
+                className={activeTab === "completed" ? "bg-earth-dark-green hover:bg-earth-medium-green" : ""}
+              >
+                {t("transactions.completed")}
+              </Button>
+              <Button
+                variant={activeTab === "cancelled" ? "default" : "outline"}
+                onClick={() => setActiveTab("cancelled")}
+                className={activeTab === "cancelled" ? "bg-earth-dark-green hover:bg-earth-medium-green" : ""}
+              >
+                {t("transactions.canceled")}
+              </Button>
+            </div>
+
+            <div className="rounded-md border">
+              {filteredTransactions.length > 0 ? (
+                <Table>
+                  <TableHeader className="bg-earth-dark-green">
+                    <TableRow>
+                      <TableHead>{t("transactions.id")}</TableHead>
+                      <TableHead>{t("transactions.buyer")}</TableHead>
+                      <TableHead>{t("transactions.commodity")}</TableHead>
+                      <TableHead>{t("transactions.quantity")}</TableHead>
+                      <TableHead>{t("transactions.status")}</TableHead>
+                      <TableHead>{t("transactions.date")}</TableHead>
+                      <TableHead className="text-right">{t("transactions.total")}</TableHead>
+                      <TableHead className="text-right">{t("action.details")}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredTransactions.map((transaction) => (
+                      <TableRow key={transaction.id}>
+                        <TableCell className="font-medium">{transaction.id}</TableCell>
+                        <TableCell>{transaction.buyerName}</TableCell>
+                        <TableCell>
+                          {transaction.commodityName}
+                          <div className="text-xs text-earth-medium-green mt-1">
+                            {transaction.type === "order_book" ? "Order Book" : "Regular"}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {transaction.quantity.toLocaleString()} {transaction.unit}
+                        </TableCell>
+                        <TableCell>{getStatusBadge(transaction.status)}</TableCell>
+                        <TableCell>{formatDate(new Date(transaction.createdAt))}</TableCell>
+                        <TableCell className="text-right">
+                          {transaction.totalPrice
+                            ? formatCurrency(transaction.totalPrice)
+                            : "-"}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            <Link to={`/transaction/${transaction.id}`}>
+                              <Button variant="ghost" size="icon">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <div className="p-8 text-center">
+                  <p className="text-earth-medium-green mb-4">{t("transactions.empty")}</p>
+                  <Button className="bg-earth-dark-green hover:bg-earth-medium-green">
+                    <Plus className="mr-2 h-4 w-4" />
+                    {t("transactions.new")}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
         </CardContent>
       </Card>
-
-      {filteredTransactions.length > 0 ? (
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("transactions.commodity")}</TableHead>
-                  <TableHead>{t("transactions.quantity")}</TableHead>
-                  <TableHead>{t("transactions.buyer")}</TableHead>
-                  <TableHead>{t("transactions.status")}</TableHead>
-                  <TableHead>{t("transactions.date")}</TableHead>
-                  <TableHead className="text-right">{t("transactions.total")}</TableHead>
-                  <TableHead className="text-right">{t("action.details")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredTransactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell className="font-medium">
-                      {transaction.commodityName}
-                      <div className="text-xs text-earth-medium-green mt-1">
-                        {transaction.type === "order_book" ? "Order Book" : "Regular"}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {transaction.quantity.toLocaleString()} {transaction.unit}
-                    </TableCell>
-                    <TableCell>{transaction.buyerName}</TableCell>
-                    <TableCell>{getStatusBadge(transaction.status)}</TableCell>
-                    <TableCell>{formatDate(new Date(transaction.createdAt))}</TableCell>
-                    <TableCell className="text-right">
-                      {transaction.totalPrice
-                        ? formatCurrency(transaction.totalPrice)
-                        : "-"}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Link
-                        to={`/transaction/${transaction.id}`}
-                        className="inline-flex items-center text-earth-dark-green hover:text-earth-medium-green"
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        {t("action.details")}
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card className="overflow-hidden">
-          <CardContent className="p-8 text-center">
-            <p className="text-earth-medium-green mb-4">{t("transactions.empty")}</p>
-            <Button className="bg-earth-dark-green hover:bg-earth-medium-green">
-              <Plus className="mr-2 h-4 w-4" />
-              {t("transactions.new")}
-            </Button>
-          </CardContent>
-        </Card>
-      )}
     </MainLayout>
   );
 };
