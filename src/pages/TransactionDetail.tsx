@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -26,6 +25,7 @@ import { transactions } from "@/lib/data/mockData";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
 import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
 import { TransactionInfo } from "@/components/transaction/TransactionInfo";
+import { TransactionQRCode } from "@/components/transaction/TransactionQRCode";
 import { TransactionStatus, ShippingStatus } from "@/lib/data/types";
 
 const TransactionDetail = () => {
@@ -233,39 +233,6 @@ const TransactionDetail = () => {
     setUploadedPhoto(null);
   };
 
-  const handleCompleteTransaction = () => {
-    console.log("Marking transaction as complete");
-    
-    // Create a new transaction object with updated status
-    const now = new Date();
-    
-    const updatedTransaction = {
-      ...transaction,
-      status: "selesai" as TransactionStatus,
-      updatedAt: now,
-      history: [
-        ...(transaction?.history || []),
-        {
-          date: now,
-          status: "selesai" as TransactionStatus,
-          description: language === "id" 
-            ? "Transaksi selesai" 
-            : "Transaction completed"
-        }
-      ]
-    };
-    
-    console.log("Transaction marked as complete:", updatedTransaction);
-    setTransaction(updatedTransaction);
-    
-    toast({
-      title: language === "id" ? "Transaksi Selesai" : "Transaction Completed",
-      description: language === "id" 
-        ? "Transaksi telah berhasil diselesaikan" 
-        : "The transaction has been successfully completed",
-    });
-  };
-
   if (loading) {
     return (
       <MainLayout>
@@ -426,91 +393,11 @@ const TransactionDetail = () => {
             calculateProgress={calculateProgress}
           />
 
-          {/* Show completed transaction section */}
-          {isCompleted && (
-            <Card className="overflow-hidden border-2 border-earth-medium-green shadow-md">
-              <CardHeader className="pb-3 bg-gradient-to-r from-earth-dark-green to-earth-medium-green">
-                <CardTitle className="text-white flex items-center">
-                  <Check className="mr-2 h-5 w-5" />
-                  {language === "id" ? "Transaksi Selesai" : "Transaction Completed"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="bg-earth-light-green/20 p-4 rounded-lg mb-6">
-                  <div className="flex items-center mb-3">
-                    <div className="bg-earth-medium-green h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                      <Check className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-earth-dark-green text-lg">
-                        {language === "id" ? "Transaksi Ini Telah Selesai" : "This Transaction Is Complete"}
-                      </h3>
-                      <p className="text-earth-medium-green">
-                        {formatDate(transaction?.updatedAt || new Date())}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <p className="text-earth-dark-green mt-2">
-                    {language === "id" 
-                      ? "Semua tahapan transaksi telah selesai. Komoditas telah berhasil dikirim dan diterima oleh pembeli." 
-                      : "All transaction steps have been completed. The commodity has been successfully delivered and received by the buyer."}
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="border border-earth-light-green rounded-lg p-4">
-                    <h4 className="font-medium text-earth-dark-green mb-2">
-                      {language === "id" ? "Detail Pengiriman" : "Delivery Details"}
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-earth-medium-green">{language === "id" ? "Tanggal Pengiriman" : "Delivery Date"}</span>
-                        <span className="text-earth-dark-green">{formatDate(transaction?.actualDeliveryDate || transaction?.updatedAt || new Date())}</span>
-                      </div>
-                      {transaction?.trackingNumber && (
-                        <div className="flex justify-between">
-                          <span className="text-earth-medium-green">{language === "id" ? "No. Pelacakan" : "Tracking No."}</span>
-                          <span className="text-earth-dark-green">{transaction.trackingNumber}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between">
-                        <span className="text-earth-medium-green">{language === "id" ? "Diterima Pada" : "Received On"}</span>
-                        <span className="text-earth-dark-green">{formatDate(transaction?.updatedAt || new Date())}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="border border-earth-light-green rounded-lg p-4">
-                    <h4 className="font-medium text-earth-dark-green mb-2">
-                      {language === "id" ? "Detail Pembayaran" : "Payment Details"}
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-earth-medium-green">{language === "id" ? "Jumlah" : "Amount"}</span>
-                        <span className="text-earth-dark-green font-medium">
-                          {transaction?.totalPrice ? formatCurrency(transaction.totalPrice) : "-"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-earth-medium-green">{language === "id" ? "Status" : "Status"}</span>
-                        <span className="text-green-600 font-medium">
-                          {language === "id" ? "Lunas" : "Paid"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Show different content based on transaction status */}
           {transaction?.status === "menunggu_konfirmasi" && (
             <Card className="earth-card-wheat overflow-hidden">
               <CardHeader className="earth-header-wheat pb-3">
                 <CardTitle className="text-white">
-                  {language === "id" ? "Menunggu Konfirmasi" : "Waiting for Confirmation"}
+                  {language === "id" ? "Menunggu Konfirmasi" : "Awaiting Confirmation"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 mt-2">
@@ -518,14 +405,123 @@ const TransactionDetail = () => {
                   <div className="flex items-center space-x-2 mb-3">
                     <Timer className="h-5 w-5 text-earth-brown" />
                     <h3 className="font-medium text-earth-dark-green">
-                      {language === "id" ? "Menunggu konfirmasi dari pembeli" : "Waiting for confirmation from the buyer"}
+                      {language === "id" ? "Transaksi Menunggu Konfirmasi" : "Transaction Awaiting Confirmation"}
                     </h3>
                   </div>
                   
                   <p className="text-earth-medium-green mb-4">
                     {language === "id" 
-                      ? "Pembeli belum mengkonfirmasi transaksi ini. Silakan hubungi pembeli untuk mempercepat proses konfirmasi."
-                      : "The buyer has not confirmed this transaction. Please contact the buyer to expedite the confirmation process."}
+                      ? "Transaksi ini sedang menunggu konfirmasi dari Anda. Harap tinjau detail dan putuskan apakah akan menerima atau menolak pesanan ini."
+                      : "This transaction is waiting for your confirmation. Please review the details and decide whether to accept or decline this order."}
+                  </p>
+                  
+                  <div className="flex flex-col md:flex-row gap-3">
+                    <Button 
+                      variant="farmer" 
+                      onClick={() => {}}
+                      className="gap-2 w-full md:w-auto"
+                    >
+                      <Check className="h-4 w-4" />
+                      {language === "id" ? "Konfirmasi Transaksi" : "Confirm Transaction"}
+                    </Button>
+                    <Button 
+                      variant="destructive" 
+                      onClick={() => {}}
+                      className="gap-2 w-full md:w-auto"
+                    >
+                      <Check className="h-4 w-4" />
+                      {language === "id" ? "Tolak Transaksi" : "Decline Transaction"}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {transaction?.status === "dikonfirmasi" && (
+            <Card className="earth-card-wheat overflow-hidden">
+              <CardHeader className="earth-header-wheat pb-3">
+                <CardTitle className="text-white">
+                  {language === "id" ? "Transaksi Dikonfirmasi" : "Transaction Confirmed"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 mt-2">
+                <div className="p-4 bg-earth-wheat/30 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <CheckCircle className="h-5 w-5 text-earth-dark-green" />
+                    <h3 className="font-medium text-earth-dark-green">
+                      {language === "id" ? "Transaksi Dikonfirmasi - Tetapkan Harga" : "Transaction Confirmed - Set Price"}
+                    </h3>
+                  </div>
+                  
+                  <p className="text-earth-medium-green mb-4">
+                    {language === "id" 
+                      ? "Anda telah mengkonfirmasi transaksi ini. Langkah selanjutnya adalah menetapkan harga dan mulai negosiasi dengan pembeli."
+                      : "You have confirmed this transaction. The next step is to set a price and begin negotiation with the buyer."}
+                  </p>
+                  
+                  <div className="flex flex-col md:flex-row gap-3">
+                    <Button 
+                      variant="farmer" 
+                      onClick={() => {}}
+                      className="gap-2 w-full md:w-auto"
+                    >
+                      <Check className="h-4 w-4" />
+                      {language === "id" ? "Tetapkan Harga & Negosiasi" : "Set Price & Negotiate"}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {transaction?.status === "negosiasi" && (
+            <Card className="earth-card-wheat overflow-hidden">
+              <CardHeader className="earth-header-wheat pb-3">
+                <CardTitle className="text-white">
+                  {language === "id" ? "Status Negosiasi" : "Negotiation Status"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 mt-2">
+                <div className="p-4 bg-earth-wheat/30 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <CheckCircle className="h-5 w-5 text-earth-dark-green" />
+                    <h3 className="font-medium text-earth-dark-green">
+                      {language === "id" ? "Harga telah disubmit" : "Price has been submitted"}
+                    </h3>
+                  </div>
+                  
+                  <div className="bg-earth-pale-green/40 p-3 rounded-lg mb-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-earth-brown">
+                        {language === "id" ? "Harga per" : "Price per"} {transaction.unit}:
+                      </span>
+                      <span className="text-earth-dark-green font-medium">
+                        {formatCurrency(transaction.price)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-earth-brown">
+                        {language === "id" ? "Jumlah" : "Quantity"}:
+                      </span>
+                      <span className="text-earth-dark-green font-medium">
+                        {transaction.quantity.toLocaleString()} {transaction.unit}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-earth-brown">
+                        {language === "id" ? "Total" : "Total"}:
+                      </span>
+                      <span className="text-earth-dark-green font-medium">
+                        {formatCurrency(transaction.totalPrice)}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-earth-medium-green mb-4">
+                    {language === "id" 
+                      ? "Harga telah dikirim ke pembeli. Silakan diskusikan harga melalui WhatsApp dan tunggu pembeli menyetujui harga tersebut."
+                      : "Price has been sent to the buyer. Please discuss the price via WhatsApp and wait for the buyer to approve the price."}
                   </p>
                   
                   <div className="flex flex-col md:flex-row gap-3">
@@ -535,7 +531,7 @@ const TransactionDetail = () => {
                       className="gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-pale-green"
                     >
                       <MessageCircle className="h-4 w-4" />
-                      {language === "id" ? "Hubungi via WhatsApp" : "Contact via WhatsApp"}
+                      {language === "id" ? "Diskusi via WhatsApp" : "Discuss via WhatsApp"}
                     </Button>
                   </div>
                 </div>
@@ -675,7 +671,6 @@ const TransactionDetail = () => {
             </Card>
           )}
 
-          {/* Shipping section for sedang_dikirim status */}
           {transaction?.status === "sedang_dikirim" && (
             <Card className="earth-card-clay overflow-hidden">
               <CardHeader className="earth-header-clay pb-3">
@@ -767,43 +762,5 @@ const TransactionDetail = () => {
                       />
                       
                       <p className="text-xs text-earth-medium-green">
-                        {language === "id"
-                          ? "Masukkan nomor resi atau pelacakan jika tersedia"
-                          : "Enter receipt or tracking number if available"}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <Button
-                    variant="farmer"
-                    className="w-full"
-                    onClick={handleCompleteDelivery}
-                  >
-                    <Check className="h-4 w-4 mr-2" />
-                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-        
-        <div className="space-y-6">
-          <TransactionSummary
-            transaction={transaction}
-            openWhatsAppChat={handleStartWhatsAppChat}
-          />
-          
-          <div className="mt-6">
-            <TransactionTimeline 
-              history={transaction?.history || []} 
-              currentStatus={transaction?.status}
-            />
-          </div>
-        </div>
-      </div>
-    </MainLayout>
-  );
-};
-
-export default TransactionDetail;
+                        {language === "id" 
+                          ? "Opsional: Isi jika menggunakan jasa kurir"
