@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, FileText, MessageCircle, CheckCircle, FileCheck, Timer, Upload, Truck } from "lucide-react";
+import { ArrowLeft, FileText, MessageCircle, CheckCircle, FileCheck, Timer, Upload, Truck, Camera } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { transactions } from "@/lib/data/mockData";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
@@ -124,6 +124,9 @@ const TransactionPriceSubmitted = () => {
   };
 
   const handleStartDelivery = () => {
+    // Important: Show a debug message to verify this function is being called
+    console.log("handleStartDelivery called, current transaction:", transaction);
+    
     setTransaction(prev => {
       if (!prev) return null;
       
@@ -132,7 +135,7 @@ const TransactionPriceSubmitted = () => {
       const estimatedDate = new Date(now);
       estimatedDate.setDate(estimatedDate.getDate() + 2);
       
-      return {
+      const updatedTransaction = {
         ...prev,
         status: "sedang_dikirim" as TransactionStatus,
         shippingStatus: "sedang_dikirim" as ShippingStatus,
@@ -150,6 +153,9 @@ const TransactionPriceSubmitted = () => {
           }
         ]
       };
+      
+      console.log("Transaction updated to:", updatedTransaction);
+      return updatedTransaction;
     });
     
     setShippingStarted(true);
@@ -617,7 +623,7 @@ const TransactionPriceSubmitted = () => {
                     {/* Delivery Proof Upload */}
                     <div className="border border-dashed border-earth-light-brown p-4 rounded-lg">
                       <div className="flex items-center mb-2">
-                        <Upload className="h-4 w-4 text-earth-brown mr-2" />
+                        <Camera className="h-4 w-4 text-earth-brown mr-2" />
                         <h4 className="font-medium text-earth-dark-green">{language === "id" ? "Bukti Pengiriman" : "Delivery Proof"}</h4>
                       </div>
                       

@@ -40,6 +40,8 @@ export const TransactionTimeline = ({ history, currentStatus }: TransactionTimel
   const currentStepIndex = statusOrder.findIndex(
     (step) => step === currentStatus
   );
+
+  console.log("Timeline props:", { history, currentStatus, currentStepIndex });
   
   if (timelineEvents.length === 0) {
     return (

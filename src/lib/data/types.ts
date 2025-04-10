@@ -68,11 +68,13 @@ export interface Transaction {
   termsDocUrl?: string;
   signatureUrl?: string;
   shippingStatus?: ShippingStatus;
-  // Add the new properties needed for buyer information
+  // Buyer information
   buyerLocation?: string;
   buyerPhone?: string;
   notes?: string;
+  // Transaction history
   history?: Array<{date: Date, status: TransactionStatus, description: string}>;
+  // Shipping information
   deliveryStartedAt?: Date;
   estimatedDeliveryDate?: Date;
   actualDeliveryDate?: Date;
