@@ -458,7 +458,7 @@ export const translations: TranslationsType = {
     "orderbook.expiry": "Tanggal Kedaluwarsa",
     "orderbook.status": "Status",
     "orderbook.action": "Aksi",
-    "transactions.search": "Cari transaksi...",
+    "orderbook.search": "Cari order book...",
     "orderbook.detail": "Detail Order Book",
     "orderbook.list": "Daftar Order Book",
     "orderbook.all": "Semua",
