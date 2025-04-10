@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -8,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, FileText, MessageCircle, CheckCircle, FileCheck, Timer, Upload, Truck, Camera } from "lucide-react";
+import { ArrowLeft, FileText, MessageCircle, CheckCircle, FileCheck, Timer, Upload, Truck, Camera, Check } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { transactions } from "@/lib/data/mockData";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
@@ -756,4 +757,178 @@ const TransactionDetail = () => {
                       
                       <p className="text-xs text-earth-medium-green">
                         {language === "id" 
-                          ? "
+                          ? "Masukkan nomor resi pengiriman untuk melacak komoditas" 
+                          : "Enter shipping receipt number to track the commodity"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    variant="farmer"
+                    className="w-full"
+                    onClick={handleCompleteDelivery}
+                  >
+                    <Truck className="h-4 w-4 mr-2" />
+                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Delivery completed section */}
+          {transaction?.status === "sudah_dikirim" && (
+            <Card className="earth-card-clay overflow-hidden">
+              <CardHeader className="earth-header-clay pb-3">
+                <CardTitle className="text-white">
+                  {language === "id" ? "Komoditas Telah Dikirim" : "Commodity Shipped"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 mt-2">
+                <div className="p-4 bg-earth-light-green/20 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <CheckCircle className="h-5 w-5 text-earth-dark-green" />
+                    <h3 className="font-medium text-earth-dark-green">
+                      {language === "id" ? "Pengiriman Telah Selesai" : "Delivery Completed"}
+                    </h3>
+                  </div>
+                  
+                  <div className="bg-earth-wheat/30 p-3 rounded-lg mb-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-earth-brown">{language === "id" ? "Tanggal Pengiriman" : "Delivery Date"}:</span>
+                      <span className="text-earth-dark-green font-medium">
+                        {transaction.actualDeliveryDate ? formatDate(transaction.actualDeliveryDate) : formatDate(transaction.updatedAt || new Date())}
+                      </span>
+                    </div>
+                    
+                    {transaction.trackingNumber && (
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-earth-brown">{language === "id" ? "Nomor Pelacakan" : "Tracking Number"}:</span>
+                        <span className="text-earth-dark-green font-medium">
+                          {transaction.trackingNumber}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <p className="text-earth-medium-green mb-4">
+                    {language === "id" 
+                      ? "Komoditas telah dikirim ke pembeli. Pembeli sedang meninjau komoditas yang diterima."
+                      : "The commodity has been delivered to the buyer. The buyer is reviewing the received commodity."}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Received status section */}
+          {transaction?.status === "diterima" && (
+            <Card className="overflow-hidden border-2 border-earth-medium-green">
+              <CardHeader className="pb-3 bg-gradient-to-r from-earth-medium-green to-earth-dark-green">
+                <CardTitle className="text-white flex items-center">
+                  <CheckCircle className="mr-2 h-5 w-5" />
+                  {language === "id" ? "Komoditas Telah Diterima" : "Commodity Received"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="bg-earth-light-green/20 p-4 rounded-lg mb-6">
+                  <div className="flex items-center mb-3">
+                    <div className="bg-earth-medium-green h-10 w-10 rounded-full flex items-center justify-center mr-3">
+                      <Check className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-earth-dark-green text-lg">
+                        {language === "id" ? "Pembeli Telah Menerima Komoditas" : "Buyer Has Received The Commodity"}
+                      </h3>
+                      <p className="text-earth-medium-green">
+                        {formatDate(transaction?.updatedAt || new Date())}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-earth-dark-green mt-2">
+                    {language === "id" 
+                      ? "Komoditas telah diterima oleh pembeli. Anda dapat menyelesaikan transaksi ini sekarang." 
+                      : "The commodity has been received by the buyer. You can complete this transaction now."}
+                  </p>
+                </div>
+                
+                <Button
+                  variant="farmer"
+                  className="w-full"
+                  onClick={handleCompleteTransaction}
+                >
+                  <Check className="h-4 w-4 mr-2" />
+                  {language === "id" ? "Selesaikan Transaksi" : "Complete Transaction"}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Add transaction timeline */}
+          <TransactionTimeline 
+            history={transaction?.history || []}
+            currentStatus={transaction?.status || "menunggu_konfirmasi"}
+          />
+        </div>
+
+        <div className="space-y-6">
+          <TransactionSummary transaction={transaction} />
+
+          <Card className="earth-card-wheat overflow-hidden">
+            <CardHeader className="earth-header-wheat pb-3">
+              <CardTitle className="text-white">{t("dashboard.quickActions")}</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-4">
+              <div className="space-y-3">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
+                  onClick={handleStartWhatsAppChat}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  {language === "id" ? "Hubungi Pembeli" : "Contact Buyer"}
+                </Button>
+                
+                {transaction?.status === "dibayar" && (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
+                    onClick={handleStartDelivery}
+                  >
+                    <Truck className="h-4 w-4" />
+                    {language === "id" ? "Mulai Pengiriman" : "Start Delivery"}
+                  </Button>
+                )}
+                
+                {transaction?.status === "sedang_dikirim" && (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
+                    onClick={handleCompleteDelivery}
+                  >
+                    <Truck className="h-4 w-4" />
+                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                  </Button>
+                )}
+                
+                {transaction?.status === "diterima" && (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
+                    onClick={handleCompleteTransaction}
+                  >
+                    <CheckCircle className="h-4 w-4" />
+                    {language === "id" ? "Selesaikan Transaksi" : "Complete Transaction"}
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default TransactionDetail;
