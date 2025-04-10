@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { History as HistoryIcon, CheckCircle, Truck, ArrowRight, ExternalLink } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 // Mock data for transaction history

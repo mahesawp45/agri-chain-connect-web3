@@ -2,31 +2,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowLeft, 
-  FileText, 
-  Clock, 
-  DollarSign, 
-  User, 
-  ShoppingCart,
-  Package,
-  Truck,
-  Check,
-  X,
-  MessageCircle,
-  Calendar,
-  MapPin,
-  Phone
-} from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { formatDate, formatCurrency } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Transaction, TransactionStatus } from "@/lib/data/types";
+import { TransactionHeader } from "@/components/transaction/TransactionHeader";
+import { TransactionInfo } from "@/components/transaction/TransactionInfo";
+import { StatusCard } from "@/components/transaction/StatusCard";
+import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
+import { TransactionSummary } from "@/components/transaction/TransactionSummary";
 
 // Mock transaction data for the demo
 const transactionsData = [
@@ -203,10 +186,9 @@ const TransactionDetail = () => {
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-2">{t("transactions.notfound")}</h2>
           <p className="text-gray-600 mb-6">The requested transaction could not be found.</p>
-          <Button onClick={() => navigate('/transaksi')}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {t("action.back")}
-          </Button>
+          <button onClick={() => navigate('/transaksi')}>
+            Back to Transactions
+          </button>
         </div>
       </MainLayout>
     );
@@ -290,351 +272,42 @@ const TransactionDetail = () => {
 
   return (
     <MainLayout>
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mb-4" 
-            onClick={() => navigate('/transaksi')}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {t("action.back")}
-          </Button>
-          <h1 className="text-2xl font-bold text-earth-dark-green">{t("transactions.detail")}</h1>
-          <p className="text-earth-medium-green font-medium">{transaction.id}</p>
-        </div>
-        <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-          {transaction.status === "menunggu_konfirmasi" && (
-            <>
-              <Button 
-                variant="farmer" 
-                onClick={handleConfirmTransaction}
-                className="gap-2"
-              >
-                <Check className="h-4 w-4" />
-                Confirm Transaction
-              </Button>
-              <Button 
-                variant="destructive" 
-                onClick={handleDeclineTransaction}
-                className="gap-2"
-              >
-                <X className="h-4 w-4" />
-                Decline Transaction
-              </Button>
-            </>
-          )}
-
-          {transaction.status === "dikonfirmasi" && (
-            <Button 
-              variant="farmer" 
-              onClick={handleProceedToNegotiation}
-              className="gap-2"
-            >
-              <DollarSign className="h-4 w-4" />
-              Set Price & Negotiate
-            </Button>
-          )}
-          
-          <Button 
-            variant="outline" 
-            className="gap-2 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
-          >
-            <FileText className="h-4 w-4" />
-            Print Details
-          </Button>
-        </div>
-      </div>
+      <TransactionHeader 
+        id={transaction.id}
+        status={transaction.status}
+        onProceedToNegotiation={handleProceedToNegotiation}
+        onConfirmTransaction={handleConfirmTransaction}
+        onDeclineTransaction={handleDeclineTransaction}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <Card className="earth-card-forest overflow-hidden">
-            <CardHeader className="earth-header-forest pb-3">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-white">{t("transactions.detail")}</CardTitle>
-                {getStatusBadge(transaction.status)}
-              </div>
-            </CardHeader>
-            <CardContent className="mt-4">
-              <div className="mb-6">
-                <Progress value={calculateProgress()} className="h-2 bg-earth-pale-green" />
-                <div className="flex justify-between text-xs text-earth-medium-green mt-1">
-                  <span>{t("status.pending")}</span>
-                  <span>{t("status.negotiating")}</span>
-                  <span>{t("status.shipping")}</span>
-                  <span>{t("status.completed")}</span>
-                </div>
-              </div>
+          <TransactionInfo 
+            transaction={transaction}
+            handleProceedToNegotiation={handleProceedToNegotiation}
+            getStatusBadge={getStatusBadge}
+            calculateProgress={calculateProgress}
+          />
 
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-4 rounded-lg bg-earth-pale-green/50">
-                    <h3 className="text-sm font-medium text-earth-medium-green mb-1">{t("transactions.commodity")}</h3>
-                    <div className="flex items-center">
-                      <div className="h-12 w-12 rounded-full overflow-hidden bg-earth-medium-green/20 flex items-center justify-center mr-3">
-                        <Package className="h-6 w-6 text-earth-medium-green" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-earth-dark-green">{transaction.commodityName}</p>
-                        <p className="text-sm text-earth-medium-green">{transaction.quantity.toLocaleString()} {transaction.unit}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-4 rounded-lg bg-earth-wheat/30">
-                    <h3 className="text-sm font-medium text-earth-brown mb-1">{t("transactions.total")}</h3>
-                    {transaction.price ? (
-                      <>
-                        <p className="text-xl font-bold text-earth-dark-green">
-                          {formatCurrency(transaction.totalPrice)}
-                        </p>
-                        <p className="text-sm text-earth-medium-green">
-                          @{formatCurrency(transaction.price)}/{transaction.unit}
-                        </p>
-                      </>
-                    ) : (
-                      <div className="flex items-center justify-between">
-                        <p className="text-earth-medium-green italic">Price not set yet</p>
-                        {transaction.status === "dikonfirmasi" && (
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={handleProceedToNegotiation}
-                            className="gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
-                          >
-                            <DollarSign className="h-3 w-3" />
-                            Set Price
-                          </Button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <Separator className="bg-earth-light-brown/30" />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-4 rounded-lg bg-earth-clay/20">
-                    <h3 className="text-sm font-medium text-earth-brown mb-2">Buyer Information</h3>
-                    <div className="flex items-start">
-                      <div className="h-12 w-12 rounded-full overflow-hidden bg-earth-clay/30 flex items-center justify-center mr-3">
-                        <User className="h-6 w-6 text-earth-brown" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-earth-dark-green">{transaction.buyerName}</p>
-                        <p className="text-sm text-earth-medium-green flex items-center gap-1 mt-1">
-                          <MapPin className="h-3 w-3" /> {transaction.buyerLocation}
-                        </p>
-                        <p className="text-sm text-earth-medium-green flex items-center gap-1 mt-1">
-                          <Phone className="h-3 w-3" /> {transaction.buyerPhone}
-                        </p>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="mt-2 gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
-                          onClick={openWhatsAppChat}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                          Chat via WhatsApp
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-4 rounded-lg bg-earth-light-green/20">
-                    <h3 className="text-sm font-medium text-earth-medium-green mb-2">Transaction Type</h3>
-                    <div>
-                      <Badge variant="outline" className="capitalize border-earth-dark-green text-earth-dark-green mb-2">
-                        {transaction.type === "order_book" ? "Order Book" : "Regular"}
-                      </Badge>
-                      <p className="text-sm text-earth-medium-green flex items-center gap-1 mt-2">
-                        <Calendar className="h-3 w-3" /> Created: {formatDate(transaction.createdAt)}
-                      </p>
-                      <p className="text-sm text-earth-medium-green flex items-center gap-1 mt-1">
-                        <Clock className="h-3 w-3" /> Updated: {formatDate(transaction.updatedAt)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator className="bg-earth-light-brown/30" />
-
-                <div className="p-4 rounded-lg bg-earth-light-brown/20">
-                  <h3 className="text-sm font-medium text-earth-brown mb-2">Notes</h3>
-                  <p className="text-earth-dark-green mb-4">{transaction.notes}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {transaction.status === "menunggu_konfirmasi" && (
-            <Card className="earth-card-wheat overflow-hidden">
-              <CardHeader className="earth-header-wheat pb-3">
-                <CardTitle className="text-white">Action Required</CardTitle>
-              </CardHeader>
-              <CardContent className="mt-4">
-                <div className="space-y-4">
-                  <div className="p-4 bg-earth-wheat/30 rounded-lg">
-                    <h3 className="font-medium text-earth-dark-green mb-2">Transaction Awaiting Confirmation</h3>
-                    <p className="text-earth-medium-green mb-4">
-                      This transaction is waiting for your confirmation. Please review the details and decide whether to accept or decline this order.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                      <Button 
-                        variant="farmer" 
-                        onClick={handleConfirmTransaction}
-                        className="gap-2 w-full sm:w-auto"
-                      >
-                        <Check className="h-4 w-4" />
-                        Confirm Transaction
-                      </Button>
-                      <Button 
-                        variant="destructive" 
-                        onClick={handleDeclineTransaction}
-                        className="gap-2 w-full sm:w-auto"
-                      >
-                        <X className="h-4 w-4" />
-                        Decline Transaction
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {transaction.status === "dikonfirmasi" && (
-            <Card className="earth-card-wheat overflow-hidden">
-              <CardHeader className="earth-header-wheat pb-3">
-                <CardTitle className="text-white">Action Required</CardTitle>
-              </CardHeader>
-              <CardContent className="mt-4">
-                <div className="space-y-4">
-                  <div className="p-4 bg-earth-wheat/30 rounded-lg">
-                    <h3 className="font-medium text-earth-dark-green mb-2">Transaction Confirmed - Set Price</h3>
-                    <p className="text-earth-medium-green mb-4">
-                      You have confirmed this transaction. The next step is to set a price and begin negotiation with the buyer.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                      <Button 
-                        variant="farmer" 
-                        onClick={handleProceedToNegotiation}
-                        className="gap-2 w-full sm:w-auto"
-                      >
-                        <DollarSign className="h-4 w-4" />
-                        Set Price & Negotiate
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          {(transaction.status === "menunggu_konfirmasi" || transaction.status === "dikonfirmasi") && (
+            <StatusCard 
+              status={transaction.status} 
+              onConfirmTransaction={handleConfirmTransaction}
+              onDeclineTransaction={handleDeclineTransaction}
+              onProceedToNegotiation={handleProceedToNegotiation}
+            />
           )}
         </div>
 
-        <div className="space-y-6">
-          <Card className="earth-card-brown overflow-hidden">
-            <CardHeader className="earth-header-brown pb-3">
-              <CardTitle className="text-white">Transaction Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-4">
-              <div className="space-y-4">
-                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
-                  <span className="text-earth-brown">Transaction Type</span>
-                  <Badge variant="outline" className="capitalize border-earth-brown text-earth-brown">
-                    {transaction.type === "order_book" ? "Order Book" : "Regular"}
-                  </Badge>
-                </div>
-                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
-                  <span className="text-earth-brown">{t("transactions.date")}</span>
-                  <span className="text-earth-dark-green">{formatDate(transaction.createdAt)}</span>
-                </div>
-                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
-                  <span className="text-earth-brown">Last Updated</span>
-                  <span className="text-earth-dark-green">{formatDate(transaction.updatedAt)}</span>
-                </div>
+        <div>
+          <TransactionSummary
+            transaction={transaction}
+            openWhatsAppChat={openWhatsAppChat}
+          />
 
-                <Separator className="bg-earth-light-brown/30" />
-
-                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
-                  <span className="text-earth-brown">Commodity</span>
-                  <span className="text-earth-dark-green">{transaction.commodityName}</span>
-                </div>
-                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
-                  <span className="text-earth-brown">Quantity</span>
-                  <span className="text-earth-dark-green">{transaction.quantity.toLocaleString()} {transaction.unit}</span>
-                </div>
-                <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
-                  <span className="text-earth-brown">Unit Price</span>
-                  <span className="text-earth-dark-green">{transaction.price ? `${formatCurrency(transaction.price)}/${transaction.unit}` : "Not set"}</span>
-                </div>
-
-                <Separator className="bg-earth-light-brown/30" />
-
-                <div className="flex justify-between items-center p-3 rounded bg-earth-wheat/40 font-bold">
-                  <span className="text-earth-dark-green">Total Amount</span>
-                  <span className="text-earth-dark-green">{transaction.totalPrice ? formatCurrency(transaction.totalPrice) : "Not set"}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="earth-card-clay overflow-hidden">
-            <CardHeader className="earth-header-clay pb-3">
-              <CardTitle className="text-white">Transaction Timeline</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-4">
-              <div className="space-y-4">
-                {transaction.history.map((event: any, index: number) => (
-                  <div key={index} className="flex">
-                    <div className="mr-4 flex flex-col items-center">
-                      <div className="w-4 h-4 bg-earth-brown rounded-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-earth-clay rounded-full"></div>
-                      </div>
-                      {index < transaction.history.length - 1 && (
-                        <div className="w-0.5 bg-earth-light-brown h-full mt-1"></div>
-                      )}
-                    </div>
-                    <div className="pb-4">
-                      <div className="flex flex-col">
-                        <p className="font-medium text-earth-dark-green">{event.description}</p>
-                        <p className="text-sm text-earth-brown">{formatDate(event.date)}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="earth-card-wheat overflow-hidden">
-            <CardHeader className="earth-header-wheat pb-3">
-              <CardTitle className="text-white">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-4">
-              <div className="space-y-3">
-                <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
-                  <FileText className="h-4 w-4" />
-                  View Invoice
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
-                  onClick={openWhatsAppChat}
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  Chat with Buyer
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50"
-                  onClick={() => navigate(`/komoditas/${transaction.commodityId}`)}
-                >
-                  <ShoppingCart className="h-4 w-4" />
-                  View Commodity
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mt-6">
+            <TransactionTimeline history={transaction.history} />
+          </div>
         </div>
       </div>
     </MainLayout>
