@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -15,6 +14,7 @@ import { transactions } from "@/lib/data/mockData";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
 import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
 import { TransactionInfo } from "@/components/transaction/TransactionInfo";
+import { TransactionQRCode } from "@/components/transaction/TransactionQRCode";
 import { TransactionStatus, ShippingStatus } from "@/lib/data/types";
 
 const TransactionPriceSubmitted = () => {
@@ -378,7 +378,6 @@ const TransactionPriceSubmitted = () => {
             calculateProgress={calculateProgress}
           />
 
-          {/* Show different content based on transaction status */}
           {transaction?.status === "negosiasi" && (
             <Card className="earth-card-wheat overflow-hidden">
               <CardHeader className="earth-header-wheat pb-3">
@@ -575,7 +574,6 @@ const TransactionPriceSubmitted = () => {
             </Card>
           )}
 
-          {/* Shipping section for sedang_dikirim status */}
           {transaction?.status === "sedang_dikirim" && (
             <Card className="earth-card-clay overflow-hidden">
               <CardHeader className="earth-header-clay pb-3">
@@ -687,7 +685,6 @@ const TransactionPriceSubmitted = () => {
             </Card>
           )}
 
-          {/* Delivery completed section */}
           {transaction?.status === "sudah_dikirim" && (
             <Card className="earth-card-clay overflow-hidden">
               <CardHeader className="earth-header-clay pb-3">
@@ -736,6 +733,13 @@ const TransactionPriceSubmitted = () => {
           <TransactionSummary
             transaction={transaction}
             openWhatsAppChat={handleStartWhatsAppChat}
+          />
+
+          {/* Add QR Code component */}
+          <TransactionQRCode 
+            transactionId={transaction?.id || ''}
+            status={transaction?.status || ''}
+            timestamp={transaction?.updatedAt || new Date()}
           />
 
           <div className="mt-6">
