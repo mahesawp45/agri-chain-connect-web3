@@ -33,7 +33,7 @@ const TransactionDetail = () => {
             setTransaction(found);
           } else {
             console.error("Transaction not found with ID:", id);
-            // Log all available transactions for debugging
+            // Log all available transaction IDs for debugging
             console.log("Available transaction IDs:", transactions.map(t => t.id));
           }
           
