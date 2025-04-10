@@ -11,7 +11,7 @@ import { StatusCard } from "@/components/transaction/StatusCard";
 import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
 
-// Mock transaction data for the demo
+// Mock transaction data for the demo - updated to have a clear "menunggu_konfirmasi" transaction
 const transactionsData = [
   {
     id: "TRX-2023-001",
@@ -28,7 +28,7 @@ const transactionsData = [
     sellerId: "SEL-001",
     sellerName: "Koperasi Tani Makmur",
     createdAt: new Date("2023-12-10T08:30:00Z"),
-    updatedAt: new Date("2023-12-15T14:25:00Z"),
+    updatedAt: new Date("2023-12-10T08:30:00Z"),
     termsDocUrl: null,
     signatureUrl: null,
     shippingStatus: null,
@@ -54,7 +54,7 @@ const transactionsData = [
     sellerId: "SEL-001",
     sellerName: "Koperasi Tani Makmur",
     createdAt: new Date("2023-12-08T10:45:00Z"),
-    updatedAt: new Date("2023-12-14T11:30:00Z"),
+    updatedAt: new Date("2023-12-09T09:20:00Z"),
     termsDocUrl: "/placeholder.svg",
     signatureUrl: null,
     shippingStatus: null,
@@ -64,6 +64,35 @@ const transactionsData = [
     history: [
       { date: new Date("2023-12-08T10:45:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dari Order Book" },
       { date: new Date("2023-12-09T09:20:00Z"), status: "dikonfirmasi", description: "Pesanan dikonfirmasi penjual" }
+    ]
+  },
+  {
+    id: "TRX-2023-003",
+    type: "regular",
+    commodityId: "KM003",
+    commodityName: "Kedelai",
+    quantity: 800,
+    unit: "kg",
+    price: 15000,
+    totalPrice: 12000000,
+    status: "selesai",
+    buyerId: "BUY-003",
+    buyerName: "Pabrik Tahu Murni",
+    sellerId: "SEL-002",
+    sellerName: "PT Agro Nusantara",
+    createdAt: new Date("2023-12-01T14:20:00Z"),
+    updatedAt: new Date("2023-12-12T09:15:00Z"),
+    termsDocUrl: "/placeholder.svg",
+    signatureUrl: "/placeholder.svg",
+    shippingStatus: "sudah_dikirim",
+    buyerLocation: "Bekasi",
+    buyerPhone: "+6285678901234",
+    notes: "Transaksi selesai. Barang telah diterima dengan kondisi baik.",
+    history: [
+      { date: new Date("2023-12-01T14:20:00Z"), status: "menunggu_konfirmasi", description: "Pesanan dibuat" },
+      { date: new Date("2023-12-02T08:45:00Z"), status: "dikonfirmasi", description: "Pesanan dikonfirmasi penjual" },
+      { date: new Date("2023-12-03T10:30:00Z"), status: "dibayar", description: "Pembayaran diterima" },
+      { date: new Date("2023-12-12T09:15:00Z"), status: "selesai", description: "Transaksi selesai" }
     ]
   }
 ];

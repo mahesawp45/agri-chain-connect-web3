@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Package, DollarSign } from "lucide-react";
+import { Package, DollarSign, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency } from "@/lib/utils";
@@ -88,7 +88,7 @@ export const TransactionInfo = ({
 
           <Separator className="bg-earth-light-brown/30" />
 
-          <BuyerInfo transaction={transaction} openWhatsAppChat={() => {}} />
+          <BuyerInfo transaction={transaction} />
 
           <Separator className="bg-earth-light-brown/30" />
 
@@ -104,10 +104,22 @@ export const TransactionInfo = ({
 
 interface BuyerInfoProps {
   transaction: any;
-  openWhatsAppChat: () => void;
 }
 
-export const BuyerInfo = ({ transaction, openWhatsAppChat }: BuyerInfoProps) => {
+export const BuyerInfo = ({ transaction }: BuyerInfoProps) => {
+  const openWhatsAppChat = () => {
+    if (!transaction) return;
+    
+    // Format WhatsApp message
+    const message = `Halo ${transaction.buyerName}, saya dari ${transaction.sellerName}. Mari bicarakan detail lebih lanjut tentang ${transaction.commodityName} yang Anda pesan. Terima kasih.`;
+    
+    // Create WhatsApp URL with phone number and message
+    const whatsappUrl = `https://wa.me/${transaction.buyerPhone.replace(/\+/g, '')}?text=${encodeURIComponent(message)}`;
+    
+    // Open WhatsApp in a new window
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="p-4 rounded-lg bg-earth-clay/20">
@@ -130,7 +142,7 @@ export const BuyerInfo = ({ transaction, openWhatsAppChat }: BuyerInfoProps) => 
               className="mt-2 gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green"
               onClick={openWhatsAppChat}
             >
-              <span className="h-3 w-3" />
+              <MessageCircle className="h-3 w-3" />
               Chat via WhatsApp
             </Button>
           </div>

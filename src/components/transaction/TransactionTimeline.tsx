@@ -13,6 +13,21 @@ interface TransactionTimelineProps {
 }
 
 export const TransactionTimeline = ({ history }: TransactionTimelineProps) => {
+  if (!history || history.length === 0) {
+    return (
+      <Card className="earth-card-clay overflow-hidden">
+        <CardHeader className="earth-header-clay pb-3">
+          <CardTitle className="text-white">Transaction Timeline</CardTitle>
+        </CardHeader>
+        <CardContent className="mt-4">
+          <div className="text-center py-4">
+            <p className="text-earth-brown">No timeline events available.</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
   return (
     <Card className="earth-card-clay overflow-hidden">
       <CardHeader className="earth-header-clay pb-3">
