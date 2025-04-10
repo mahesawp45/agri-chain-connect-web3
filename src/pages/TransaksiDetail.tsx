@@ -20,6 +20,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
+import { TransactionFlowExplainer } from "@/components/transaction/TransactionFlowExplainer";
 
 // Mock transaction data for the demo
 const transactionsData = [
@@ -166,7 +167,7 @@ const TransaksiDetail = () => {
       <MainLayout>
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-2">{t("transactions.notfound")}</h2>
-          <p className="text-gray-600 mb-6">The requested transaction could not be found.</p>
+          <p className="text-gray-600 mb-6">{t("transactions.empty")}</p>
           <Button onClick={() => navigate('/transaksi')}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("action.back")}
@@ -238,6 +239,7 @@ const TransaksiDetail = () => {
     const statusOrder = [
       "menunggu_konfirmasi",
       "dikonfirmasi",
+      "negosiasi",
       "dibayar",
       "persiapan_pengiriman",
       "sedang_dikirim",
@@ -353,11 +355,11 @@ const TransaksiDetail = () => {
 
                 <div className="p-4 rounded-lg bg-earth-light-brown/20">
                   <h3 className="text-sm font-medium text-earth-brown mb-2">{t("transactions.terms")}</h3>
-                  <p className="text-earth-dark-green mb-4">{transaction.notes}</p>
+                  <p className="text-earth-dark-green mb-4">{transaction.notes || "-"}</p>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" className="gap-1 border-earth-light-brown/70 text-earth-dark-green hover:bg-earth-pale-green">
                       <FileText className="h-4 w-4" />
-                      View Agreement
+                      {t("transactions.documents")}
                     </Button>
                   </div>
                 </div>
@@ -367,72 +369,75 @@ const TransaksiDetail = () => {
 
           <Card className="earth-card-moss overflow-hidden">
             <CardHeader className="earth-header-moss pb-3">
-              <CardTitle className="text-white">Shipping Information</CardTitle>
+              <CardTitle className="text-white">{t("shipping.title")}</CardTitle>
             </CardHeader>
             <CardContent className="mt-4">
               {transaction.shippingStatus !== "belum_dikirim" ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-3 rounded-lg bg-earth-pale-green/50">
-                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Shipping Address</h3>
-                      <p className="text-earth-dark-green">{transaction.shippingDetails.address}</p>
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">{t("shipping.destination")}</h3>
+                      <p className="text-earth-dark-green">{transaction.shippingDetails?.address || "-"}</p>
                     </div>
                     <div className="p-3 rounded-lg bg-earth-pale-green/50">
-                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Courier</h3>
-                      <p className="text-earth-dark-green">{transaction.shippingDetails.courier}</p>
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">{t("shipping.carrier")}</h3>
+                      <p className="text-earth-dark-green">{transaction.shippingDetails?.courier || "-"}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-3 rounded-lg bg-earth-light-green/20">
-                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Tracking Number</h3>
-                      <p className="text-earth-dark-green font-mono">{transaction.shippingDetails.trackingNumber || "-"}</p>
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">{t("shipping.tracking")}</h3>
+                      <p className="text-earth-dark-green font-mono">{transaction.shippingDetails?.trackingNumber || "-"}</p>
                     </div>
                     <div className="p-3 rounded-lg bg-earth-light-green/20">
-                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">Estimated Arrival</h3>
+                      <h3 className="text-sm font-medium text-earth-medium-green mb-1">{t("shipping.arrivalDate")}</h3>
                       <p className="text-earth-dark-green">
-                        {transaction.shippingDetails.estimatedArrival ? 
+                        {transaction.shippingDetails?.estimatedArrival ? 
                           formatDate(new Date(transaction.shippingDetails.estimatedArrival)) : 
                           "-"}
                       </p>
                     </div>
                   </div>
                   <div className="p-3 rounded-lg bg-earth-wheat/30">
-                    <h3 className="text-sm font-medium text-earth-brown mb-1">Shipped Date</h3>
+                    <h3 className="text-sm font-medium text-earth-brown mb-1">{t("shipping.departureDate")}</h3>
                     <p className="text-earth-dark-green">
-                      {transaction.shippingDetails.shippedDate ? 
+                      {transaction.shippingDetails?.shippedDate ? 
                         formatDate(new Date(transaction.shippingDetails.shippedDate)) : 
-                        "Not shipped yet"}
+                        t("status.notshipped")}
                     </p>
                   </div>
                   <div className="flex justify-end">
                     <Button variant="outline" className="gap-2 border-earth-light-brown text-earth-dark-green hover:bg-earth-pale-green">
                       <Truck className="h-4 w-4" />
-                      Track Shipment
+                      {t("shipping.trackShipment")}
                     </Button>
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-8 bg-earth-pale-green/30 rounded-lg">
                   <Truck className="h-12 w-12 mx-auto mb-2 text-earth-light-green" />
-                  <p className="mb-4 text-earth-medium-green font-medium">Shipping information not available yet</p>
-                  <p className="text-sm text-earth-medium-green">Shipping details will be updated once the order is processed for delivery.</p>
+                  <p className="mb-4 text-earth-medium-green font-medium">{t("shipping.notfound")}</p>
+                  <p className="text-sm text-earth-medium-green">{t("status.notshipped")}</p>
                 </div>
               )}
             </CardContent>
           </Card>
+
+          {/* Add Transaction Flow Explainer */}
+          <TransactionFlowExplainer currentStatus={transaction.status} />
         </div>
 
         <div className="space-y-6">
           <Card className="earth-card-brown overflow-hidden">
             <CardHeader className="earth-header-brown pb-3">
-              <CardTitle className="text-white">Transaction Summary</CardTitle>
+              <CardTitle className="text-white">{t("transactions.summary")}</CardTitle>
             </CardHeader>
             <CardContent className="mt-4">
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
-                  <span className="text-earth-brown">Transaction Type</span>
+                  <span className="text-earth-brown">{t("transactions.type")}</span>
                   <Badge variant="outline" className="capitalize border-earth-brown text-earth-brown">
-                    {transaction.type === "order_book" ? "Order Book" : "Regular"}
+                    {transaction.type === "order_book" ? "Order Book" : t("transactions.regular")}
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
@@ -440,29 +445,29 @@ const TransaksiDetail = () => {
                   <span className="text-earth-dark-green">{formatDate(new Date(transaction.createdAt))}</span>
                 </div>
                 <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
-                  <span className="text-earth-brown">Last Updated</span>
+                  <span className="text-earth-brown">{t("transactions.updatedAt")}</span>
                   <span className="text-earth-dark-green">{formatDate(new Date(transaction.updatedAt))}</span>
                 </div>
 
                 <Separator className="bg-earth-light-brown/30" />
 
                 <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
-                  <span className="text-earth-brown">Commodity</span>
+                  <span className="text-earth-brown">{t("transactions.commodity")}</span>
                   <span className="text-earth-dark-green">{transaction.commodityName}</span>
                 </div>
                 <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/20">
-                  <span className="text-earth-brown">Quantity</span>
+                  <span className="text-earth-brown">{t("transactions.quantity")}</span>
                   <span className="text-earth-dark-green">{transaction.quantity.toLocaleString()} {transaction.unit}</span>
                 </div>
                 <div className="flex justify-between items-center p-2 rounded bg-earth-light-brown/10">
-                  <span className="text-earth-brown">Unit Price</span>
+                  <span className="text-earth-brown">{t("transactions.price")}</span>
                   <span className="text-earth-dark-green">{formatCurrency(transaction.price)}/{transaction.unit}</span>
                 </div>
 
                 <Separator className="bg-earth-light-brown/30" />
 
                 <div className="flex justify-between items-center p-3 rounded bg-earth-wheat/40 font-bold">
-                  <span className="text-earth-dark-green">Total Amount</span>
+                  <span className="text-earth-dark-green">{t("transactions.total")}</span>
                   <span className="text-earth-dark-green">{formatCurrency(transaction.totalPrice)}</span>
                 </div>
               </div>
@@ -471,17 +476,17 @@ const TransaksiDetail = () => {
 
           <Card className="earth-card-clay overflow-hidden">
             <CardHeader className="earth-header-clay pb-3">
-              <CardTitle className="text-white">Transaction Timeline</CardTitle>
+              <CardTitle className="text-white">{t("transactions.timeline")}</CardTitle>
             </CardHeader>
             <CardContent className="mt-4">
               <div className="space-y-4">
-                {transaction.history.map((event: any, index: number) => (
+                {transaction.history?.map((event: any, index: number) => (
                   <div key={index} className="flex">
                     <div className="mr-4 flex flex-col items-center">
                       <div className="w-4 h-4 bg-earth-brown rounded-full flex items-center justify-center">
                         <div className="w-2 h-2 bg-earth-clay rounded-full"></div>
                       </div>
-                      {index < transaction.history.length - 1 && (
+                      {index < (transaction.history?.length || 0) - 1 && (
                         <div className="w-0.5 bg-earth-light-brown h-full mt-1"></div>
                       )}
                     </div>
@@ -493,27 +498,32 @@ const TransaksiDetail = () => {
                     </div>
                   </div>
                 ))}
+                {(!transaction.history || transaction.history.length === 0) && (
+                  <div className="text-center py-4">
+                    <p className="text-earth-medium-green">{t("info.noData")}</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
 
           <Card className="earth-card-wheat overflow-hidden">
             <CardHeader className="earth-header-wheat pb-3">
-              <CardTitle className="text-white">Quick Actions</CardTitle>
+              <CardTitle className="text-white">{t("dashboard.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent className="mt-4">
               <div className="space-y-3">
                 <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
                   <FileText className="h-4 w-4" />
-                  View Invoice
+                  {t("transactions.invoice")}
                 </Button>
                 <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
                   <ShoppingCart className="h-4 w-4" />
-                  View Commodity
+                  {t("transactions.commodity")}
                 </Button>
                 <Button variant="outline" className="w-full justify-start gap-2 border-earth-light-brown/50 text-earth-dark-green hover:bg-earth-pale-green/50">
                   <PackageCheck className="h-4 w-4" />
-                  Update Status
+                  {t("shipping.updateStatus")}
                 </Button>
               </div>
             </CardContent>

@@ -100,9 +100,7 @@ export const translations: TranslationsType = {
     "transactions.detail": "Transaction Details",
     "transactions.all": "All",
     "transactions.pending": "Pending",
-    "transactions.confirmed": "Confirmed",
-    "transactions.paid": "Paid",
-    "transactions.shipped": "Shipped",
+    "transactions.processed": "Processed",
     "transactions.completed": "Completed",
     "transactions.canceled": "Canceled",
     "transactions.total": "Total Price",
@@ -114,6 +112,11 @@ export const translations: TranslationsType = {
     "transactions.documents": "Documents",
     "transactions.notes": "Notes",
     "transactions.invoice": "Invoice",
+    "transactions.empty": "No transactions found",
+    "transactions.new": "New Transaction",
+    "transactions.regular": "Regular",
+    "transactions.list": "Transaction List",
+    "transactions.print": "Print Transaction",
 
     // Order Book
     "orderbook.title": "Order Book",
@@ -219,6 +222,7 @@ export const translations: TranslationsType = {
     "status.rejected": "Rejected",
     "status.draft": "Draft",
     "status.onHold": "On Hold",
+    "status.negotiating": "Negotiating",
 
     // Dashboard
     "dashboard.title": "Dashboard",
@@ -342,6 +346,42 @@ export const translations: TranslationsType = {
     "market.noReviews": "No reviews yet",
     "market.backToMarket": "Back to Market",
     "market.notFound": "Commodity not found",
+
+    // Transaction Flow Explainer
+    "flow.title": "Transaction Process",
+    "flow.subtitle": "Here's how the transaction process works from start to finish:",
+    "flow.current": "Current Step",
+    "flow.helpTitle": "Need help?",
+    "flow.helpText": "If you need assistance with any step of the process, please contact our support team through the help center or WhatsApp.",
+    
+    "flow.pending.title": "1. Order Received",
+    "flow.pending.description": "A buyer has placed an order for your commodity. Review the order details and decide to accept or reject it.",
+    
+    "flow.confirmed.title": "2. Order Confirmed",
+    "flow.confirmed.description": "You've confirmed the order. The buyer has been notified and awaits further information.",
+    
+    "flow.negotiating.title": "3. Price Negotiation",
+    "flow.negotiating.description": "Discuss and negotiate price terms with the buyer until both parties are satisfied.",
+    
+    "flow.paid.title": "4. Payment Received",
+    "flow.paid.description": "The buyer has made the payment for the order. You can now proceed with preparing the shipment.",
+    
+    "flow.processing.title": "5. Preparing Shipment",
+    "flow.processing.description": "Prepare the ordered commodities for shipping. Ensure proper packaging and documentation.",
+    
+    "flow.shipping.title": "6. Shipment in Transit",
+    "flow.shipping.description": "The commodities are on their way to the buyer. Tracking information has been provided to the buyer.",
+    
+    "flow.shipped.title": "7. Shipment Delivered",
+    "flow.shipped.description": "The shipment has been delivered to the buyer's specified address.",
+    
+    "flow.received.title": "8. Order Received",
+    "flow.received.description": "The buyer has confirmed receipt of the commodities and is reviewing them.",
+    
+    "flow.completed.title": "9. Transaction Completed",
+    "flow.completed.description": "The transaction has been successfully completed. The funds have been released to your account.",
+    "transactions.updatedAt": "Updated Date",
+    "transactions.summary": "Transaction Summary"
   },
   id: {
     // General
@@ -431,9 +471,7 @@ export const translations: TranslationsType = {
     "transactions.detail": "Detail Transaksi",
     "transactions.all": "Semua",
     "transactions.pending": "Menunggu",
-    "transactions.confirmed": "Dikonfirmasi",
-    "transactions.paid": "Dibayar",
-    "transactions.shipped": "Dikirim",
+    "transactions.processed": "Diproses",
     "transactions.completed": "Selesai",
     "transactions.canceled": "Dibatalkan",
     "transactions.total": "Total Harga",
@@ -445,6 +483,11 @@ export const translations: TranslationsType = {
     "transactions.documents": "Dokumen",
     "transactions.notes": "Catatan",
     "transactions.invoice": "Faktur",
+    "transactions.empty": "Tidak ada transaksi yang ditemukan",
+    "transactions.new": "Transaksi Baru",
+    "transactions.regular": "Reguler",
+    "transactions.list": "Daftar Transaksi",
+    "transactions.print": "Cetak Transaksi",
 
     // Order Book
     "orderbook.title": "Order Book",
@@ -550,6 +593,7 @@ export const translations: TranslationsType = {
     "status.rejected": "Ditolak",
     "status.draft": "Draf",
     "status.onHold": "Ditahan",
+    "status.negotiating": "Negosiasi",
 
     // Dashboard
     "dashboard.title": "Dasbor",
@@ -673,48 +717,15 @@ export const translations: TranslationsType = {
     "market.noReviews": "Belum ada ulasan",
     "market.backToMarket": "Kembali ke Pasar",
     "market.notFound": "Komoditas tidak ditemukan",
-  }
-};
 
-interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
-}
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('id');
-
-  // Load saved language preference from localStorage
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('app-language');
-    if (savedLanguage && (savedLanguage === 'id' || savedLanguage === 'en')) {
-      setLanguage(savedLanguage as Language);
-    }
-  }, []);
-
-  // Save language preference to localStorage when changed
-  useEffect(() => {
-    localStorage.setItem('app-language', language);
-  }, [language]);
-
-  const t = (key: string): string => {
-    return translations[language][key] || key;
-  };
-
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};
-
-export const useLanguage = (): LanguageContextType => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-};
+    // Transaction Flow Explainer
+    "flow.title": "Proses Transaksi",
+    "flow.subtitle": "Berikut adalah cara kerja proses transaksi dari awal hingga akhir:",
+    "flow.current": "Langkah Saat Ini",
+    "flow.helpTitle": "Butuh bantuan?",
+    "flow.helpText": "Jika Anda membutuhkan bantuan pada langkah mana pun dalam proses ini, silakan hubungi tim dukungan kami melalui pusat bantuan atau WhatsApp.",
+    
+    "flow.pending.title": "1. Pesanan Diterima",
+    "flow.pending.description": "Pembeli telah melakukan pemesanan untuk komoditas Anda. Tinjau detail pesanan dan putuskan untuk menerima atau menolak.",
+    
+    "
