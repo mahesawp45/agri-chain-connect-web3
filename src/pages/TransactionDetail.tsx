@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -763,3 +764,41 @@ const TransactionDetail = () => {
                         placeholder={language === "id" ? "Masukkan nomor resi/pelacakan" : "Enter receipt/tracking number"}
                         value={trackingNumber}
                         onChange={(e) => setTrackingNumber(e.target.value)}
+                      />
+                      
+                      <p className="text-xs text-earth-medium-green">
+                        {language === "id"
+                          ? "Masukkan nomor resi atau pelacakan jika tersedia"
+                          : "Enter receipt or tracking number if available"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    variant="farmer"
+                    className="w-full"
+                    onClick={handleCompleteDelivery}
+                  >
+                    <Check className="h-4 w-4 mr-2" />
+                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+        
+        <div>
+          <TransactionSummary
+            transaction={transaction}
+            openWhatsAppChat={handleStartWhatsAppChat}
+          />
+          
+          <TransactionTimeline transaction={transaction} />
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default TransactionDetail;
