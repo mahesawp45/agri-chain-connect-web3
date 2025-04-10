@@ -9,6 +9,8 @@ import { TransactionInfo } from "@/components/transaction/TransactionInfo";
 import { StatusCard } from "@/components/transaction/StatusCard";
 import { TransactionTimeline } from "@/components/transaction/TransactionTimeline";
 import { TransactionSummary } from "@/components/transaction/TransactionSummary";
+import { TransactionFlowExplainer } from "@/components/transaction/TransactionFlowExplainer";
+import { TransactionFlowGuide } from "@/components/transaction/TransactionFlowGuide";
 import { transactions } from "@/lib/data/mockData";  // Import directly from mockData
 
 const TransactionDetail = () => {
@@ -18,6 +20,7 @@ const TransactionDetail = () => {
   const { toast } = useToast();
   const [transaction, setTransaction] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showFarmerGuide, setShowFarmerGuide] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -230,6 +233,11 @@ const TransactionDetail = () => {
     return ((currentIndex + 1) / statusOrder.length) * 100;
   };
 
+  // Toggle between farmer guide and regular flow explainer
+  const toggleFlowGuide = () => {
+    setShowFarmerGuide(prev => !prev);
+  };
+
   return (
     <MainLayout>
       <TransactionHeader 
@@ -259,11 +267,31 @@ const TransactionDetail = () => {
           )}
         </div>
 
-        <div>
+        <div className="space-y-6">
           <TransactionSummary
             transaction={transaction}
             openWhatsAppChat={openWhatsAppChat}
           />
+
+          {/* Toggle button between flow views */}
+          <div className="flex justify-end">
+            <button 
+              onClick={toggleFlowGuide} 
+              className="text-sm text-earth-medium-green hover:text-earth-dark-green underline"
+            >
+              {showFarmerGuide 
+                ? "Show Standard Flow" 
+                : "Show Farmer Guide"
+              }
+            </button>
+          </div>
+
+          {/* Conditional rendering of either TransactionFlowGuide or TransactionFlowExplainer */}
+          {showFarmerGuide ? (
+            <TransactionFlowGuide currentStep={transaction.status} />
+          ) : (
+            <TransactionFlowExplainer currentStatus={transaction.status} />
+          )}
 
           <div className="mt-6">
             <TransactionTimeline history={transaction.history} />
