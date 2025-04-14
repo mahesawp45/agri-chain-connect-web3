@@ -95,6 +95,7 @@ export interface OrderBook {
   status: 'open' | 'accepted' | 'completed' | 'expired' | 'cancelled';
   termsConditions: string;
   createdAt: Date;
+  qrCodeUrl?: string; // Add qrCodeUrl field for saving generated QR code
 }
 
 export interface User {

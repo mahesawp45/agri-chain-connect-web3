@@ -29,6 +29,8 @@ import TransaksiPending from "./pages/buyer/TransaksiPending";
 import History from "./pages/buyer/History";
 import BuyTransaction from "./pages/buyer/BuyTransaction";
 import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
+import OrderBookList from "./pages/buyer/OrderBookList"; // New buyer order book list
+import CreateOrderBook from "./pages/buyer/CreateOrderBook"; // New create order book page
 
 // New farmer-specific pages
 import TransactionManagement from "./pages/farmer/TransactionManagement";
@@ -93,6 +95,11 @@ const App = () => (
             <Route path="/transaction-nego/:id" element={<TransactionNegotiation />} />
             <Route path="/transaksi-pending" element={<TransaksiPending />} />
             <Route path="/history" element={<History />} />
+            
+            {/* New buyer Order Book routes */}
+            <Route path="/buyer/order-book" element={<OrderBookList />} />
+            <Route path="/buyer/order-book/create" element={<CreateOrderBook />} />
+            <Route path="/buyer/order-book/:id" element={<OrderBookDetail />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
