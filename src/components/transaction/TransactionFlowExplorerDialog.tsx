@@ -10,24 +10,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { InfoIcon } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { TransactionFlowGuide } from "./TransactionFlowGuide";
 
-interface TransactionGuideDialogProps {
-  currentStep?: string;
-}
-
-export const TransactionGuideDialog = ({
-  currentStep = "login",
-}: TransactionGuideDialogProps) => {
+export const TransactionFlowExplorerDialog = () => {
   const { language } = useLanguage();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2 border-earth-light-brown/30 text-earth-brown hover:bg-earth-wheat/50">
-          <InfoIcon className="h-4 w-4" />
-          {language === "id" ? "Petunjuk Transaksi" : "Transaction Guide"}
+          <BookOpen className="h-4 w-4" />
+          {language === "id" ? "Panduan Transaksi" : "Transaction Guide"}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -37,16 +31,16 @@ export const TransactionGuideDialog = ({
           </DialogTitle>
           <DialogDescription className="text-earth-medium-green">
             {language === "id" 
-              ? "Berikut adalah langkah-langkah dalam proses transaksi reguler untuk petani:" 
-              : "Here are the steps in the regular transaction process for farmers:"}
+              ? "Berikut adalah langkah-langkah dalam proses transaksi untuk petani:" 
+              : "Here are the steps in the transaction process for farmers:"}
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4">
-          <TransactionFlowGuide currentStep={currentStep} />
+          <TransactionFlowGuide currentStep="login" />
         </div>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default TransactionGuideDialog;
+export default TransactionFlowExplorerDialog;

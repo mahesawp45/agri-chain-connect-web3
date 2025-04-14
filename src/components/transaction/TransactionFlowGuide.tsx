@@ -105,7 +105,7 @@ export const TransactionFlowGuide = ({
   };
 
   // Get current step index based on current status
-  const currentStepId = statusToStepMap[currentStep] || "review";
+  const currentStepId = statusToStepMap[currentStep] || currentStep || "login";
   const currentStepIndex = flowSteps.findIndex(step => step.id === currentStepId);
 
   return (
