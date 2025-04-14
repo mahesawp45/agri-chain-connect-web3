@@ -12,13 +12,24 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   CheckCircle, 
   Package, 
   Plus, 
   Info, 
   AlertTriangle,
-  FileCheck
+  FileCheck,
+  Search,
+  Filter,
+  SlidersHorizontal
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
@@ -79,8 +90,15 @@ const OrderBookAcceptDialog = ({
   const navigate = useNavigate();
   const [selectedCommodity, setSelectedCommodity] = useState<string | null>(null);
   const [matchingCommodities, setMatchingCommodities] = useState<any[]>([]);
+  const [filteredCommodities, setFilteredCommodities] = useState<any[]>([]);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [step, setStep] = useState<'select-commodity' | 'confirm'>('select-commodity');
+  
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGrade, setSelectedGrade] = useState<string>("all");
+  const [selectedLocation, setSelectedLocation] = useState<string>("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen && orderBook) {
@@ -92,13 +110,62 @@ const OrderBookAcceptDialog = ({
           commodity.available
       );
       setMatchingCommodities(matching);
+      setFilteredCommodities(matching);
+      
+      // Reset search and filters when dialog opens
+      setSearchQuery("");
+      setSelectedGrade("all");
+      setSelectedLocation("all");
     } else {
       // Reset dialog state when closing
       setSelectedCommodity(null);
       setTermsAccepted(false);
       setStep('select-commodity');
+      setIsFilterOpen(false);
     }
   }, [isOpen, orderBook]);
+
+  // Apply filters and search
+  useEffect(() => {
+    if (matchingCommodities.length === 0) return;
+    
+    let filtered = [...matchingCommodities];
+    
+    // Apply search
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        commodity => 
+          commodity.name.toLowerCase().includes(query) || 
+          commodity.id.toLowerCase().includes(query) ||
+          commodity.location.toLowerCase().includes(query)
+      );
+    }
+    
+    // Apply grade filter
+    if (selectedGrade !== "all") {
+      filtered = filtered.filter(commodity => commodity.grade === selectedGrade);
+    }
+    
+    // Apply location filter
+    if (selectedLocation !== "all") {
+      filtered = filtered.filter(commodity => 
+        commodity.location.includes(selectedLocation)
+      );
+    }
+    
+    setFilteredCommodities(filtered);
+  }, [searchQuery, selectedGrade, selectedLocation, matchingCommodities]);
+
+  // Get unique locations for filter
+  const uniqueLocations = Array.from(
+    new Set(matchingCommodities.map(commodity => commodity.location.split(",")[0].trim()))
+  );
+
+  // Get unique grades for filter
+  const uniqueGrades = Array.from(
+    new Set(matchingCommodities.map(commodity => commodity.grade))
+  );
 
   const handleSelectCommodity = (commodityId: string) => {
     setSelectedCommodity(commodityId);
@@ -150,6 +217,10 @@ const OrderBookAcceptDialog = ({
 
   const handleBack = () => {
     setStep('select-commodity');
+  };
+
+  const toggleFilter = () => {
+    setIsFilterOpen(!isFilterOpen);
   };
 
   return (
@@ -218,39 +289,124 @@ const OrderBookAcceptDialog = ({
               </h3>
               
               {matchingCommodities.length > 0 ? (
-                <div className="max-h-60 overflow-y-auto space-y-2 pr-2">
-                  {matchingCommodities.map((commodity) => (
-                    <div 
-                      key={commodity.id}
-                      className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                        selectedCommodity === commodity.id 
-                          ? 'border-earth-medium-green bg-earth-pale-green' 
-                          : 'border-gray-200 hover:bg-earth-pale-green/30'
-                      }`}
-                      onClick={() => handleSelectCommodity(commodity.id)}
+                <div className="space-y-4">
+                  {/* Search and Filter UI */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-earth-medium-green" />
+                      <Input
+                        placeholder={language === "id" ? "Cari komoditas..." : "Search commodities..."}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9 border-earth-light-green focus-visible:ring-earth-medium-green"
+                      />
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      onClick={toggleFilter}
+                      className={`gap-2 ${isFilterOpen ? 'bg-earth-pale-green border-earth-medium-green text-earth-dark-green' : 'border-earth-light-green text-earth-medium-green'}`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-3 ${
+                      <SlidersHorizontal className="h-4 w-4" />
+                      {language === "id" ? "Filter" : "Filter"}
+                    </Button>
+                  </div>
+
+                  {/* Filter Section */}
+                  {isFilterOpen && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-earth-pale-green/20 rounded-lg border border-earth-light-green/30 mb-2">
+                      <div>
+                        <p className="text-sm font-medium text-earth-medium-green mb-1">
+                          {language === "id" ? "Filter Grade" : "Filter by Grade"}
+                        </p>
+                        <Select
+                          value={selectedGrade}
+                          onValueChange={setSelectedGrade}
+                        >
+                          <SelectTrigger className="w-full border-earth-light-green focus:ring-earth-medium-green">
+                            <SelectValue placeholder={language === "id" ? "Semua Grade" : "All Grades"} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">{language === "id" ? "Semua Grade" : "All Grades"}</SelectItem>
+                            {uniqueGrades.map((grade) => (
+                              <SelectItem key={grade} value={grade}>Grade {grade}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-earth-medium-green mb-1">
+                          {language === "id" ? "Filter Lokasi" : "Filter by Location"}
+                        </p>
+                        <Select
+                          value={selectedLocation}
+                          onValueChange={setSelectedLocation}
+                        >
+                          <SelectTrigger className="w-full border-earth-light-green focus:ring-earth-medium-green">
+                            <SelectValue placeholder={language === "id" ? "Semua Lokasi" : "All Locations"} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">{language === "id" ? "Semua Lokasi" : "All Locations"}</SelectItem>
+                            {uniqueLocations.map((location) => (
+                              <SelectItem key={location} value={location}>{location}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Commodities List */}
+                  <div className="max-h-60 overflow-y-auto space-y-2 pr-2">
+                    {filteredCommodities.length > 0 ? (
+                      filteredCommodities.map((commodity) => (
+                        <div 
+                          key={commodity.id}
+                          className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                             selectedCommodity === commodity.id 
-                              ? 'bg-earth-medium-green border-earth-dark-green' 
-                              : 'border-earth-medium-green'
-                          }`}>
-                            {selectedCommodity === commodity.id && (
-                              <CheckCircle className="h-3 w-3 text-white" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-medium text-earth-dark-green">{commodity.name}</p>
-                            <div className="flex text-sm text-earth-medium-green">
-                              <p className="mr-4">{commodity.type} - Grade {commodity.grade}</p>
-                              <p>{commodity.quantity.toLocaleString()} {commodity.unit}</p>
+                              ? 'border-earth-medium-green bg-earth-pale-green' 
+                              : 'border-gray-200 hover:bg-earth-pale-green/30'
+                          }`}
+                          onClick={() => handleSelectCommodity(commodity.id)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div className={`w-5 h-5 rounded-full border flex items-center justify-center mr-3 ${
+                                selectedCommodity === commodity.id 
+                                  ? 'bg-earth-medium-green border-earth-dark-green' 
+                                  : 'border-earth-medium-green'
+                              }`}>
+                                {selectedCommodity === commodity.id && (
+                                  <CheckCircle className="h-3 w-3 text-white" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-earth-dark-green">{commodity.name}</p>
+                                <div className="flex text-sm text-earth-medium-green">
+                                  <p className="mr-4">{commodity.type} - Grade {commodity.grade}</p>
+                                  <p>{commodity.quantity.toLocaleString()} {commodity.unit}</p>
+                                </div>
+                                <p className="text-xs text-earth-medium-green/80">{commodity.location}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
+                      ))
+                    ) : (
+                      <div className="p-6 bg-earth-pale-green/20 border border-earth-light-green/30 rounded-lg text-center">
+                        <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-amber-500" />
+                        <p className="font-medium text-earth-dark-green mb-1">
+                          {language === "id" 
+                            ? "Tidak ditemukan hasil yang sesuai" 
+                            : "No matching results found"}
+                        </p>
+                        <p className="text-sm text-earth-medium-green">
+                          {language === "id" 
+                            ? "Coba ubah pencarian atau filter Anda" 
+                            : "Try changing your search or filters"}
+                        </p>
                       </div>
-                    </div>
-                  ))}
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="p-6 bg-amber-50 border border-amber-200 rounded-lg text-center">
@@ -276,7 +432,7 @@ const OrderBookAcceptDialog = ({
                 </div>
               )}
               
-              {matchingCommodities.length > 0 && (
+              {filteredCommodities.length > 0 && (
                 <div className="mt-4 flex justify-between items-center">
                   <Button 
                     variant="outline" 
