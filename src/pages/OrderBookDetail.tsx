@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { formatDate } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import OrderBookAcceptDialog from "@/components/orderbook/OrderBookAcceptDialog";
+import { TransactionFlowExplorerDialog } from "@/components/transaction/TransactionFlowExplorerDialog"; // Add this import
 
 // Mock order book data
 const orderBooks = [
@@ -284,25 +285,30 @@ const OrderBookDetail = () => {
           <h1 className="text-2xl font-bold text-earth-dark-green">{t("orderbook.detail")}</h1>
           <p className="text-earth-medium-green">{orderBook.id}</p>
         </div>
-        {orderBook.status === "open" && (
-          <div className="flex space-x-2 mt-4 md:mt-0">
-            <Button 
-              variant="outline" 
-              className="gap-2 text-red-600 border-red-200 hover:bg-red-50" 
-              onClick={handleReject}
-            >
-              <XCircle className="h-4 w-4" />
-              {language === "id" ? "Tolak Pesanan" : "Reject Order"}
-            </Button>
-            <Button 
-              className="gap-2 bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green" 
-              onClick={handleAccept}
-            >
-              <CheckCircle className="h-4 w-4" />
-              {language === "id" ? "Terima Pesanan" : "Accept Order"}
-            </Button>
-          </div>
-        )}
+        <div className="flex space-x-2 mt-4 md:mt-0">
+          {/* Add Transaction Guide button */}
+          <TransactionFlowExplorerDialog />
+
+          {orderBook.status === "open" && (
+            <>
+              <Button 
+                variant="outline" 
+                className="gap-2 text-red-600 border-red-200 hover:bg-red-50" 
+                onClick={handleReject}
+              >
+                <XCircle className="h-4 w-4" />
+                {language === "id" ? "Tolak Pesanan" : "Reject Order"}
+              </Button>
+              <Button 
+                className="gap-2 bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green" 
+                onClick={handleAccept}
+              >
+                <CheckCircle className="h-4 w-4" />
+                {language === "id" ? "Terima Pesanan" : "Accept Order"}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Main content sections */}
