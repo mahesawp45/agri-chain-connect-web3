@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -800,4 +801,110 @@ const TransactionDetail = () => {
                         
                         {uploadedPhoto && (
                           <div className="mt-2 text-earth-dark-green bg-earth-light-green/20 p-2 rounded-lg">
-                            <CheckCircle className="h-4 w-4 inline-block mr-1"
+                            <CheckCircle className="h-4 w-4 inline-block mr-1" />
+                            {uploadedPhoto.name}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Tracking Number */}
+                    <div className="border border-earth-light-brown p-4 rounded-lg">
+                      <div className="flex items-center mb-2">
+                        <FileText className="h-4 w-4 text-earth-brown mr-2" />
+                        <h4 className="font-medium text-earth-dark-green">{language === "id" ? "Nomor Pelacakan" : "Tracking Number"}</h4>
+                      </div>
+                      
+                      <input 
+                        type="text" 
+                        className="w-full p-2 border border-earth-light-brown/70 rounded-lg mb-2"
+                        placeholder={language === "id" ? "Masukkan nomor resi/pelacakan" : "Enter receipt/tracking number"}
+                        value={trackingNumber}
+                        onChange={(e) => setTrackingNumber(e.target.value)}
+                      />
+                      
+                      <p className="text-xs text-earth-medium-green">
+                        {language === "id" 
+                          ? "Opsional: Isi jika menggunakan jasa kurir" 
+                          : "Optional: Fill if using courier service"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    variant="farmer" 
+                    className="w-full"
+                    onClick={handleCompleteDelivery}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    {language === "id" ? "Selesaikan Pengiriman" : "Complete Delivery"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Show delivery completed section */}
+          {transaction?.status === "sudah_dikirim" && (
+            <Card className="earth-card-clay overflow-hidden">
+              <CardHeader className="earth-header-clay pb-3">
+                <CardTitle className="text-white">
+                  {language === "id" ? "Pengiriman Selesai" : "Delivery Completed"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 mt-2">
+                <div className="p-4 bg-earth-clay/20 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <CheckCircle className="h-5 w-5 text-earth-dark-green" />
+                    <h3 className="font-medium text-earth-dark-green">
+                      {language === "id" ? "Pengiriman Telah Selesai" : "Delivery Has Been Completed"}
+                    </h3>
+                  </div>
+                  
+                  <div className="bg-earth-light-green/20 p-3 rounded-lg mb-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-earth-brown">{language === "id" ? "Tanggal Pengiriman" : "Delivery Date"}:</span>
+                      <span className="text-earth-dark-green font-medium">
+                        {transaction.actualDeliveryDate ? formatDate(transaction.actualDeliveryDate) : formatDate(new Date())}
+                      </span>
+                    </div>
+                    {transaction.trackingNumber && (
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-earth-brown">{language === "id" ? "No. Pelacakan" : "Tracking No."}:</span>
+                        <span className="text-earth-dark-green font-medium">
+                          {transaction.trackingNumber}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <p className="text-earth-medium-green mb-4 text-center">
+                    {language === "id" 
+                      ? "Komoditas telah dikirim. Menunggu konfirmasi penerimaan dari pembeli."
+                      : "The commodity has been delivered. Waiting for receipt confirmation from the buyer."}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        <div className="space-y-6">
+          <TransactionSummary
+            transaction={transaction}
+            openWhatsAppChat={handleStartWhatsAppChat}
+          />
+
+          <div className="mt-6">
+            <TransactionTimeline 
+              history={transaction?.history || []} 
+              currentStatus={transaction?.status}
+            />
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default TransactionDetail;
