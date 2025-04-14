@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -19,6 +18,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatDate } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import OrderBookAcceptDialog from "@/components/orderbook/OrderBookAcceptDialog";
 
 // Mock order book data
 const orderBooks = [
@@ -125,6 +125,7 @@ const OrderBookDetail = () => {
   const { toast } = useToast();
   const [orderBook, setOrderBook] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [acceptDialogOpen, setAcceptDialogOpen] = useState(false);
 
   useEffect(() => {
     // Simulate API call with setTimeout
@@ -138,6 +139,10 @@ const OrderBookDetail = () => {
   }, [id]);
 
   const handleAccept = () => {
+    setAcceptDialogOpen(true);
+  };
+
+  const handleAcceptOrderBook = () => {
     toast({
       title: language === "id" 
         ? "Pesanan Diterima" 
@@ -161,6 +166,9 @@ const OrderBookDetail = () => {
         }
       ]
     });
+    
+    // In a real application, you would redirect to transactions page after buyer approves
+    // For now, we'll just simulate that the status has changed
   };
 
   const handleReject = () => {
@@ -297,6 +305,7 @@ const OrderBookDetail = () => {
         )}
       </div>
 
+      {/* Main content sections */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Main content - 2/3 width on desktop */}
         <div className="md:col-span-2 space-y-6">
@@ -597,6 +606,14 @@ const OrderBookDetail = () => {
           </Card>
         </div>
       </div>
+
+      {/* Order accept dialog */}
+      <OrderBookAcceptDialog 
+        isOpen={acceptDialogOpen}
+        onOpenChange={setAcceptDialogOpen}
+        orderBook={orderBook}
+        onAcceptOrderBook={handleAcceptOrderBook}
+      />
     </MainLayout>
   );
 };
