@@ -121,7 +121,7 @@ const orderBooks = [
 const OrderBookDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [orderBook, setOrderBook] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -139,8 +139,12 @@ const OrderBookDetail = () => {
 
   const handleAccept = () => {
     toast({
-      title: "Order Accepted",
-      description: `You have accepted the order ${orderBook.id} from ${orderBook.buyerName}`,
+      title: language === "id" 
+        ? "Pesanan Diterima" 
+        : "Order Accepted",
+      description: language === "id"
+        ? `Anda telah menerima pesanan ${orderBook.id} dari ${orderBook.buyerName}`
+        : `You have accepted the order ${orderBook.id} from ${orderBook.buyerName}`,
     });
     // Here you would normally update the status via API
     setOrderBook({
@@ -150,8 +154,10 @@ const OrderBookDetail = () => {
         ...orderBook.history,
         { 
           date: new Date().toISOString(), 
-          action: "Accepted", 
-          notes: "Order accepted by seller" 
+          action: language === "id" ? "Diterima" : "Accepted", 
+          notes: language === "id" 
+            ? "Pesanan diterima oleh penjual" 
+            : "Order accepted by seller" 
         }
       ]
     });
@@ -159,8 +165,12 @@ const OrderBookDetail = () => {
 
   const handleReject = () => {
     toast({
-      title: "Order Rejected",
-      description: `You have rejected the order ${orderBook.id} from ${orderBook.buyerName}`,
+      title: language === "id" 
+        ? "Pesanan Ditolak" 
+        : "Order Rejected",
+      description: language === "id"
+        ? `Anda telah menolak pesanan ${orderBook.id} dari ${orderBook.buyerName}`
+        : `You have rejected the order ${orderBook.id} from ${orderBook.buyerName}`,
       variant: "destructive"
     });
     // Here you would normally update the status via API
@@ -171,8 +181,10 @@ const OrderBookDetail = () => {
         ...orderBook.history,
         { 
           date: new Date().toISOString(), 
-          action: "Rejected", 
-          notes: "Order rejected by seller" 
+          action: language === "id" ? "Ditolak" : "Rejected", 
+          notes: language === "id" 
+            ? "Pesanan ditolak oleh penjual" 
+            : "Order rejected by seller" 
         }
       ]
     });
@@ -233,7 +245,11 @@ const OrderBookDetail = () => {
       <MainLayout>
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-2 text-earth-dark-green">{t("orderbook.notfound")}</h2>
-          <p className="text-earth-medium-green mb-6">The requested order book entry could not be found.</p>
+          <p className="text-earth-medium-green mb-6">
+            {language === "id" 
+              ? "Entri order book yang diminta tidak dapat ditemukan." 
+              : "The requested order book entry could not be found."}
+          </p>
           <Button onClick={() => navigate('/order-book')} className="bg-earth-dark-green hover:bg-earth-medium-green">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("action.back")}
@@ -268,14 +284,14 @@ const OrderBookDetail = () => {
               onClick={handleReject}
             >
               <XCircle className="h-4 w-4" />
-              Reject Order
+              {language === "id" ? "Tolak Pesanan" : "Reject Order"}
             </Button>
             <Button 
               className="gap-2 bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green" 
               onClick={handleAccept}
             >
               <CheckCircle className="h-4 w-4" />
-              Accept Order
+              {language === "id" ? "Terima Pesanan" : "Accept Order"}
             </Button>
           </div>
         )}
@@ -310,7 +326,9 @@ const OrderBookDetail = () => {
                 </div>
                 
                 <div>
-                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">Requested Grade</h3>
+                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">
+                    {language === "id" ? "Grade yang Diminta" : "Requested Grade"}
+                  </h3>
                   <div className="p-3 rounded-lg bg-earth-pale-green/50 border border-earth-light-green/30">
                     <Badge 
                       variant="outline" 
@@ -330,27 +348,38 @@ const OrderBookDetail = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">Price Offer</h3>
+                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">
+                    {language === "id" ? "Penawaran Harga" : "Price Offer"}
+                  </h3>
                   <div className="p-4 rounded-lg bg-earth-wheat/30 border border-earth-wheat">
                     <p className="text-xl font-bold text-earth-dark-green">
                       Rp {orderBook.priceOffer.toLocaleString()}/{orderBook.unit}
                     </p>
                     <p className="text-sm text-earth-medium-green">
-                      Total: Rp {orderBook.totalValue.toLocaleString()}
+                      {language === "id" ? "Total: " : "Total: "}
+                      Rp {orderBook.totalValue.toLocaleString()}
                     </p>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">Important Dates</h3>
+                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">
+                    {language === "id" ? "Tanggal Penting" : "Important Dates"}
+                  </h3>
                   <div className="p-4 rounded-lg bg-earth-pale-green/50 border border-earth-light-green/30 space-y-1">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      <span className="text-sm text-earth-dark-green">Delivery: <strong>{formatDate(orderBook.requestedDeliveryDate)}</strong></span>
+                      <span className="text-sm text-earth-dark-green">
+                        {language === "id" ? "Pengiriman: " : "Delivery: "}
+                        <strong>{formatDate(orderBook.requestedDeliveryDate)}</strong>
+                      </span>
                     </div>
                     <div className="flex items-center">
                       <Clock className="h-4 w-4 mr-2 text-earth-medium-green" />
-                      <span className="text-sm text-earth-dark-green">Expires: <strong>{formatDate(orderBook.offerExpiryDate)}</strong></span>
+                      <span className="text-sm text-earth-dark-green">
+                        {language === "id" ? "Kedaluwarsa: " : "Expires: "}
+                        <strong>{formatDate(orderBook.offerExpiryDate)}</strong>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -359,7 +388,9 @@ const OrderBookDetail = () => {
               <Separator className="my-6 bg-earth-light-green" />
 
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-earth-medium-green mb-2">Buyer Information</h3>
+                <h3 className="text-sm font-medium text-earth-medium-green mb-2">
+                  {language === "id" ? "Informasi Pembeli" : "Buyer Information"}
+                </h3>
                 <div className="flex items-start p-4 rounded-lg bg-blue-50 border border-blue-100">
                   <div className="h-10 w-10 rounded-full overflow-hidden bg-blue-100 flex items-center justify-center mr-3">
                     <User className="h-5 w-5 text-blue-600" />
@@ -376,7 +407,9 @@ const OrderBookDetail = () => {
               <Separator className="my-6 bg-earth-light-green" />
 
               <div>
-                <h3 className="text-sm font-medium text-earth-medium-green mb-2">Requirements</h3>
+                <h3 className="text-sm font-medium text-earth-medium-green mb-2">
+                  {language === "id" ? "Persyaratan" : "Requirements"}
+                </h3>
                 <ul className="list-disc pl-5 space-y-1 text-earth-dark-green p-4 rounded-lg bg-earth-pale-green/30 border border-earth-light-green/20 mb-6">
                   {orderBook.requirementDetails.map((req: string, index: number) => (
                     <li key={index}>{req}</li>
@@ -394,7 +427,9 @@ const OrderBookDetail = () => {
           {/* History Card */}
           <Card className="overflow-hidden border-2 border-earth-clay/70 shadow-md">
             <CardHeader className="pb-3 bg-gradient-to-r from-earth-brown to-earth-light-brown">
-              <CardTitle className="text-white">History</CardTitle>
+              <CardTitle className="text-white">
+                {language === "id" ? "Riwayat" : "History"}
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
@@ -425,45 +460,63 @@ const OrderBookDetail = () => {
           {/* Order Summary Card */}
           <Card className="overflow-hidden border-2 border-earth-wheat/70 shadow-md">
             <CardHeader className="pb-3 bg-gradient-to-r from-[#d4b145] to-[#e6be70]">
-              <CardTitle className="text-white">Order Summary</CardTitle>
+              <CardTitle className="text-white">
+                {language === "id" ? "Ringkasan Pesanan" : "Order Summary"}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 p-6">
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Order ID</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "ID Pesanan" : "Order ID"}
+                </span>
                 <span className="font-mono text-earth-dark-green">{orderBook.id}</span>
               </div>
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Created Date</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "Tanggal Dibuat" : "Created Date"}
+                </span>
                 <span className="text-earth-dark-green">{formatDate(orderBook.createdAt)}</span>
               </div>
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Status</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "Status" : "Status"}
+                </span>
                 {getStatusBadge(orderBook.status)}
               </div>
 
               <Separator className="bg-earth-light-green/50" />
 
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Commodity</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "Komoditas" : "Commodity"}
+                </span>
                 <span className="text-earth-dark-green">{orderBook.commodityType}</span>
               </div>
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Quantity</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "Jumlah" : "Quantity"}
+                </span>
                 <span className="text-earth-dark-green">{orderBook.quantity.toLocaleString()} {orderBook.unit}</span>
               </div>
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Grade</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "Grade" : "Grade"}
+                </span>
                 <span className="text-earth-dark-green">{orderBook.requestedGrade}</span>
               </div>
 
               <Separator className="bg-earth-light-green/50" />
 
               <div className="flex justify-between items-center p-2 rounded hover:bg-earth-pale-green/20 transition-colors">
-                <span className="text-earth-medium-green">Unit Price</span>
+                <span className="text-earth-medium-green">
+                  {language === "id" ? "Harga Satuan" : "Unit Price"}
+                </span>
                 <span className="text-earth-dark-green">Rp {orderBook.priceOffer.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center p-2 rounded-lg bg-earth-wheat/30 font-bold">
-                <span className="text-earth-dark-green">Total Value</span>
+                <span className="text-earth-dark-green">
+                  {language === "id" ? "Total Nilai" : "Total Value"}
+                </span>
                 <span className="text-earth-dark-green">Rp {orderBook.totalValue.toLocaleString()}</span>
               </div>
             </CardContent>
@@ -472,23 +525,31 @@ const OrderBookDetail = () => {
           {/* Delivery Information Card */}
           <Card className="overflow-hidden border-2 border-earth-light-green/70 shadow-md">
             <CardHeader className="pb-3 bg-gradient-to-r from-earth-medium-green to-earth-light-green">
-              <CardTitle className="text-white">Delivery Information</CardTitle>
+              <CardTitle className="text-white">
+                {language === "id" ? "Informasi Pengiriman" : "Delivery Information"}
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="p-3 rounded-lg bg-earth-pale-green/40 border border-earth-light-green/20">
-                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">Requested Delivery Date</h3>
+                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">
+                    {language === "id" ? "Tanggal Pengiriman yang Diminta" : "Requested Delivery Date"}
+                  </h3>
                   <div className="flex items-center">
                     <Calendar className="h-5 w-5 mr-2 text-earth-medium-green" />
                     <span className="text-earth-dark-green font-medium">{formatDate(orderBook.requestedDeliveryDate)}</span>
                   </div>
                 </div>
                 <div className="p-3 rounded-lg bg-earth-pale-green/40 border border-earth-light-green/20">
-                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">Delivery Address</h3>
+                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">
+                    {language === "id" ? "Alamat Pengiriman" : "Delivery Address"}
+                  </h3>
                   <p className="text-earth-dark-green">{orderBook.buyerDetails.address}</p>
                 </div>
                 <div className="p-3 rounded-lg bg-earth-pale-green/40 border border-earth-light-green/20">
-                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">Contact Person</h3>
+                  <h3 className="text-sm font-medium text-earth-medium-green mb-1">
+                    {language === "id" ? "Kontak Perwakilan" : "Contact Person"}
+                  </h3>
                   <div className="flex flex-col">
                     <p className="text-earth-dark-green font-medium">{orderBook.buyerName}</p>
                     <p className="text-sm text-earth-medium-green">{orderBook.buyerDetails.phone}</p>
@@ -502,13 +563,15 @@ const OrderBookDetail = () => {
           {/* Quick Actions Card */}
           <Card className="overflow-hidden border-2 border-earth-clay/70 shadow-md">
             <CardHeader className="pb-3 bg-gradient-to-r from-earth-brown to-earth-light-brown">
-              <CardTitle className="text-white">Quick Actions</CardTitle>
+              <CardTitle className="text-white">
+                {language === "id" ? "Aksi Cepat" : "Quick Actions"}
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-3">
                 <Button variant="outline" className="w-full justify-start gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20">
                   <FileText className="h-4 w-4" />
-                  View Terms
+                  {language === "id" ? "Lihat Syarat & Ketentuan" : "View Terms"}
                 </Button>
                 {orderBook.status === "open" && (
                   <>
@@ -517,7 +580,7 @@ const OrderBookDetail = () => {
                       onClick={handleAccept}
                     >
                       <CheckCircle className="h-4 w-4" />
-                      Accept Order
+                      {language === "id" ? "Terima Pesanan" : "Accept Order"}
                     </Button>
                     <Button 
                       variant="outline" 
@@ -525,7 +588,7 @@ const OrderBookDetail = () => {
                       onClick={handleReject}
                     >
                       <XCircle className="h-4 w-4" />
-                      Reject Order
+                      {language === "id" ? "Tolak Pesanan" : "Reject Order"}
                     </Button>
                   </>
                 )}
