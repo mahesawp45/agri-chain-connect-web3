@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -74,7 +73,7 @@ const App = () => (
             <Route path="/saldo" element={<Saldo />} />
             <Route path="/transaksi" element={<Transaksi />} />
             <Route path="/transaksi/:id" element={<TransaksiDetail />} />
-            <Route path="/order-book" element={<OrderBookList />} /> {/* Important: Using OrderBookList here */}
+            <Route path="/order-book" element={<OrderBookList />} />
             <Route path="/order-book/:id" element={<OrderBookDetail />} />
             <Route path="/harga" element={<Harga />} />
             <Route path="/pengiriman" element={<Pengiriman />} />
@@ -97,9 +96,9 @@ const App = () => (
             
             {/* Buyer Order Book routes */}
             <Route path="/buyer/order-book" element={<OrderBookList />} />
-            <Route path="/buyer/order-book/create" element={<CreateOrderBook />} />
             <Route path="/buyer/order-book/:id" element={<OrderBookDetail />} />
-            <Route path="/order-book/create" element={<CreateOrderBook />} /> {/* Direct route for creating order books */}
+            
+            {/* Remove the create route since we're using a modal now */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

@@ -26,6 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { TransactionFlowExplorerDialog } from "@/components/transaction/TransactionFlowExplorerDialog";
 import { OrderBook } from "@/lib/data/types";
+import { AddOrderBookDialog } from "@/components/orderbook/AddOrderBookDialog";
 
 // Sample order book data for buyer view
 const orderBooks: OrderBook[] = [
@@ -165,13 +166,7 @@ const OrderBookList = () => {
         </div>
         <div className="flex gap-2">
           <TransactionFlowExplorerDialog />
-          <Button 
-            onClick={handleCreateOrderBook}
-            className="gap-2 bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green"
-          >
-            <Plus className="h-4 w-4" />
-            {language === "id" ? "Tambah Order Book" : "Add Order Book"}
-          </Button>
+          <AddOrderBookDialog />
         </div>
       </div>
 
