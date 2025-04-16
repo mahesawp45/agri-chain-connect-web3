@@ -30,7 +30,7 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
   
   return (
     <header className="fixed top-0 w-full bg-white border-b border-gray-200 z-30">
-      <div className="flex h-16 items-center px-3 sm:px-4 lg:px-5 justify-between">
+      <div className="flex h-16 items-center gap-4 px-4 lg:px-6">
         <Button
           variant="ghost"
           size="icon"
@@ -55,7 +55,7 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           <span className="sr-only">Toggle Menu</span>
         </Button>
 
-        <div className="flex-1 md:ml-4 xl:ml-6 max-w-md">
+        <div className="flex-1 flex items-center gap-4 md:ml-0 max-w-md">
           <div className="relative w-full">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
             <Input
@@ -66,14 +66,14 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-3 lg:gap-4">
+        <div className="flex items-center gap-3 md:gap-2">
           {/* Blockchain Verification Status */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="hidden sm:flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full">
+                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-earth-light-green/20 text-earth-dark-green rounded-full whitespace-nowrap">
                   <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-                  <span className="text-xs font-medium whitespace-nowrap">
+                  <span className="text-xs font-medium">
                     {t("language") === "id" ? "Blockchain Aktif" : "Blockchain Active"}
                   </span>
                 </div>
@@ -92,8 +92,8 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <HelpCircle className="h-5 w-5 text-earth-medium-green" />
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <HelpCircle className="h-4 w-4 text-earth-medium-green" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -104,12 +104,12 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
             </Tooltip>
           </TooltipProvider>
           
-          {/* Settings Button - New */}
+          {/* Settings Button */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
-                  <Settings className="h-5 w-5 text-earth-medium-green" />
+                <Button variant="ghost" size="icon" className="h-8 w-8 hidden md:flex">
+                  <Settings className="h-4 w-4 text-earth-medium-green" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -120,12 +120,12 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
             </Tooltip>
           </TooltipProvider>
           
-          {/* User Profile Button - New */}
+          {/* User Profile Button */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 hidden md:flex">
-                  <User className="h-5 w-5 text-earth-medium-green" />
+                <Button variant="ghost" size="icon" className="h-8 w-8 hidden md:flex">
+                  <User className="h-4 w-4 text-earth-medium-green" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -139,9 +139,9 @@ export function TopNav({ onMenuButtonClick }: TopNavProps) {
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative h-9 w-9">
-                <Bell className="h-5 w-5" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-earth-medium-green">
+              <Button variant="ghost" size="icon" className="relative h-8 w-8">
+                <Bell className="h-4 w-4 text-earth-medium-green" />
+                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center bg-earth-medium-green">
                   3
                 </Badge>
               </Button>
