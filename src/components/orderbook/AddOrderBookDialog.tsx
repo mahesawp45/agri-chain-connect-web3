@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,8 +54,20 @@ export function AddOrderBookDialog() {
     }
   };
 
+  const resetForm = () => {
+    setFormData({
+      commodityType: "",
+      quantity: "",
+      unit: "",
+      termsFile: null,
+    });
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      setOpen(isOpen);
+      if (!isOpen) resetForm();
+    }}>
       <DialogTrigger asChild>
         <Button className="gap-2 bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green">
           <Plus className="h-4 w-4" />
@@ -76,6 +88,7 @@ export function AddOrderBookDialog() {
             <Select 
               value={formData.commodityType}
               onValueChange={(value) => setFormData(prev => ({ ...prev, commodityType: value }))}
+              required
             >
               <SelectTrigger>
                 <SelectValue placeholder={language === "id" ? "Pilih komoditas" : "Select commodity"} />
@@ -96,6 +109,8 @@ export function AddOrderBookDialog() {
                 type="number"
                 value={formData.quantity}
                 onChange={(e) => setFormData(prev => ({ ...prev, quantity: e.target.value }))}
+                required
+                min="1"
               />
             </div>
             <div className="space-y-2">
@@ -103,6 +118,7 @@ export function AddOrderBookDialog() {
               <Select
                 value={formData.unit}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, unit: value }))}
+                required
               >
                 <SelectTrigger>
                   <SelectValue placeholder={language === "id" ? "Pilih satuan" : "Select unit"} />
@@ -128,17 +144,19 @@ export function AddOrderBookDialog() {
                 setFormData(prev => ({ ...prev, termsFile: file }));
               }}
               className="cursor-pointer"
+              accept=".pdf,.doc,.docx"
             />
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setOpen(false)} 
-              type="button"
-            >
-              {language === "id" ? "Batal" : "Cancel"}
-            </Button>
+            <DialogClose asChild>
+              <Button 
+                variant="outline" 
+                type="button"
+              >
+                {language === "id" ? "Batal" : "Cancel"}
+              </Button>
+            </DialogClose>
             <Button type="submit">
               {language === "id" ? "Simpan" : "Save"}
             </Button>
