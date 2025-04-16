@@ -13,7 +13,8 @@ import {
   Calendar, 
   Package,
   User,
-  Clock
+  Clock,
+  ArrowRight
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatDate } from "@/lib/utils";
@@ -606,6 +607,15 @@ const OrderBookDetail = () => {
                       {language === "id" ? "Tolak Pesanan" : "Reject Order"}
                     </Button>
                   </>
+                )}
+                {orderBook.status === "accepted" && (
+                  <Button 
+                    className="w-full justify-start gap-2 bg-gradient-to-r from-earth-dark-green to-earth-medium-green hover:from-earth-medium-green hover:to-earth-dark-green"
+                    onClick={() => navigate(`/transaction/${orderBook.id}`)}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                    {language === "id" ? "Lihat Detail Transaksi" : "View Transaction Details"}
+                  </Button>
                 )}
               </div>
             </CardContent>
