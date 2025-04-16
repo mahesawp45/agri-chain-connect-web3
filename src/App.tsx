@@ -13,7 +13,6 @@ import KomoditasDetail from "./pages/KomoditasDetail";
 import Saldo from "./pages/Saldo";
 import Transaksi from "./pages/Transaksi";
 import TransaksiDetail from "./pages/TransaksiDetail";
-import OrderBook from "./pages/OrderBook";
 import OrderBookDetail from "./pages/OrderBookDetail";
 import Harga from "./pages/Harga";
 import Pengiriman from "./pages/Pengiriman";
@@ -75,7 +74,7 @@ const App = () => (
             <Route path="/saldo" element={<Saldo />} />
             <Route path="/transaksi" element={<Transaksi />} />
             <Route path="/transaksi/:id" element={<TransaksiDetail />} />
-            <Route path="/order-book" element={<OrderBookList />} /> {/* Changed this route to point to OrderBookList */}
+            <Route path="/order-book" element={<OrderBookList />} /> {/* Important: Using OrderBookList here */}
             <Route path="/order-book/:id" element={<OrderBookDetail />} />
             <Route path="/harga" element={<Harga />} />
             <Route path="/pengiriman" element={<Pengiriman />} />
@@ -100,7 +99,7 @@ const App = () => (
             <Route path="/buyer/order-book" element={<OrderBookList />} />
             <Route path="/buyer/order-book/create" element={<CreateOrderBook />} />
             <Route path="/buyer/order-book/:id" element={<OrderBookDetail />} />
-            <Route path="/order-book/create" element={<CreateOrderBook />} /> {/* Added direct route for creating order books */}
+            <Route path="/order-book/create" element={<CreateOrderBook />} /> {/* Direct route for creating order books */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
