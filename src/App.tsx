@@ -28,7 +28,6 @@ import History from "./pages/buyer/History";
 import BuyTransaction from "./pages/buyer/BuyTransaction";
 import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
 import OrderBookList from "./pages/buyer/OrderBookList"; // Buyer order book list
-import CreateOrderBook from "./pages/buyer/CreateOrderBook"; // Create order book page
 
 // New farmer-specific pages
 import TransactionManagement from "./pages/farmer/TransactionManagement";
@@ -97,8 +96,7 @@ const App = () => (
             {/* Buyer Order Book routes */}
             <Route path="/buyer/order-book" element={<OrderBookList />} />
             <Route path="/buyer/order-book/:id" element={<OrderBookDetail />} />
-            
-            {/* Remove the create route since we're using a modal now */}
+            <Route path="/order-book" element={<OrderBookList />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
