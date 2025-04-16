@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
@@ -62,9 +61,7 @@ const buyerLinks = [
   { name: "Order Book", href: "/order-book", icon: ClipboardList },
   { name: "Saldo", href: "/saldo", icon: Wallet },
   { name: "Transaksi", href: "/transaksi", icon: ShoppingCart },
-  { name: "Transaksi Tertunda", href: "/transaksi-pending", icon: Receipt },
   { name: "Pengiriman", href: "/pengiriman", icon: Truck },
-  { name: "Riwayat", href: "/history", icon: History },
   { name: "Harga Komoditas", href: "/harga", icon: TrendingUp },
   { name: "Profil", href: "/profile", icon: User },
 ];
@@ -291,4 +288,3 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
     </>
   );
 }
-

@@ -23,8 +23,6 @@ import TransactionDetail from "./pages/TransactionDetail";
 // New buyer-specific pages
 import Market from "./pages/buyer/Market";
 import MarketDetail from "./pages/buyer/MarketDetail";
-import TransaksiPending from "./pages/buyer/TransaksiPending";
-import History from "./pages/buyer/History";
 import BuyTransaction from "./pages/buyer/BuyTransaction";
 import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
 import OrderBookList from "./pages/buyer/OrderBookList"; // Buyer order book list
@@ -90,13 +88,8 @@ const App = () => (
             <Route path="/market/:id" element={<MarketDetail />} />
             <Route path="/buy/:id" element={<BuyTransaction />} />
             <Route path="/transaction-nego/:id" element={<TransactionNegotiation />} />
-            <Route path="/transaksi-pending" element={<TransaksiPending />} />
-            <Route path="/history" element={<History />} />
-            
-            {/* Buyer Order Book routes */}
             <Route path="/buyer/order-book" element={<OrderBookList />} />
             <Route path="/buyer/order-book/:id" element={<OrderBookDetail />} />
-            <Route path="/order-book" element={<OrderBookList />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
