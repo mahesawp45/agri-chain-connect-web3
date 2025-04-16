@@ -29,8 +29,8 @@ import TransaksiPending from "./pages/buyer/TransaksiPending";
 import History from "./pages/buyer/History";
 import BuyTransaction from "./pages/buyer/BuyTransaction";
 import TransactionNegotiation from "./pages/buyer/TransactionNegotiation";
-import OrderBookList from "./pages/buyer/OrderBookList"; // New buyer order book list
-import CreateOrderBook from "./pages/buyer/CreateOrderBook"; // New create order book page
+import OrderBookList from "./pages/buyer/OrderBookList"; // Buyer order book list
+import CreateOrderBook from "./pages/buyer/CreateOrderBook"; // Create order book page
 
 // New farmer-specific pages
 import TransactionManagement from "./pages/farmer/TransactionManagement";
@@ -75,7 +75,7 @@ const App = () => (
             <Route path="/saldo" element={<Saldo />} />
             <Route path="/transaksi" element={<Transaksi />} />
             <Route path="/transaksi/:id" element={<TransaksiDetail />} />
-            <Route path="/order-book" element={<OrderBook />} />
+            <Route path="/order-book" element={<OrderBookList />} /> {/* Changed this route to point to OrderBookList */}
             <Route path="/order-book/:id" element={<OrderBookDetail />} />
             <Route path="/harga" element={<Harga />} />
             <Route path="/pengiriman" element={<Pengiriman />} />
@@ -96,10 +96,11 @@ const App = () => (
             <Route path="/transaksi-pending" element={<TransaksiPending />} />
             <Route path="/history" element={<History />} />
             
-            {/* New buyer Order Book routes */}
+            {/* Buyer Order Book routes */}
             <Route path="/buyer/order-book" element={<OrderBookList />} />
             <Route path="/buyer/order-book/create" element={<CreateOrderBook />} />
             <Route path="/buyer/order-book/:id" element={<OrderBookDetail />} />
+            <Route path="/order-book/create" element={<CreateOrderBook />} /> {/* Added direct route for creating order books */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

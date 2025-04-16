@@ -110,7 +110,7 @@ const OrderBookList = () => {
 
   // Function to navigate to create new order book
   const handleCreateOrderBook = () => {
-    navigate("/buyer/order-book/create");
+    navigate("/order-book/create");
   };
 
   // Function to render status badge with appropriate color
