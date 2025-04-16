@@ -1,4 +1,3 @@
-
 import { MainLayout } from "@/components/layout/MainLayout";
 import { formatCurrency } from "@/lib/utils";
 import { Wallet, ArrowDownToLine, BarChart3, AlertCircle, CreditCard, Clock, ArrowUpRight, RefreshCcw } from "lucide-react";
@@ -11,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { TopUpDialog } from "@/components/saldo/TopUpDialog";
 
 const Saldo = () => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
@@ -105,6 +105,7 @@ const Saldo = () => {
             </Alert>
           </CardContent>
           <CardFooter className="flex justify-end gap-4 p-6 bg-earth-pale-green/50">
+            <TopUpDialog />
             <Dialog open={withdrawOpen} onOpenChange={setWithdrawOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2 border-earth-medium-green text-earth-dark-green hover:bg-earth-pale-green">
