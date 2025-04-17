@@ -1,7 +1,6 @@
-
-import { useState } from "react";
+import React, { useState } from 'react';
 import { MainLayout } from "@/components/layout/MainLayout";
-import { TrendingUp, Search, Filter, ArrowDown, ArrowUp, MapPin, LineChart, BarChart3, CalendarDays, TrendingDown, Info, Percent } from "lucide-react";
+import { TrendingUp, Search, Filter, ArrowDown, ArrowUp, MapPin, LineChart, BarChart3, CalendarDays, TrendingDown, Info, Percent, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +24,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { type CommodityPrice } from "@/lib/data/types";
 import { CommodityPriceDetail } from "@/components/commodity/CommodityPriceDetail";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Sample commodity price data
 const commodityPrices: CommodityPrice[] = [
@@ -343,6 +348,7 @@ const Harga = () => {
                           <TableHead className="text-earth-dark-green font-bold">Prediksi Perubahan</TableHead>
                           <TableHead className="text-earth-dark-green font-bold">Wilayah</TableHead>
                           <TableHead className="text-earth-dark-green font-bold">Terakhir Diperbarui</TableHead>
+                          <TableHead className="text-earth-dark-green font-bold text-center">Detail</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -350,8 +356,7 @@ const Harga = () => {
                           filteredCommodityPrices.map((price) => (
                             <TableRow 
                               key={price.id} 
-                              className="hover:bg-earth-pale-green/50 cursor-pointer"
-                              onClick={() => handleRowClick(price)}
+                              className="hover:bg-earth-pale-green/50"
                             >
                               <TableCell className="font-medium text-earth-dark-green">{price.name}</TableCell>
                               <TableCell className="font-medium text-earth-dark-green">
@@ -364,6 +369,25 @@ const Harga = () => {
                                 {price.region}
                               </TableCell>
                               <TableCell className="text-earth-dark-green">{formatDate(price.updatedAt)}</TableCell>
+                              <TableCell className="text-center">
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleRowClick(price)}
+                                        className="hover:bg-earth-pale-green"
+                                      >
+                                        <Eye className="h-4 w-4 text-earth-dark-green hover:text-earth-medium-green transition-colors" />
+                                      </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>Lihat detail harga</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (
