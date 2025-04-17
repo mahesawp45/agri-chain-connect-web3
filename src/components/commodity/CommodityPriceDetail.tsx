@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   LineChart, 
@@ -120,7 +119,13 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
       <div>
         <h2 className="text-2xl font-bold text-earth-dark-green flex items-center gap-2">
           {commodity.name}
-          <Badge className={`${commodity.predictedChange >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+          <Badge 
+            className={`${
+              commodity.predictedChange >= 0 
+                ? 'bg-earth-pale-green text-earth-dark-green border border-earth-medium-green/30' 
+                : 'bg-earth-light-brown text-earth-brown border border-earth-brown/30'
+            }`}
+          >
             {trendDirection} {trendPercentage}%
           </Badge>
         </h2>
@@ -140,22 +145,22 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-white border-earth-medium-green/30">
+        <Card className="bg-gradient-to-br from-earth-pale-green to-white border-earth-medium-green/30">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg text-earth-dark-green">Harga Saat Ini</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-earth-dark-green">{formatCurrency(commodity.price)}/{commodity.unit}</div>
-            <div className={`flex items-center mt-2 ${priceChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`flex items-center mt-2 ${priceChange >= 0 ? 'text-earth-dark-green' : 'text-earth-brown'}`}>
               {priceChange >= 0 ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
               <span>{formatCurrency(Math.abs(priceChange))}</span>
               <span className="ml-1">({Math.abs(priceChangePercent).toFixed(1)}%)</span>
-              <span className="ml-1 text-sm text-gray-500">dari bulan lalu</span>
+              <span className="ml-1 text-sm text-earth-medium-green">dari bulan lalu</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-earth-medium-green/30">
+        <Card className="bg-gradient-to-br from-earth-light-brown/30 to-white border-earth-medium-green/30">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg text-earth-dark-green">Prediksi 3 Bulan</CardTitle>
           </CardHeader>
@@ -163,7 +168,7 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
             <div className="text-3xl font-bold text-earth-dark-green">
               {formatCurrency(forecastData.length ? forecastData[forecastData.length - 1].price : commodity.price)}
             </div>
-            <div className={`flex items-center mt-2 ${commodity.predictedChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`flex items-center mt-2 ${commodity.predictedChange >= 0 ? 'text-earth-dark-green' : 'text-earth-brown'}`}>
               {commodity.predictedChange >= 0 ? <TrendingUp className="h-4 w-4 mr-1" /> : <TrendingDown className="h-4 w-4 mr-1" />}
               <span>Tren {trendDirection}</span>
               <span className="ml-1">({trendPercentage}%)</span>
@@ -171,39 +176,48 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-earth-medium-green/30">
+        <Card className="bg-gradient-to-br from-earth-wheat/30 to-white border-earth-medium-green/30">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg text-earth-dark-green">Volatilitas Harga</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-earth-dark-green">{stats.volatility.toFixed(1)}%</div>
-            <div className="flex items-center mt-2 text-gray-600">
+            <div className="flex items-center mt-2 text-earth-medium-green">
               <Percent className="h-4 w-4 mr-1" />
               <span>{stats.volatility < 5 ? 'Stabil' : stats.volatility < 10 ? 'Moderat' : 'Tinggi'}</span>
-              <span className="ml-1 text-sm text-gray-500">6 bulan terakhir</span>
+              <span className="ml-1 text-sm">6 bulan terakhir</span>
             </div>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3 mb-6">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">
+        <TabsList className="grid grid-cols-3 mb-6 bg-earth-pale-green/50">
+          <TabsTrigger 
+            value="overview" 
+            className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white"
+          >
             <LineChartIcon className="h-4 w-4 mr-2" />
             Tren Harga
           </TabsTrigger>
-          <TabsTrigger value="regional" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">
+          <TabsTrigger 
+            value="regional" 
+            className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white"
+          >
             <Map className="h-4 w-4 mr-2" />
             Perbandingan Regional
           </TabsTrigger>
-          <TabsTrigger value="market" className="data-[state=active]:bg-earth-dark-green data-[state=active]:text-white">
+          <TabsTrigger 
+            value="market" 
+            className="data-[state=active]:bg-earth-medium-green data-[state=active]:text-white"
+          >
             <Info className="h-4 w-4 mr-2" />
             Info Pasar
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-0">
-          <Card className="bg-white border-earth-medium-green/30">
+          <Card className="bg-gradient-to-br from-earth-pale-green/20 to-white border-earth-medium-green/30">
             <CardHeader>
               <CardTitle className="text-xl text-earth-dark-green">Tren Harga 6 Bulan Terakhir & Proyeksi 3 Bulan</CardTitle>
               <CardDescription>
@@ -298,7 +312,7 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
         </TabsContent>
 
         <TabsContent value="regional" className="mt-0">
-          <Card className="bg-white border-earth-medium-green/30">
+          <Card className="bg-gradient-to-br from-earth-light-brown/20 to-white border-earth-medium-green/30">
             <CardHeader>
               <CardTitle className="text-xl text-earth-dark-green">Perbandingan Harga Antar Wilayah</CardTitle>
               <CardDescription>
@@ -376,7 +390,7 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
         </TabsContent>
 
         <TabsContent value="market" className="mt-0">
-          <Card className="bg-white border-earth-medium-green/30">
+          <Card className="bg-gradient-to-br from-earth-wheat/20 to-white border-earth-medium-green/30">
             <CardHeader>
               <CardTitle className="text-xl text-earth-dark-green">Informasi Pasar {commodity.name}</CardTitle>
               <CardDescription>
@@ -509,4 +523,3 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
     </div>
   );
 };
-
