@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { TrendingUp, Search, Filter, ArrowDown, ArrowUp, MapPin } from "lucide-react";
+import { TrendingUp, Search, Filter, ArrowDown, ArrowUp, MapPin, LineChart, BarChart3, CalendarDays, TrendingDown, Info, Percent } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,9 @@ import {
 } from "@/components/ui/select";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { type CommodityPrice } from "@/lib/data/types";
+import { CommodityPriceDetail } from "@/components/commodity/CommodityPriceDetail";
 
 // Sample commodity price data
 const commodityPrices: CommodityPrice[] = [
@@ -106,11 +109,100 @@ const commodityPrices: CommodityPrice[] = [
   },
 ];
 
+// Add historical price data for sample visualization
+const commodityPriceHistory = {
+  "PRICE-001": [
+    { date: "2023-06", price: 9800 },
+    { date: "2023-07", price: 9900 },
+    { date: "2023-08", price: 10100 },
+    { date: "2023-09", price: 10300 },
+    { date: "2023-10", price: 10400 },
+    { date: "2023-11", price: 10500 },
+  ],
+  "PRICE-002": [
+    { date: "2023-06", price: 8500 },
+    { date: "2023-07", price: 8300 },
+    { date: "2023-08", price: 8200 },
+    { date: "2023-09", price: 8100 },
+    { date: "2023-10", price: 8000 },
+    { date: "2023-11", price: 8000 },
+  ],
+  "PRICE-003": [
+    { date: "2023-06", price: 11000 },
+    { date: "2023-07", price: 11200 },
+    { date: "2023-08", price: 11500 },
+    { date: "2023-09", price: 11800 },
+    { date: "2023-10", price: 12200 },
+    { date: "2023-11", price: 12500 },
+  ],
+  "PRICE-004": [
+    { date: "2023-06", price: 80000 },
+    { date: "2023-07", price: 81000 },
+    { date: "2023-08", price: 82000 },
+    { date: "2023-09", price: 83000 },
+    { date: "2023-10", price: 84000 },
+    { date: "2023-11", price: 85000 },
+  ],
+  "PRICE-005": [
+    { date: "2023-06", price: 38000 },
+    { date: "2023-07", price: 37500 },
+    { date: "2023-08", price: 37000 },
+    { date: "2023-09", price: 36500 },
+    { date: "2023-10", price: 36000 },
+    { date: "2023-11", price: 35000 },
+  ],
+  "PRICE-006": [
+    { date: "2023-06", price: 25000 },
+    { date: "2023-07", price: 25500 },
+    { date: "2023-08", price: 26000 },
+    { date: "2023-09", price: 26500 },
+    { date: "2023-10", price: 27000 },
+    { date: "2023-11", price: 28000 },
+  ],
+  "PRICE-007": [
+    { date: "2023-06", price: 14000 },
+    { date: "2023-07", price: 14100 },
+    { date: "2023-08", price: 14200 },
+    { date: "2023-09", price: 14300 },
+    { date: "2023-10", price: 14400 },
+    { date: "2023-11", price: 14500 },
+  ],
+  "PRICE-008": [
+    { date: "2023-06", price: 19000 },
+    { date: "2023-07", price: 18800 },
+    { date: "2023-08", price: 18600 },
+    { date: "2023-09", price: 18400 },
+    { date: "2023-10", price: 18200 },
+    { date: "2023-11", price: 18000 },
+  ],
+};
+
+// Add regional price comparison data
+const regionalPriceComparison = {
+  "PRICE-001": [
+    { region: "Jawa Barat", price: 10500 },
+    { region: "Jawa Tengah", price: 10300 },
+    { region: "Jawa Timur", price: 10400 },
+    { region: "Sumatra Utara", price: 10800 },
+    { region: "Sulawesi Selatan", price: 10200 },
+  ],
+  "PRICE-002": [
+    { region: "Jawa Barat", price: 8100 },
+    { region: "Jawa Tengah", price: 8000 },
+    { region: "Jawa Timur", price: 8000 },
+    { region: "Sumatra Utara", price: 8300 },
+    { region: "Sulawesi Selatan", price: 7900 },
+  ],
+  // ... add similar data for other commodities
+};
+
 const Harga = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [regionFilter, setRegionFilter] = useState("all");
   const [trendFilter, setTrendFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
+  const [selectedCommodity, setSelectedCommodity] = useState<CommodityPrice | null>(null);
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
   // Get unique regions for filter
   const regions = ["all", ...new Set(commodityPrices.map((price) => price.region))];
@@ -161,6 +253,12 @@ const Harga = () => {
     } else {
       return <span className="text-gray-700 font-medium">0%</span>;
     }
+  };
+
+  // Function to handle row click and show details
+  const handleRowClick = (commodity: CommodityPrice) => {
+    setSelectedCommodity(commodity);
+    setIsDetailDialogOpen(true);
   };
 
   return (
@@ -250,7 +348,11 @@ const Harga = () => {
                       <TableBody>
                         {filteredCommodityPrices.length > 0 ? (
                           filteredCommodityPrices.map((price) => (
-                            <TableRow key={price.id} className="hover:bg-earth-pale-green/50">
+                            <TableRow 
+                              key={price.id} 
+                              className="hover:bg-earth-pale-green/50 cursor-pointer"
+                              onClick={() => handleRowClick(price)}
+                            >
                               <TableCell className="font-medium text-earth-dark-green">{price.name}</TableCell>
                               <TableCell className="font-medium text-earth-dark-green">
                                 {formatCurrency(price.price)}/{price.unit}
@@ -280,6 +382,19 @@ const Harga = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Commodity Price Detail Dialog */}
+      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedCommodity && (
+            <CommodityPriceDetail 
+              commodity={selectedCommodity} 
+              priceHistory={commodityPriceHistory[selectedCommodity.id] || []}
+              regionalComparison={regionalPriceComparison[selectedCommodity.id] || []}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   );
 };
