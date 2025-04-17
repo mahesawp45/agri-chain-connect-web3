@@ -238,9 +238,9 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
                       activeDot={{ r: 6 }}
                       isAnimationActive={true}
                     />
+                    {/* Fix: Removed duplicate 'dataKey' attribute here and kept the specialized one below */}
                     <Line 
                       type="monotone" 
-                      dataKey="price" 
                       name="Proyeksi Harga" 
                       stroke="#805AD5" 
                       strokeWidth={2}
@@ -509,3 +509,4 @@ export const CommodityPriceDetail: React.FC<CommodityPriceDetailProps> = ({
     </div>
   );
 };
+
