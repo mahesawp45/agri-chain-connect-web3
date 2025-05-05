@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -161,10 +162,13 @@ const Komoditas = () => {
 
   const handleInputChange = (field: string, value: string) => {
     if (field === "basePrice") {
+      // Format the input as currency
+      const formattedValue = formatPriceInput(value);
+      setDisplayPrice(formattedValue);
+      
       // Store raw value in formData
-      setFormData(prev => ({ ...prev, [field]: parsePriceInput(value).toString() }));
-      // Store formatted value for display
-      setDisplayPrice(formatPriceInput(value));
+      const numericValue = parsePriceInput(value);
+      setFormData(prev => ({ ...prev, [field]: numericValue.toString() }));
     } else {
       setFormData(prev => ({ ...prev, [field]: value }));
     }
@@ -178,10 +182,13 @@ const Komoditas = () => {
 
   const handleBulkPriceChange = (field: string, value: string) => {
     if (field === "price") {
-      // Store formatted display value
-      setDisplayBulkPrice(formatPriceInput(value));
-      // Store raw value
-      setNewBulkPrice(prev => ({ ...prev, [field]: parsePriceInput(value).toString() }));
+      // Format the input as currency with thousand separators
+      const formattedValue = formatPriceInput(value);
+      setDisplayBulkPrice(formattedValue);
+      
+      // Store raw numeric value
+      const numericValue = parsePriceInput(value);
+      setNewBulkPrice(prev => ({ ...prev, [field]: numericValue.toString() }));
     } else {
       setNewBulkPrice(prev => ({ ...prev, [field]: value }));
     }
@@ -505,115 +512,129 @@ const Komoditas = () => {
                 </SheetDescription>
               </SheetHeader>
               
-              <ScrollArea className="flex-1 px-6 py-4">
-                <div className="space-y-6">
-                  {/* Pricing info */}
-                  <div className="bg-earth-pale-green p-4 rounded-md border border-earth-light-green">
-                    <div className="flex items-center gap-2 mb-2">
-                      <DollarSign className="h-5 w-5 text-earth-dark-green" />
-                      <h3 className="font-medium text-earth-dark-green">Harga Dasar</h3>
+              {/* Fix: Using ScrollArea with proper styles to ensure scrolling works */}
+              <div className="flex-1 overflow-hidden">
+                <ScrollArea className="h-[calc(100vh-240px)]">
+                  <div className="px-6 py-4 space-y-6">
+                    {/* Pricing info */}
+                    <div className="bg-earth-pale-green p-4 rounded-md border border-earth-light-green">
+                      <div className="flex items-center gap-2 mb-2">
+                        <DollarSign className="h-5 w-5 text-earth-dark-green" />
+                        <h3 className="font-medium text-earth-dark-green">Harga Dasar</h3>
+                      </div>
+                      <div className="pl-7">
+                        <p className="text-sm text-earth-medium-green">
+                          Harga dasar: <span className="font-medium text-earth-dark-green">
+                            Rp {Number(formData.basePrice).toLocaleString()}/{formData.unit || 'unit'}
+                          </span>
+                        </p>
+                        <p className="text-xs text-earth-medium-green mt-1">
+                          Harga ini berlaku untuk pembelian standar.
+                        </p>
+                      </div>
                     </div>
-                    <div className="pl-7">
-                      <p className="text-sm text-earth-medium-green">
-                        Harga dasar: <span className="font-medium text-earth-dark-green">Rp {Number(formData.basePrice).toLocaleString()}/{formData.unit || 'unit'}</span>
-                      </p>
-                      <p className="text-xs text-earth-medium-green mt-1">
-                        Harga ini berlaku untuk pembelian standar.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Add bulk price form */}
-                  <div className="space-y-4">
-                    <h3 className="font-medium text-earth-dark-green">Tambah Harga Grosir</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-2">
-                        <Label htmlFor="minQuantity" className="text-earth-medium-green text-sm">Jumlah Minimal</Label>
-                        <div className="relative">
-                          <Input 
-                            id="minQuantity" 
-                            type="number" 
-                            placeholder="100" 
-                            value={newBulkPrice.minQuantity}
-                            onChange={(e) => handleBulkPriceChange("minQuantity", e.target.value)}
-                            className="border-earth-medium-green focus:border-earth-dark-green"
-                          />
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <span className="text-earth-medium-green text-sm">{formData.unit || 'unit'}</span>
+                    
+                    {/* Add bulk price form - Improved formatting */}
+                    <div className="space-y-4">
+                      <h3 className="font-medium text-earth-dark-green">Tambah Harga Grosir</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="minQuantity" className="text-earth-medium-green text-sm">Jumlah Minimal</Label>
+                          <div className="relative">
+                            <Input 
+                              id="minQuantity" 
+                              type="text" 
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              placeholder="100" 
+                              value={newBulkPrice.minQuantity}
+                              onChange={(e) => {
+                                // Only allow numeric input
+                                const value = e.target.value.replace(/\D/g, '');
+                                handleBulkPriceChange("minQuantity", value);
+                              }}
+                              className="border-earth-medium-green focus:border-earth-dark-green"
+                            />
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <span className="text-earth-medium-green text-sm">{formData.unit || 'unit'}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="bulkPrice" className="text-earth-medium-green text-sm">
+                            Harga per {formData.unit || 'unit'}
+                          </Label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                              <span className="text-earth-medium-green text-sm">Rp</span>
+                            </div>
+                            <Input 
+                              id="bulkPrice" 
+                              type="text" 
+                              inputMode="numeric"
+                              placeholder="0" 
+                              value={displayBulkPrice}
+                              onChange={(e) => handleBulkPriceChange("price", e.target.value)}
+                              className="pl-10 border-earth-medium-green focus:border-earth-dark-green"
+                            />
                           </div>
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="bulkPrice" className="text-earth-medium-green text-sm">Harga per {formData.unit || 'unit'}</Label>
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span className="text-earth-medium-green text-sm">Rp</span>
-                          </div>
-                          <Input 
-                            id="bulkPrice" 
-                            type="text" 
-                            placeholder="0" 
-                            value={displayBulkPrice}
-                            onChange={(e) => handleBulkPriceChange("price", e.target.value)}
-                            className="pl-10 border-earth-medium-green focus:border-earth-dark-green"
-                          />
-                        </div>
-                      </div>
+                      <Button 
+                        onClick={handleAddBulkPrice}
+                        className="w-full bg-earth-dark-green hover:bg-earth-medium-green"
+                      >
+                        Tambah Harga Grosir
+                      </Button>
                     </div>
-                    <Button 
-                      onClick={handleAddBulkPrice}
-                      className="w-full bg-earth-dark-green hover:bg-earth-medium-green"
-                    >
-                      Tambah Harga Grosir
-                    </Button>
-                  </div>
-                  
-                  {/* Bulk prices list */}
-                  {bulkPrices.length > 0 ? (
-                    <div className="space-y-3">
-                      <h3 className="font-medium text-earth-dark-green">Daftar Harga Grosir</h3>
-                      <div className="border border-earth-light-green rounded-md overflow-hidden">
-                        <table className="w-full">
-                          <thead className="bg-earth-light-green/30">
-                            <tr>
-                              <th className="px-4 py-2 text-left text-sm font-medium text-earth-dark-green">Min. Jumlah</th>
-                              <th className="px-4 py-2 text-left text-sm font-medium text-earth-dark-green">Harga/{formData.unit || 'unit'}</th>
-                              <th className="px-4 py-2 text-right text-sm font-medium text-earth-dark-green">Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {bulkPrices.map((price) => (
-                              <tr key={price.id} className="border-t border-earth-light-green">
-                                <td className="px-4 py-2 text-sm text-earth-dark-green">{price.minQuantity.toLocaleString()} {formData.unit || 'unit'}</td>
-                                <td className="px-4 py-2 text-sm text-earth-dark-green">Rp {price.price.toLocaleString()}</td>
-                                <td className="px-4 py-2 text-right">
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    className="h-7 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                    onClick={() => handleRemoveBulkPrice(price.id)}
-                                  >
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                  </Button>
-                                </td>
+                    
+                    {/* Bulk prices list */}
+                    {bulkPrices.length > 0 ? (
+                      <div className="space-y-3">
+                        <h3 className="font-medium text-earth-dark-green">Daftar Harga Grosir</h3>
+                        <div className="border border-earth-light-green rounded-md overflow-hidden">
+                          <table className="w-full">
+                            <thead className="bg-earth-light-green/30">
+                              <tr>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-earth-dark-green">Min. Jumlah</th>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-earth-dark-green">Harga/{formData.unit || 'unit'}</th>
+                                <th className="px-4 py-2 text-right text-sm font-medium text-earth-dark-green">Aksi</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody>
+                              {bulkPrices.map((price) => (
+                                <tr key={price.id} className="border-t border-earth-light-green">
+                                  <td className="px-4 py-2 text-sm text-earth-dark-green">{price.minQuantity.toLocaleString()} {formData.unit || 'unit'}</td>
+                                  <td className="px-4 py-2 text-sm text-earth-dark-green">Rp {price.price.toLocaleString()}</td>
+                                  <td className="px-4 py-2 text-right">
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm"
+                                      className="h-7 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                      onClick={() => handleRemoveBulkPrice(price.id)}
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        <p className="text-xs text-earth-medium-green">
+                          Harga akan otomatis diterapkan berdasarkan jumlah pembelian.
+                        </p>
                       </div>
-                      <p className="text-xs text-earth-medium-green">
-                        Harga akan otomatis diterapkan berdasarkan jumlah pembelian.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="text-center py-6 text-earth-medium-green">
-                      <Tag className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                      <p>Belum ada harga grosir</p>
-                      <p className="text-xs mt-1">Tambahkan harga grosir untuk menarik pembeli dalam jumlah besar</p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
+                    ) : (
+                      <div className="text-center py-6 text-earth-medium-green">
+                        <Tag className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                        <p>Belum ada harga grosir</p>
+                        <p className="text-xs mt-1">Tambahkan harga grosir untuk menarik pembeli dalam jumlah besar</p>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
               
               <SheetFooter className="border-t border-earth-light-green p-4 mt-auto">
                 <SheetClose asChild>
@@ -625,8 +646,9 @@ const Komoditas = () => {
             </div>
           </SheetContent>
         </Sheet>
-      
+      </div>
 
+      {/* Improved price input formatting in the main form */}
       <Card className="mb-6 earth-card-green">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-4">

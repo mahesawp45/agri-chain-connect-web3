@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { DollarSign, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import { formatPriceInput, parsePriceInput } from "@/lib/utils";
 
 interface PriceInputFormProps {
   transaction: any;
@@ -22,26 +23,36 @@ export const PriceInputForm = ({
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [price, setPrice] = useState<string>(transaction.price?.toString() || "");
+  const [rawPrice, setRawPrice] = useState<string>(transaction.price?.toString() || "");
+  const [displayPrice, setDisplayPrice] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
 
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Allow only digits and one decimal point
-    const value = e.target.value.replace(/[^\d.]/g, "");
-    const parts = value.split(".");
-    
-    // Ensure only one decimal point and max 2 decimal places
-    if (parts.length > 2) {
-      return; // More than one decimal point, don't update
+  // Initialize display price from transaction price if available
+  React.useEffect(() => {
+    if (transaction.price) {
+      setDisplayPrice(formatPriceInput(transaction.price.toString()));
     }
+  }, [transaction.price]);
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Get the input value
+    const inputValue = e.target.value;
     
-    setPrice(value);
+    // Format the price for display (with thousand separators)
+    const formattedValue = formatPriceInput(inputValue);
+    setDisplayPrice(formattedValue);
+    
+    // Save the raw numeric value for submission
+    const numericValue = parsePriceInput(inputValue);
+    setRawPrice(numericValue.toString());
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!price || isNaN(Number(price)) || Number(price) <= 0) {
+    const numericPrice = Number(rawPrice);
+    
+    if (!rawPrice || isNaN(numericPrice) || numericPrice <= 0) {
       toast({
         title: language === "id" ? "Kesalahan" : "Error",
         description: language === "id" 
@@ -55,7 +66,7 @@ export const PriceInputForm = ({
     setSubmitting(true);
     
     setTimeout(() => {
-      onPriceSubmit(Number(price));
+      onPriceSubmit(numericPrice);
       setSubmitting(false);
       
       toast({
@@ -71,8 +82,8 @@ export const PriceInputForm = ({
   };
 
   const calculateTotal = () => {
-    if (!price || isNaN(Number(price))) return "-";
-    return (Number(price) * transaction.quantity).toLocaleString();
+    if (!rawPrice || isNaN(Number(rawPrice))) return "-";
+    return (Number(rawPrice) * transaction.quantity).toLocaleString();
   };
 
   return (
@@ -117,7 +128,8 @@ export const PriceInputForm = ({
                   <Input
                     id="price"
                     type="text"
-                    value={price}
+                    inputMode="numeric"
+                    value={displayPrice}
                     onChange={handlePriceChange}
                     className="pl-10 border-earth-light-brown/50 focus:border-earth-brown focus:ring-earth-dark-green/30"
                     placeholder={language === "id" ? "Masukkan harga" : "Enter price"}
