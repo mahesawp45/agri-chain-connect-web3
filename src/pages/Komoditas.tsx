@@ -625,6 +625,7 @@ const Komoditas = () => {
             </div>
           </SheetContent>
         </Sheet>
+      
 
       <Card className="mb-6 earth-card-green">
         <CardContent className="p-6">
