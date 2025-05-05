@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -281,192 +280,197 @@ const Komoditas = () => {
               {t("commodities.add")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[625px] border-earth-light-green">
-            <DialogHeader className="earth-header-moss">
+          <DialogContent className="sm:max-w-[625px] border-earth-light-green max-h-[90vh] p-0">
+            <DialogHeader className="earth-header-moss sticky top-0 z-10 p-6">
               <DialogTitle>{t("commodities.add")}</DialogTitle>
               <DialogDescription className="text-white">
                 Isi formulir di bawah ini untuk menambahkan komoditas baru ke daftar Anda.
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-earth-dark-green">{t("commodities.name")}</Label>
-                  <Input 
-                    id="name" 
-                    placeholder="Masukkan nama komoditas" 
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="border-earth-medium-green focus:border-earth-dark-green"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="unit" className="text-earth-dark-green">{t("commodities.unit")}</Label>
-                  <Select 
-                    value={formData.unit}
-                    onValueChange={(value) => handleInputChange("unit", value)}
-                  >
-                    <SelectTrigger className="border-earth-medium-green">
-                      <SelectValue placeholder="Pilih satuan" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {units.map((unit) => (
-                        <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="type" className="text-earth-dark-green">{t("commodities.type")}</Label>
-                  <Select 
-                    value={formData.type}
-                    onValueChange={(value) => handleInputChange("type", value)}
-                  >
-                    <SelectTrigger className="border-earth-medium-green">
-                      <SelectValue placeholder="Pilih jenis komoditas" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {types.map((type) => (
-                        <SelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="image" className="text-earth-dark-green">{t("commodities.upload.image")}</Label>
-                  <Input 
-                    id="image" 
-                    type="file" 
-                    accept="image/*"
-                    onChange={(e) => handleFileChange("image", e.target.files)}
-                    className="border-earth-medium-green focus:border-earth-dark-green"
-                  />
-                  <p className="text-xs text-earth-medium-green">Upload foto komoditas (maks 2MB)</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="quantity" className="text-earth-dark-green">{t("commodities.quantity")}</Label>
-                  <Input 
-                    id="quantity" 
-                    type="number" 
-                    placeholder="Masukkan jumlah" 
-                    value={formData.quantity}
-                    onChange={(e) => handleInputChange("quantity", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="location" className="text-earth-dark-green">{t("commodities.location")}</Label>
-                  <Select 
-                    value={formData.location}
-                    onValueChange={(value) => handleInputChange("location", value)}
-                  >
-                    <SelectTrigger className="border-earth-medium-green">
-                      <SelectValue placeholder="Pilih lokasi" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {locations.map((location) => (
-                        <SelectItem key={location} value={location}>{location}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="gradeFile" className="text-earth-dark-green">{t("commodities.upload.grade")}</Label>
-                  <Input 
-                    id="gradeFile" 
-                    type="file" 
-                    accept="image/*,.pdf" 
-                    onChange={(e) => handleFileChange("gradeFile", e.target.files)}
-                  />
-                  <p className="text-xs text-earth-medium-green">Upload file grading (PDF/Gambar)</p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="grade" className="text-earth-dark-green">{t("commodities.grade")}</Label>
-                  <Select 
-                    value={formData.grade}
-                    onValueChange={(value) => handleInputChange("grade", value)}
-                  >
-                    <SelectTrigger className="border-earth-medium-green">
-                      <SelectValue placeholder="Pilih grade" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {grades.map((grade) => (
-                        <SelectItem key={grade} value={grade}>{grade}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              {/* Price input section - updated with formatting */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="basePrice" className="text-earth-dark-green">Harga Dasar</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <span className="text-earth-medium-green text-sm">Rp</span>
-                    </div>
+            
+            <ScrollArea className="max-h-[calc(90vh-180px)]">
+              <div className="grid gap-4 py-4 px-6">
+                {/* Form content */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-earth-dark-green">{t("commodities.name")}</Label>
                     <Input 
-                      id="basePrice" 
-                      type="text" 
-                      placeholder="0" 
-                      value={displayPrice}
-                      onChange={(e) => handleInputChange("basePrice", e.target.value)}
-                      className="pl-10 border-earth-medium-green focus:border-earth-dark-green"
+                      id="name" 
+                      placeholder="Masukkan nama komoditas" 
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      className="border-earth-medium-green focus:border-earth-dark-green"
                     />
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <span className="text-earth-medium-green text-sm">/{formData.unit || 'unit'}</span>
-                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="unit" className="text-earth-dark-green">{t("commodities.unit")}</Label>
+                    <Select 
+                      value={formData.unit}
+                      onValueChange={(value) => handleInputChange("unit", value)}
+                    >
+                      <SelectTrigger className="border-earth-medium-green">
+                        <SelectValue placeholder="Pilih satuan" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {units.map((unit) => (
+                          <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
-                <div className="space-y-2 flex items-end">
-                  <Button 
-                    onClick={handleOpenBulkPricing} 
-                    variant="outline" 
-                    className="w-full h-10 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20 gap-2"
-                  >
-                    <Tag className="h-4 w-4" />
-                    Atur Harga Grosir
-                  </Button>
-                </div>
-              </div>
-              
-              {/* Display bulk pricing summary if any */}
-              {bulkPrices.length > 0 && (
-                <div className="bg-earth-pale-green p-3 rounded-md border border-earth-light-green">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-earth-dark-green">Harga Grosir</h4>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-7 text-earth-medium-green hover:text-earth-dark-green hover:bg-earth-light-green/20"
-                      onClick={handleOpenBulkPricing}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="type" className="text-earth-dark-green">{t("commodities.type")}</Label>
+                    <Select 
+                      value={formData.type}
+                      onValueChange={(value) => handleInputChange("type", value)}
                     >
-                      Edit
+                      <SelectTrigger className="border-earth-medium-green">
+                        <SelectValue placeholder="Pilih jenis komoditas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {types.map((type) => (
+                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="image" className="text-earth-dark-green">{t("commodities.upload.image")}</Label>
+                    <Input 
+                      id="image" 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => handleFileChange("image", e.target.files)}
+                      className="border-earth-medium-green focus:border-earth-dark-green"
+                    />
+                    <p className="text-xs text-earth-medium-green">Upload foto komoditas (maks 2MB)</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="quantity" className="text-earth-dark-green">{t("commodities.quantity")}</Label>
+                    <Input 
+                      id="quantity" 
+                      type="number" 
+                      placeholder="Masukkan jumlah" 
+                      value={formData.quantity}
+                      onChange={(e) => handleInputChange("quantity", e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="location" className="text-earth-dark-green">{t("commodities.location")}</Label>
+                    <Select 
+                      value={formData.location}
+                      onValueChange={(value) => handleInputChange("location", value)}
+                    >
+                      <SelectTrigger className="border-earth-medium-green">
+                        <SelectValue placeholder="Pilih lokasi" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {locations.map((location) => (
+                          <SelectItem key={location} value={location}>{location}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="gradeFile" className="text-earth-dark-green">{t("commodities.upload.grade")}</Label>
+                    <Input 
+                      id="gradeFile" 
+                      type="file" 
+                      accept="image/*,.pdf" 
+                      onChange={(e) => handleFileChange("gradeFile", e.target.files)}
+                    />
+                    <p className="text-xs text-earth-medium-green">Upload file grading (PDF/Gambar)</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="grade" className="text-earth-dark-green">{t("commodities.grade")}</Label>
+                    <Select 
+                      value={formData.grade}
+                      onValueChange={(value) => handleInputChange("grade", value)}
+                    >
+                      <SelectTrigger className="border-earth-medium-green">
+                        <SelectValue placeholder="Pilih grade" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {grades.map((grade) => (
+                          <SelectItem key={grade} value={grade}>{grade}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                {/* Price input section - updated with formatting */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="basePrice" className="text-earth-dark-green">Harga Dasar</Label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <span className="text-earth-medium-green text-sm">Rp</span>
+                      </div>
+                      <Input 
+                        id="basePrice" 
+                        type="text" 
+                        placeholder="0" 
+                        value={displayPrice}
+                        onChange={(e) => handleInputChange("basePrice", e.target.value)}
+                        className="pl-10 border-earth-medium-green focus:border-earth-dark-green"
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <span className="text-earth-medium-green text-sm">/{formData.unit || 'unit'}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2 flex items-end">
+                    <Button 
+                      onClick={handleOpenBulkPricing} 
+                      variant="outline" 
+                      className="w-full h-10 border-earth-medium-green text-earth-dark-green hover:bg-earth-light-green/20 gap-2"
+                    >
+                      <Tag className="h-4 w-4" />
+                      Atur Harga Grosir
                     </Button>
                   </div>
-                  <div className="space-y-1">
-                    {bulkPrices.slice(0, 3).map((price, index) => (
-                      <div key={price.id} className="text-xs flex justify-between text-earth-dark-green">
-                        <span>≥ {price.minQuantity} {formData.unit}</span>
-                        <span>Rp {price.price.toLocaleString()}/{formData.unit}</span>
-                      </div>
-                    ))}
-                    {bulkPrices.length > 3 && (
-                      <div className="text-xs text-earth-medium-green text-center mt-1">
-                        +{bulkPrices.length - 3} harga grosir lainnya
-                      </div>
-                    )}
-                  </div>
                 </div>
-              )}
-            </div>
-            <DialogFooter>
+                
+                {/* Display bulk pricing summary if any */}
+                {bulkPrices.length > 0 && (
+                  <div className="bg-earth-pale-green p-3 rounded-md border border-earth-light-green">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-earth-dark-green">Harga Grosir</h4>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-7 text-earth-medium-green hover:text-earth-dark-green hover:bg-earth-light-green/20"
+                        onClick={handleOpenBulkPricing}
+                      >
+                        Edit
+                      </Button>
+                    </div>
+                    <div className="space-y-1">
+                      {bulkPrices.slice(0, 3).map((price, index) => (
+                        <div key={price.id} className="text-xs flex justify-between text-earth-dark-green">
+                          <span>≥ {price.minQuantity} {formData.unit}</span>
+                          <span>Rp {price.price.toLocaleString()}/{formData.unit}</span>
+                        </div>
+                      ))}
+                      {bulkPrices.length > 3 && (
+                        <div className="text-xs text-earth-medium-green text-center mt-1">
+                          +{bulkPrices.length - 3} harga grosir lainnya
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+            
+            <DialogFooter className="sticky bottom-0 z-10 bg-background border-t border-earth-light-green p-4">
               <Button variant="outline" onClick={() => setAddKomoditasOpen(false)} className="border-earth-light-green text-earth-dark-green hover:bg-earth-light-green/20">{t("action.cancel")}</Button>
               <Button onClick={handleAddKomoditas} className="bg-earth-dark-green hover:bg-earth-medium-green">{t("action.save")}</Button>
             </DialogFooter>
@@ -748,31 +752,4 @@ const Komoditas = () => {
                               {t("commodities.qrcode")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-earth-light-green" />
-                            <DropdownMenuItem className="text-red-600 hover:bg-red-50">
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              {t("action.delete")}
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-earth-medium-green">
-                      {searchQuery 
-                        ? `${t("commodities.notfound")} "${searchQuery}"`
-                        : `${t("commodities.notfound")}. ${t("commodities.add")} to get started.`}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
-    </MainLayout>
-  );
-};
-
-export default Komoditas;
+                            <DropdownMenuItem className="text-red-60
