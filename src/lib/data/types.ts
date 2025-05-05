@@ -23,6 +23,12 @@ export type TransactionType = 'regular' | 'order_book';
 
 export type ShippingStatus = 'belum_dikirim' | 'sedang_dikirim' | 'sudah_dikirim' | 'diterima';
 
+export interface BulkPrice {
+  id: string;
+  minQuantity: number;
+  price: number;
+}
+
 export interface Commodity {
   id: string;
   name: string;
@@ -36,6 +42,8 @@ export interface Commodity {
   createdAt: Date;
   qrCodeHash?: string;
   farmerId: string;
+  basePrice?: number;
+  bulkPrices?: BulkPrice[];
 }
 
 export interface CommodityPrice {
