@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -502,7 +503,7 @@ const Komoditas = () => {
           </DialogContent>
         </Dialog>
         
-        {/* Bulk Pricing Sheet - Updated with ScrollArea for better scrolling */}
+        {/* Bulk Pricing Sheet */}
         <Sheet open={bulkPricingSheetOpen} onOpenChange={setBulkPricingSheetOpen}>
           <SheetContent className="sm:max-w-[500px] border-l border-earth-light-green p-0">
             <div className="flex flex-col h-full">
@@ -752,4 +753,29 @@ const Komoditas = () => {
                               {t("commodities.qrcode")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-earth-light-green" />
-                            <DropdownMenuItem className="text-red-60
+                            <DropdownMenuItem className="text-red-600 hover:bg-red-50">
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              {t("action.delete")}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center py-8 text-earth-medium-green">
+                      {t("commodities.empty")}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </MainLayout>
+  );
+};
+
+export default Komoditas;
