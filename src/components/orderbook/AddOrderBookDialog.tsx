@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Calendar } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 // Sample commodity types - replace with API data
 const commodityTypes = ["Padi", "Jagung", "Kedelai", "Cabai"];
@@ -24,6 +28,7 @@ export function AddOrderBookDialog() {
     quantity: "",
     unit: "",
     termsFile: null as File | null,
+    deliveryDate: undefined as Date | undefined,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -60,6 +65,7 @@ export function AddOrderBookDialog() {
       quantity: "",
       unit: "",
       termsFile: null,
+      deliveryDate: undefined,
     });
   };
 
@@ -130,6 +136,41 @@ export function AddOrderBookDialog() {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="deliveryDate">
+              {language === "id" ? "Tanggal Pengiriman" : "Delivery Date"}
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="deliveryDate"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !formData.deliveryDate && "text-muted-foreground"
+                  )}
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  {formData.deliveryDate ? (
+                    format(formData.deliveryDate, "PPP")
+                  ) : (
+                    <span>{language === "id" ? "Pilih tanggal" : "Pick a date"}</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={formData.deliveryDate}
+                  onSelect={(date) => setFormData(prev => ({ ...prev, deliveryDate: date }))}
+                  initialFocus
+                  disabled={(date) => date < new Date()}
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">
