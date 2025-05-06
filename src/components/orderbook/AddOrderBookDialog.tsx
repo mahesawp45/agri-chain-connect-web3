@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Calendar } from "lucide-react";
+import { Plus, CalendarIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -152,7 +152,7 @@ export function AddOrderBookDialog() {
                     !formData.deliveryDate && "text-muted-foreground"
                   )}
                 >
-                  <Calendar className="mr-2 h-4 w-4" />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {formData.deliveryDate ? (
                     format(formData.deliveryDate, "PPP")
                   ) : (
